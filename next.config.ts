@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "plus.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "smarttourism.pekanbaru.go.id",
         pathname: "/**",
       },

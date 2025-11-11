@@ -130,6 +130,52 @@ export const authOptions: AuthOptions = {
             throw new Error("Email and password are required");
           }
 
+          // Toggle dummy auth: enabled when NEXT_PUBLIC_DUMMY_AUTH=true or in non-production env
+          const useDummyAuth =
+            process.env.NEXT_PUBLIC_DUMMY_AUTH === "true" ||
+            process.env.NODE_ENV !== "production";
+
+          if (useDummyAuth) {
+            const emailInput = String(credentials.email).trim().toLowerCase();
+            const passwordInput = String(credentials.password);
+            const demoEmail = (
+              process.env.NEXT_PUBLIC_DUMMY_EMAIL || "demo@kominfo.go.id"
+            ).toLowerCase();
+            const demoPassword =
+              process.env.NEXT_PUBLIC_DUMMY_PASSWORD || "demo123";
+
+            if (emailInput !== demoEmail || passwordInput !== demoPassword) {
+              throw new Error("Email atau password demo salah");
+            }
+
+            // Return a fully-typed dummy user matching our Session/User interfaces
+            return {
+              id: 1,
+              uuid: "00000000-0000-0000-0000-demo",
+              name: "Demo Admin",
+              email: demoEmail,
+              phone: "081234567890",
+              address: "Jl. Demo No. 1",
+              masjid_id: "MSJ-DEMO-001",
+              masjid_name: "Masjid Demo",
+              city: "Jakarta",
+              avatar: null,
+              avatar_url: null,
+              role: "admin",
+              active: "1",
+              profile: "Demo profile",
+              email_verified_at: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              accessToken: "dummy-access-token",
+              tokenType: "Bearer",
+              permissions: [
+                { id: 1, name: "dashboard:view" },
+                { id: 2, name: "users:manage" },
+              ],
+              activity: null,
+            };
+          }
+
           const signinUrl = process.env.NEXT_PUBLIC_API_URL + "/api/auth/login";
 
           const res = await axios.post(
