@@ -1,2 +1,2 @@
 # dashboard-kinerja-nextjs
-Dashboard Kinerja adalah tampilan visual interaktif digunakan untuk mengukur kinerja, memantau aktivitas, menganalisis tren, dan mengelola pencapaian tujuan organisasi dalam satu layar yang mudah dipahami.
+Visual dashboard interaktif untuk memantau KPI, menganalisis kinerja, dan mendukung pengambilan keputusan berbasis data.
