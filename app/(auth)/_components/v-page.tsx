@@ -194,17 +194,19 @@ export default function Vlogin() {
               <Image
                 src="/assets/logo_pekanbaru.png"
                 alt="Logo Pemerintah Kota Pekanbaru"
-                width={40}
-                height={40}
+                width={68}
+                height={68}
                 priority
-                className="size-10 shrink-0 object-contain drop-shadow-sm"
+                className="size-16 shrink-0 object-contain drop-shadow-sm"
               />
-              <div className="text-4xl md:text-5xl font-bold tracking-tight text-white drop-shadow-md">
-                Dashboard Kinerja
+              <div className="">
+                <div className="text-xl md:text-4xl font-bold tracking-tight text-white drop-shadow-md">
+                  {process.env.NEXT_PUBLIC_APP_NAME}
+                </div>
+                <div className="text-base md:text-lg text-white/90 font-normal">
+                  {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
+                </div>
               </div>
-            </div>
-            <div className="text-base md:text-lg text-white/90 font-normal">
-              Sistem Monitoring Performa Dinas
             </div>
           </motion.div>
 
@@ -289,7 +291,7 @@ export default function Vlogin() {
 
         {/* Right Section - Login Form */}
         <motion.div
-          className="w-full lg:w-1/2 flex items-center justify-center p-6"
+          className="w-full lg:w-1/2 flex items-center justify-center p-6 flex-1 lg:flex-none"
           variants={slideInRight}
           initial="hidden"
           animate="visible"
@@ -349,7 +351,7 @@ export default function Vlogin() {
               </motion.div>
 
               {/* Divider */}
-              <motion.div
+              {/* <motion.div
                 className="flex items-center gap-4 my-8"
                 variants={fadeUp}
                 initial="hidden"
@@ -361,10 +363,10 @@ export default function Vlogin() {
                   atau
                 </span>
                 <div className="flex-1 h-px bg-border dark:bg-white/20"></div>
-              </motion.div>
+              </motion.div> */}
 
               {/* Alternative Login */}
-              <motion.div
+              {/* <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 animate="visible"
@@ -376,11 +378,10 @@ export default function Vlogin() {
                 >
                   Masuk dengan SSO
                 </Button>
-              </motion.div>
+              </motion.div> */}
             </CardContent>
 
-            <CardFooter>
-              {/* Footer */}
+            {/* <CardFooter>
               <motion.p
                 className="text-center text-sm text-muted-foreground dark:text-white/70 w-full"
                 variants={fadeUp}
@@ -396,7 +397,7 @@ export default function Vlogin() {
                   Hubungi administrator
                 </a>
               </motion.p>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </motion.div>
       </div>
