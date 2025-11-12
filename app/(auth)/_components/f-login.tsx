@@ -23,10 +23,8 @@ import {
 } from "@/components/ui/form";
 import { LoginSchemaValues, loginSchema } from "./schema-login";
 import { Label } from "@/components/ui/label";
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"form">) {
+import { toast } from "sonner";
+export function LoginForm({ className }: React.ComponentProps<"form">) {
   const DEMO_EMAIL =
     process.env.NEXT_PUBLIC_DUMMY_EMAIL ?? "demo@kominfo.go.id";
   const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DUMMY_PASSWORD ?? "demo123";
@@ -50,13 +48,16 @@ export function LoginForm({
         password: values.password,
         callbackUrl: "/dashboard",
       });
+      toast.success("Login berhasil. Mengalihkan...");
       if (result?.error) {
         setError(result.error);
+        toast.error(result.error);
       } else if (result?.url) {
         router.push(result.url);
       }
     } catch (err) {
       setError("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
+      toast.error("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }

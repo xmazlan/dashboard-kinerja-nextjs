@@ -61,7 +61,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background">
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/10 backdrop-blur supports-backdrop-filter:bg-background/10">
       <div className="px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div>

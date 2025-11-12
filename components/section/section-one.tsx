@@ -1,10 +1,14 @@
-"use client";
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import { TrendingUp, Users, CheckCircle, AlertCircle } from "lucide-react";
-import SectionOne from "@/components/section/section-one";
-import SectionTwo from "@/components/section/section-two";
 
-// Mock data untuk dashboard
 const mockData = {
   kpiCards: [
     {
@@ -78,19 +82,36 @@ const mockData = {
     { minggu: "W4", hadir: 91, cuti: 6, alfa: 3 },
   ],
 };
-
-export default function Dashboard() {
+export default function SectionOne() {
   return (
     <>
-      <main className="flex-1 mx-auto w-full  px-4 py-8 sm:px-6 lg:px-8">
-        {/* Tab Navigation */}
-
-        {/* KPI Cards */}
-        <SectionOne />
-
-        {/* Charts Grid */}
-        <SectionTwo />
-      </main>
+      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {mockData.kpiCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <Card key={card.id} className="overflow-hidden">
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      {card.title}
+                    </p>
+                    <p className="mt-2 text-3xl font-bold text-foreground">
+                      {card.value}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {card.subtitle}
+                    </p>
+                  </div>
+                  <div className={`rounded-lg ${card.bgColor} p-2`}>
+                    <Icon className={`h-6 w-6 ${card.color}`} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
     </>
   );
 }
