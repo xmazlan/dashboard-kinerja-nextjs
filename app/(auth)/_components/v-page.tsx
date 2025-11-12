@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { } from "react";
 import { Eye, EyeOff, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,72 +99,71 @@ export default function Vlogin() {
       </div>
       {/* Animated Chart Background */}
       <div className="absolute inset-0 pointer-events-none select-none opacity-30">
-        <motion.svg
-          className="w-full h-full"
-          viewBox="0 0 108 64"
-          preserveAspectRatio="none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <defs>
-            <linearGradient id="bgBarGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="0%"
-                stopColor={isDark ? "#ffffff" : "#000000"}
-                stopOpacity="0.28"
-              />
-              <stop
-                offset="100%"
-                stopColor={isDark ? "#ffffff" : "#000000"}
-                stopOpacity="0.06"
-              />
-            </linearGradient>
-          </defs>
+          <motion.svg
+            className="w-full h-full text-black dark:text-white"
+            viewBox="0 0 108 64"
+            preserveAspectRatio="none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <defs>
+              <linearGradient id="bgBarGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="0%"
+                  stopColor="currentColor"
+                  stopOpacity="0.28"
+                />
+                <stop
+                  offset="100%"
+                  stopColor="currentColor"
+                  stopOpacity="0.06"
+                />
+              </linearGradient>
+            </defs>
 
-          {bgChartBars.map((b, idx) => (
-            <motion.rect
-              key={`bar-${idx}`}
-              x={b.x}
-              width={b.width}
-              rx={1}
-              initial={{ y: 64 - b.baseHeight, height: b.baseHeight }}
-              animate={{
-                y: [
-                  64 - b.baseHeight,
-                  64 - (b.baseHeight + 8),
-                  64 - b.baseHeight,
-                ],
-                height: [b.baseHeight, b.baseHeight + 8, b.baseHeight],
-              }}
+            {bgChartBars.map((b, idx) => (
+              <motion.rect
+                key={`bar-${idx}`}
+                x={b.x}
+                width={b.width}
+                rx={1}
+                initial={{ y: 64 - b.baseHeight, height: b.baseHeight }}
+                animate={{
+                  y: [
+                    64 - b.baseHeight,
+                    64 - (b.baseHeight + 8),
+                    64 - b.baseHeight,
+                  ],
+                  height: [b.baseHeight, b.baseHeight + 8, b.baseHeight],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                  delay: b.delay,
+                }}
+                fill="url(#bgBarGradient)"
+              />
+            ))}
+
+            <motion.path
+              d="M0 40 C 18 36, 36 44, 54 36 S 90 44 108 40"
+              stroke="currentColor"
+              strokeOpacity={0.22}
+              strokeWidth={0.6}
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0.6 }}
+              animate={{ pathLength: 1, opacity: 0.6 }}
               transition={{
-                duration: 4,
+                duration: 5,
                 repeat: Infinity,
-                repeatType: "mirror",
+                repeatType: "reverse",
                 ease: "easeInOut",
-                delay: b.delay,
               }}
-              fill="url(#bgBarGradient)"
             />
-          ))}
-
-          {/* Garis chart yang bergerak halus */}
-          <motion.path
-            d="M0 40 C 18 36, 36 44, 54 36 S 90 44 108 40"
-            stroke={isDark ? "#ffffff" : "#000000"}
-            strokeOpacity={0.22}
-            strokeWidth={0.6}
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0.6 }}
-            animate={{ pathLength: 1, opacity: 0.6 }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        </motion.svg>
+          </motion.svg>
       </div>
       {/* Accent orbits - moved to root so kedua section seragam */}
       <div className="pointer-events-none select-none absolute inset-0">
@@ -403,7 +402,7 @@ export default function Vlogin() {
       </div>
       {/* Global Footer */}
       <footer className="relative z-10 w-full px-6 py-4 text-center text-sm text-white dark:text-white/70">
-        © {new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_NAME}. Hak
+        © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {process.env.NEXT_PUBLIC_APP_NAME}. Hak
         cipta dilindungi.
       </footer>
     </div>
