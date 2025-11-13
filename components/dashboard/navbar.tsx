@@ -62,15 +62,12 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/10 backdrop-blur supports-backdrop-filter:bg-background/10">
-      <div className="px-4 py-4 sm:px-6 lg:px-8">
+      <div className="px-4 py-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-xl font-bold text-foreground">
               {process.env.NEXT_PUBLIC_APP_NAME}
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
-            </p>
           </div>
 
           <div className="flex items-center gap-2">
