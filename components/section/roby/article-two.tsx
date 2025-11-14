@@ -1,14 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-import { TrendingUp, Users, CheckCircle, AlertCircle } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -26,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import CardComponent from "@/components/card/card-component";
 
 export default function ArticleTwo() {
   // State & kontrol untuk Carousel CHART
@@ -101,155 +94,147 @@ export default function ArticleTwo() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Keterangan Penilaian</CardTitle>
-          <CardDescription>
-            Geser untuk melihat 5 visual berbeda per bulan
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-1">
-          <Carousel
-            className="w-full"
-            opts={{ loop: true, align: "start" }}
-            setApi={setChartApi}
-            onMouseEnter={() => setChartPaused(true)}
-            onMouseLeave={() => setChartPaused(false)}
-            onTouchStart={() => setChartPaused(true)}
-            onTouchEnd={() => setChartPaused(false)}
-          >
-            <CarouselContent>
-              {/* Slide 1: Line Chart Target vs Realisasi */}
-              <CarouselItem>
-                <div className="w-full overflow-x-auto">
-                  <Table className="w-full text-sm justify-center">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[160px]">Kategory</TableHead>
-                        <TableHead className="w-[160px]">Range Nilai</TableHead>
-                        <TableHead>Keterangan</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>Mismatch</TableCell>
-                        <TableCell>0–10</TableCell>
-                        <TableCell>Perlu pengembangan signifikan</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Inconsistent</TableCell>
-                        <TableCell>11–30</TableCell>
-                        <TableCell>
-                          Perlu pendampingan dan evaluasi berkala
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Solid</TableCell>
-                        <TableCell>31–60</TableCell>
-                        <TableCell>Performa stabil sesuai ekspektasi</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Key Talent</TableCell>
-                        <TableCell>61–80</TableCell>
-                        <TableCell>
-                          Berpotensi berkembang, siap ditingkatkan
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Expert</TableCell>
-                        <TableCell>81–90</TableCell>
-                        <TableCell>Keahlian tinggi, menjadi rujukan</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Top Talent</TableCell>
-                        <TableCell>91–100</TableCell>
-                        <TableCell>
-                          Performa dan potensi sangat tinggi
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                    <TableCaption>
-                      Klasifikasi penilaian berdasarkan rentang nilai.
-                    </TableCaption>
-                  </Table>
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="w-full overflow-x-auto">
-                  <Table className="w-full text-sm justify-center">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[160px]">Kategory</TableHead>
-                        <TableHead className="w-[160px]">Range Nilai</TableHead>
-                        <TableHead>Keterangan</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>Mismatch</TableCell>
-                        <TableCell>0–10</TableCell>
-                        <TableCell>Perlu pengembangan signifikan</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Inconsistent</TableCell>
-                        <TableCell>11–30</TableCell>
-                        <TableCell>
-                          Perlu pendampingan dan evaluasi berkala
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Solid</TableCell>
-                        <TableCell>31–60</TableCell>
-                        <TableCell>Performa stabil sesuai ekspektasi</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Key Talent</TableCell>
-                        <TableCell>61–80</TableCell>
-                        <TableCell>
-                          Berpotensi berkembang, siap ditingkatkan
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Expert</TableCell>
-                        <TableCell>81–90</TableCell>
-                        <TableCell>Keahlian tinggi, menjadi rujukan</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Top Talent</TableCell>
-                        <TableCell>91–100</TableCell>
-                        <TableCell>
-                          Performa dan potensi sangat tinggi
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                    <TableCaption>
-                      Klasifikasi penilaian berdasarkan rentang nilai.
-                    </TableCaption>
-                  </Table>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+      <CardComponent
+        className="gap-1"
+        title="Keterangan Penilaian"
+        description="Data nilai 5 tahun terakhir"
+      >
+        <Carousel
+          className="w-full"
+          opts={{ loop: true, align: "start" }}
+          setApi={setChartApi}
+          onMouseEnter={() => setChartPaused(true)}
+          onMouseLeave={() => setChartPaused(false)}
+          onTouchStart={() => setChartPaused(true)}
+          onTouchEnd={() => setChartPaused(false)}
+        >
+          <CarouselContent>
+            {/* Slide 1: Line Chart Target vs Realisasi */}
+            <CarouselItem>
+              <div className="w-full overflow-x-auto">
+                <Table className="w-full text-sm justify-center [&_th]:py-2 [&_td]:py-1">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[160px]">Kategory</TableHead>
+                      <TableHead className="w-[160px]">Range Nilai</TableHead>
+                      <TableHead>Keterangan</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Mismatch</TableCell>
+                      <TableCell>0–10</TableCell>
+                      <TableCell>Perlu pengembangan signifikan</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Inconsistent</TableCell>
+                      <TableCell>11–30</TableCell>
+                      <TableCell>
+                        Perlu pendampingan dan evaluasi berkala
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Solid</TableCell>
+                      <TableCell>31–60</TableCell>
+                      <TableCell>Performa stabil sesuai ekspektasi</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Key Talent</TableCell>
+                      <TableCell>61–80</TableCell>
+                      <TableCell>
+                        Berpotensi berkembang, siap ditingkatkan
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Expert</TableCell>
+                      <TableCell>81–90</TableCell>
+                      <TableCell>Keahlian tinggi, menjadi rujukan</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Top Talent</TableCell>
+                      <TableCell>91–100</TableCell>
+                      <TableCell>Performa dan potensi sangat tinggi</TableCell>
+                    </TableRow>
+                  </TableBody>
+                  <TableCaption>
+                    Klasifikasi penilaian berdasarkan rentang nilai.
+                  </TableCaption>
+                </Table>
+              </div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="w-full overflow-x-auto">
+                <Table className="w-full text-sm justify-center [&_th]:py-2 [&_td]:py-1">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[160px]">Kategory</TableHead>
+                      <TableHead className="w-[160px]">Range Nilai</TableHead>
+                      <TableHead>Keterangan</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Mismatch</TableCell>
+                      <TableCell>0–10</TableCell>
+                      <TableCell>Perlu pengembangan signifikan</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Inconsistent</TableCell>
+                      <TableCell>11–30</TableCell>
+                      <TableCell>
+                        Perlu pendampingan dan evaluasi berkala
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Solid</TableCell>
+                      <TableCell>31–60</TableCell>
+                      <TableCell>Performa stabil sesuai ekspektasi</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Key Talent</TableCell>
+                      <TableCell>61–80</TableCell>
+                      <TableCell>
+                        Berpotensi berkembang, siap ditingkatkan
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Expert</TableCell>
+                      <TableCell>81–90</TableCell>
+                      <TableCell>Keahlian tinggi, menjadi rujukan</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Top Talent</TableCell>
+                      <TableCell>91–100</TableCell>
+                      <TableCell>Performa dan potensi sangat tinggi</TableCell>
+                    </TableRow>
+                  </TableBody>
+                  <TableCaption>
+                    Klasifikasi penilaian berdasarkan rentang nilai.
+                  </TableCaption>
+                </Table>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+          {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
             <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-          </Carousel>
-          {/* Indikator dot */}
-          <div className="mt-2 flex justify-center gap-2">
-            {chartScrollSnaps.map((_, idx) => (
-              <button
-                key={idx}
-                aria-label={`Ke slide ${idx + 1}`}
-                onClick={() => chartApi?.scrollTo(idx)}
-                className={cn(
-                  "h-2 w-2 rounded-full transition-colors",
-                  idx === chartSelectedIndex
-                    ? "bg-primary"
-                    : "bg-muted-foreground/30"
-                )}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        </Carousel>
+        {/* Indikator dot */}
+        <div className="mt-2 flex justify-center gap-2">
+          {chartScrollSnaps.map((_, idx) => (
+            <button
+              key={idx}
+              aria-label={`Ke slide ${idx + 1}`}
+              onClick={() => chartApi?.scrollTo(idx)}
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                idx === chartSelectedIndex
+                  ? "bg-primary"
+                  : "bg-muted-foreground/30"
+              )}
+            />
+          ))}
+        </div>
+      </CardComponent>
     </>
   );
 }
