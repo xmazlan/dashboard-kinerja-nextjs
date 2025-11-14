@@ -27,12 +27,12 @@ export default function ChartPeranianBiopharmaceutical({ year, chartData }: Prop
   //   "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
   // ];
   // // Generate series untuk chart
-  // const series = dataChart.map(item => ({
+  // const series = dataChart?.map(item => ({
   //   name: item.label,
   //   data: item.values
   // }));
-  const categories = dataChart.map((d) => d.label);
-  const values = dataChart.map((d) => d.total);
+  const categories = dataChart?.map((d) => d.label);
+  const values = dataChart?.map((d) => d.total);
 
   const options: ApexCharts.ApexOptions = {
     chart: {
@@ -114,7 +114,7 @@ export default function ChartPeranianBiopharmaceutical({ year, chartData }: Prop
       // },
       y: {
         formatter: (val: number) =>
-          new Intl.NumberFormat('id-ID').format(val),
+          new Intl.NumberFormat('id-ID').format(val) + ' Ton',
       },
     },
     colors: ['#00E396'],

@@ -10,27 +10,17 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPeranianFruitVegetableSeason({ year, chartData }: Props) {
+export default function ChartPerkebunanProduction({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
 
-  const title = 'Data Produksi Tanaman Sayuran dan Buah-Buahan Semusim';
+  const title = 'Data Produksi Perkebunan';
   const subTitle = 'Tahun ' + year;
 
-  const dataChart = chartData?.data?.fruit_vegetable_season;
+  const dataChart = chartData?.data?.production;
 
-  // // Label bulan
-  // const months = [
-  //   "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-  //   "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-  // ];
-  // // Generate series untuk chart
-  // const series = dataChart?.map(item => ({
-  //   name: item.label,
-  //   data: item.values
-  // }));
   const categories = dataChart?.map((d) => d.label);
   const values = dataChart?.map((d) => d.total);
 
@@ -117,7 +107,7 @@ export default function ChartPeranianFruitVegetableSeason({ year, chartData }: P
           new Intl.NumberFormat('id-ID').format(val) + ' Ton',
       },
     },
-    colors: ['#00E396'],
+    colors: ['#4caf50'],
     stroke: {
       curve: "smooth",
       width: 2
@@ -157,14 +147,23 @@ export default function ChartPeranianFruitVegetableSeason({ year, chartData }: P
     },
   ];
 
-  return chartData.isLoaded ? (
-    <LineChart
-      options={options}
-      series={series}
-      type="line"
-      height={400}
-    />
-  ) : (
-    'Memuat data..'
-  )
+  return (
+    <>
+      <div className="px-2">
+        <p className="text-xs text-gray-500"> Khusus untuk <b>Aren</b> data dalam satuan <b>Liter</b>. </p>
+      </div>
+      {
+        chartData.isLoaded ? (
+          <LineChart
+            options={options}
+            series={series}
+            type="line"
+            height={400}
+          />
+        ) : (
+          'Memuat data..'
+        )
+      }
+    </>
+  );
 }
