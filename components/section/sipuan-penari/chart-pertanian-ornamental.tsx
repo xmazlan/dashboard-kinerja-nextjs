@@ -10,16 +10,16 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPertanianPalawija({ year, chartData }: Props) {
+export default function ChartPeranianOrnamental({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
 
-  const title = 'Data Produksi Tanaman Palawija';
+  const title = 'Data Produksi Tanaman Hias';
   const subTitle = 'Tahun ' + year;
 
-  const dataChart = chartData?.data?.palawija;
+  const dataChart = chartData?.data?.ornamental;
 
   // // Label bulan
   // const months = [

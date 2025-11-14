@@ -7,7 +7,10 @@ import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
 import CardComponent from "@/components/card/card-component";
 import ChartPertanianPalawija from './chart-pertanian-palawija';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ChartPeranianFruitVegetableSeason from './chart-pertanian-fruit-vegetable-season';
+import ChartPeranianFruitVegetableYear from './chart-pertanian-fruit-vegetable-year';
+import ChartPeranianBiopharmaceutical from './chart-pertanian-biopharmaceutical';
+import ChartPeranianOrnamental from './chart-pertanian-ornamental';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 // Icons
@@ -141,21 +144,30 @@ export default function ProductionSection() {
             <ChartPertanianPalawija year={year} chartData={chartData} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPertanianPalawija year={year} chartData={chartData} />
+            <ChartPeranianFruitVegetableSeason year={year} chartData={chartData} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianFruitVegetableYear year={year} chartData={chartData} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianBiopharmaceutical year={year} chartData={chartData} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianOrnamental year={year} chartData={chartData} />
           </CarouselItem>
         </CarouselContent>
-        {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-        {/* <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+        <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
       </Carousel>
       {/* Indikator dot */}
-      <div className="mt-3 flex justify-center gap-2">
+      <div className="mt-2 flex justify-center gap-2">
         {chartScrollSnaps.map((_, idx) => (
           <button
             key={idx}
             aria-label={`Ke slide ${idx + 1}`}
             onClick={() => chartApi?.scrollTo(idx)}
             className={cn(
-              "h-2 w-2 rounded-full transition-colors",
+              "h-2 w-2 rounded-full transition-colors cursor-pointer",
               idx === chartSelectedIndex
                 ? "bg-primary"
                 : "bg-muted-foreground/30"
