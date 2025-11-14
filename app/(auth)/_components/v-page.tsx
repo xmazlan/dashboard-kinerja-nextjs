@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { } from "react";
+import {} from "react";
 import { Eye, EyeOff, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,71 +99,63 @@ export default function Vlogin() {
       </div>
       {/* Animated Chart Background */}
       <div className="absolute inset-0 pointer-events-none select-none opacity-30">
-          <motion.svg
-            className="w-full h-full text-black dark:text-white"
-            viewBox="0 0 108 64"
-            preserveAspectRatio="none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <defs>
-              <linearGradient id="bgBarGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="currentColor"
-                  stopOpacity="0.28"
-                />
-                <stop
-                  offset="100%"
-                  stopColor="currentColor"
-                  stopOpacity="0.06"
-                />
-              </linearGradient>
-            </defs>
+        <motion.svg
+          className="w-full h-full text-black dark:text-white"
+          viewBox="0 0 108 64"
+          preserveAspectRatio="none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <defs>
+            <linearGradient id="bgBarGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="currentColor" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="currentColor" stopOpacity="0.06" />
+            </linearGradient>
+          </defs>
 
-            {bgChartBars.map((b, idx) => (
-              <motion.rect
-                key={`bar-${idx}`}
-                x={b.x}
-                width={b.width}
-                rx={1}
-                initial={{ y: 64 - b.baseHeight, height: b.baseHeight }}
-                animate={{
-                  y: [
-                    64 - b.baseHeight,
-                    64 - (b.baseHeight + 8),
-                    64 - b.baseHeight,
-                  ],
-                  height: [b.baseHeight, b.baseHeight + 8, b.baseHeight],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "mirror",
-                  ease: "easeInOut",
-                  delay: b.delay,
-                }}
-                fill="url(#bgBarGradient)"
-              />
-            ))}
-
-            <motion.path
-              d="M0 40 C 18 36, 36 44, 54 36 S 90 44 108 40"
-              stroke="currentColor"
-              strokeOpacity={0.22}
-              strokeWidth={0.6}
-              fill="none"
-              initial={{ pathLength: 0, opacity: 0.6 }}
-              animate={{ pathLength: 1, opacity: 0.6 }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
+          {bgChartBars.map((b, idx) => (
+            <motion.rect
+              key={`bar-${idx}`}
+              x={b.x}
+              width={b.width}
+              rx={1}
+              initial={{ y: 64 - b.baseHeight, height: b.baseHeight }}
+              animate={{
+                y: [
+                  64 - b.baseHeight,
+                  64 - (b.baseHeight + 8),
+                  64 - b.baseHeight,
+                ],
+                height: [b.baseHeight, b.baseHeight + 8, b.baseHeight],
               }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+                delay: b.delay,
+              }}
+              fill="url(#bgBarGradient)"
             />
-          </motion.svg>
+          ))}
+
+          <motion.path
+            d="M0 40 C 18 36, 36 44, 54 36 S 90 44 108 40"
+            stroke="currentColor"
+            strokeOpacity={0.22}
+            strokeWidth={0.6}
+            fill="none"
+            initial={{ pathLength: 0, opacity: 0.6 }}
+            animate={{ pathLength: 1, opacity: 0.6 }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        </motion.svg>
       </div>
       {/* Accent orbits - moved to root so kedua section seragam */}
       <div className="pointer-events-none select-none absolute inset-0">
@@ -175,7 +167,7 @@ export default function Vlogin() {
       <div className="relative z-10 flex flex-1 flex-col lg:flex-row">
         {/* Left Section - Branding & Features with Carousel */}
         <motion.div
-          className="hidden lg:flex lg:w-1/2 p-12 flex-col justify-between text-white relative overflow-hidden"
+          className="hidden lg:flex lg:w-1/2 p-8 flex-col justify-between text-white relative overflow-hidden"
           variants={slideInLeft}
           initial="hidden"
           animate="visible"
@@ -402,8 +394,20 @@ export default function Vlogin() {
       </div>
       {/* Global Footer */}
       <footer className="relative z-10 w-full px-6 py-4 text-center text-sm text-white dark:text-white/70">
-        © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {process.env.NEXT_PUBLIC_APP_NAME}. Hak
-        cipta dilindungi.
+        <div className="flex flex-col items-center gap-2">
+          <Image
+            src="/assets/logo-pemko-kominfo.webp"
+            alt="Logo Pemerintah Kota Pekanbaru"
+            width={120}
+            height={120}
+            priority
+            className="block mx-auto shrink-0 object-contain drop-shadow-sm mb-1"
+          />
+          <div>
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span>{" "}
+            {process.env.NEXT_PUBLIC_APP_NAME}. Hak cipta dilindungi.
+          </div>
+        </div>
       </footer>
     </div>
   );

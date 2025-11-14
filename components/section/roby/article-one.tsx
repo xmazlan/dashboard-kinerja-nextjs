@@ -1,27 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+
 import { TrendingUp, Users, CheckCircle, AlertCircle } from "lucide-react";
 import {
   Carousel,
@@ -31,6 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
+import CardComponent from "@/components/card/card-component";
 
 // Mock data untuk dashboard
 const mockData = {
@@ -181,185 +161,110 @@ export default function ArticleOne() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4">
-            <div className="">
-              <CardTitle className="mb-1">Talent Pool</CardTitle>
-              <CardDescription>
-                Geser untuk melihat 5 visual berbeda per bulan
-              </CardDescription>
-            </div>
-            <div className="text-xs md:text-right text-muted-foreground space-y-1">
-              <p>Jumlah Jabatan JA : 100</p>
-              <p>Jumlah Dalam Talent : 50</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-1">
-          <Carousel
-            className="w-full "
-            opts={{ loop: true, align: "start" }}
-            setApi={setChartApi}
-            onMouseEnter={() => setChartPaused(true)}
-            onMouseLeave={() => setChartPaused(false)}
-            onTouchStart={() => setChartPaused(true)}
-            onTouchEnd={() => setChartPaused(false)}
-          >
-            <CarouselContent>
-              {/* Slide 1: Line Chart Target vs Realisasi */}
-              <CarouselItem>
-                <div className="relative h-[200px] md:h-[300px]">
-                  {/* Label sumbu vertikal POTENSIAL */}
-                  {/* <div className="absolute -left-6 md:-left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] md:text-xs font-semibold tracking-wide text-muted-foreground">
+      <CardComponent
+        title="Tingkat Kehadiran"
+        description="Persentase kehadiran pegawai dalam satu minggu"
+        className="gap-4"
+        options={{
+          title: "Jumlah Jabatan JA : 100",
+          description: "Jumlah Dalam Talent : 50",
+        }}
+      >
+        <Carousel
+          className="w-full "
+          opts={{ loop: true, align: "start" }}
+          setApi={setChartApi}
+          onMouseEnter={() => setChartPaused(true)}
+          onMouseLeave={() => setChartPaused(false)}
+          onTouchStart={() => setChartPaused(true)}
+          onTouchEnd={() => setChartPaused(false)}
+        >
+          <CarouselContent>
+            {/* Slide 1: Line Chart Target vs Realisasi */}
+            <CarouselItem>
+              <div className="relative h-[160px] md:h-[240px]">
+                {/* Label sumbu vertikal POTENSIAL */}
+                {/* <div className="absolute -left-6 md:-left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] md:text-xs font-semibold tracking-wide text-muted-foreground">
                     POTENSIAL
                   </div> */}
 
-                  {/* Matriks 3x3 + label sumbu horizontal (full width & height) */}
-                  <div className="grid grid-cols-[84px_1fr_1fr_1fr] md:grid-cols-[110px_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_auto] w-full h-full gap-[2px]">
-                    {/* Row 1: Potential = Sangat Baik */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      SANGAT BAIK 10
-                    </div>
-                    <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      POTENSIAL 20
-                    </div>
-                    <div className="bg-emerald-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      RISING 14
-                    </div>
-                    <div className="bg-sky-600/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      TOP TALENT&nbsp;<span className="font-bold">35</span>
-                    </div>
+                {/* Matriks 3x3 + label sumbu horizontal (full width & height) */}
+                <div className="grid grid-cols-[84px_1fr_1fr_1fr] md:grid-cols-[110px_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] w-full h-full gap-[2px]">
+                  {/* Row 1: Potential = Sangat Baik */}
+                  <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    SANGAT BAIK 10
+                  </div>
+                  <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    POTENSIAL 20
+                  </div>
+                  <div className="bg-emerald-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    RISING 14
+                  </div>
+                  <div className="bg-sky-600/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    TOP TALENT&nbsp;<span className="font-bold">35</span>
+                  </div>
 
-                    {/* Row 2: Potential = Baik */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      BAIK 10
-                    </div>
-                    <div className="bg-amber-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      INCONSISTENT&nbsp;<span className="font-bold">1</span>
-                    </div>
-                    <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      KEY TALENT
-                    </div>
-                    <div className="bg-green-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      ADAPTABLE&nbsp;<span className="font-bold">144</span>
-                    </div>
+                  {/* Row 2: Potential = Baik */}
+                  <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    BAIK 10
+                  </div>
+                  <div className="bg-amber-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    INCONSISTENT&nbsp;<span className="font-bold">1</span>
+                  </div>
+                  <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    KEY TALENT
+                  </div>
+                  <div className="bg-green-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    ADAPTABLE&nbsp;<span className="font-bold">144</span>
+                  </div>
 
-                    {/* Row 3: Potential = Cukup */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      CUKUP
-                    </div>
-                    <div className="bg-rose-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      MISMATCH&nbsp;<span className="font-bold">4</span>
-                    </div>
-                    <div className="bg-orange-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      SOLID
-                    </div>
-                    <div className="bg-slate-800/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      EXPERT
-                    </div>
+                  {/* Row 3: Potential = Cukup */}
+                  <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    CUKUP
+                  </div>
+                  <div className="bg-rose-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    MISMATCH&nbsp;<span className="font-bold">4</span>
+                  </div>
+                  <div className="bg-orange-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    SOLID
+                  </div>
+                  <div className="bg-slate-800/90 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    EXPERT
+                  </div>
 
-                    {/* Row 4: Label sumbu horizontal PERFORMA */}
-                    <div className="bg-transparent"></div>
-                    <div className="bg-slate-500 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      CUKUP
-                    </div>
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      BAIK
-                    </div>
-                    <div className="bg-slate-700 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      SANGAT BAIK
-                    </div>
+                  {/* Row 4: Label sumbu horizontal PERFORMA */}
+                  <div className="bg-transparent"></div>
+                  <div className="bg-slate-500 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    CUKUP
+                  </div>
+                  <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    BAIK
+                  </div>
+                  <div className="bg-slate-700 text-white flex items-center justify-center text-[10px] md:text-xs font-normal uppercase min-h-[38px] md:min-h-[50px]">
+                    SANGAT BAIK
                   </div>
                 </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="relative h-[200px] md:h-[300px]">
-                  {/* Label sumbu vertikal POTENSIAL */}
-                  {/* <div className="absolute -left-6 md:-left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] md:text-xs font-semibold tracking-wide text-muted-foreground">
-                    POTENSIAL
-                  </div> */}
-
-                  {/* Matriks 3x3 + label sumbu horizontal (full width & height) */}
-                  <div className="grid grid-cols-[84px_1fr_1fr_1fr] md:grid-cols-[110px_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_auto] w-full h-full gap-[2px]">
-                    {/* Row 1: Potential = Sangat Baik */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      SANGAT BAIK 10
-                    </div>
-                    <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      POTENSIAL 20
-                    </div>
-                    <div className="bg-emerald-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      RISING 14
-                    </div>
-                    <div className="bg-sky-600/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      TOP TALENT&nbsp;<span className="font-bold">35</span>
-                    </div>
-
-                    {/* Row 2: Potential = Baik */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      BAIK 10
-                    </div>
-                    <div className="bg-amber-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      INCONSISTENT&nbsp;<span className="font-bold">1</span>
-                    </div>
-                    <div className="bg-yellow-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      KEY TALENT
-                    </div>
-                    <div className="bg-green-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      ADAPTABLE&nbsp;<span className="font-bold">144</span>
-                    </div>
-
-                    {/* Row 3: Potential = Cukup */}
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      CUKUP
-                    </div>
-                    <div className="bg-rose-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      MISMATCH&nbsp;<span className="font-bold">4</span>
-                    </div>
-                    <div className="bg-orange-500/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      SOLID
-                    </div>
-                    <div className="bg-slate-800/90 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[38px] md:min-h-[50px]">
-                      EXPERT
-                    </div>
-
-                    {/* Row 4: Label sumbu horizontal PERFORMA */}
-                    <div className="bg-transparent"></div>
-                    <div className="bg-slate-500 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      CUKUP
-                    </div>
-                    <div className="bg-slate-600 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      BAIK
-                    </div>
-                    <div className="bg-slate-700 text-white flex items-center justify-center text-[10px] md:text-xs font-semibold uppercase min-h-[32px] md:min-h-[50px]">
-                      SANGAT BAIK
-                    </div>
-                  </div>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-            <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-          </Carousel>
-          {/* Indikator dot */}
-          <div className="mt-2 flex justify-center gap-2">
-            {chartScrollSnaps.map((_, idx) => (
-              <button
-                key={idx}
-                aria-label={`Ke slide ${idx + 1}`}
-                onClick={() => chartApi?.scrollTo(idx)}
-                className={cn(
-                  "h-2 w-2 rounded-full transition-colors",
-                  idx === chartSelectedIndex
-                    ? "bg-primary"
-                    : "bg-muted-foreground/30"
-                )}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+        </Carousel>
+        {/* Indikator dot */}
+        <div className="mt-2 flex justify-center gap-2">
+          {chartScrollSnaps.map((_, idx) => (
+            <button
+              key={idx}
+              aria-label={`Ke slide ${idx + 1}`}
+              onClick={() => chartApi?.scrollTo(idx)}
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                idx === chartSelectedIndex
+                  ? "bg-primary"
+                  : "bg-muted-foreground/30"
+              )}
+            />
+          ))}
+        </div>
+      </CardComponent>
     </>
   );
 }

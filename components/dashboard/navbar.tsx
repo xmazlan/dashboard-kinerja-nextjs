@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { LogOut, Maximize, Minimize2 } from "lucide-react";
 import {
@@ -22,6 +23,7 @@ import { ThemeSwitcher } from "../theme-switcher";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import AlertModal from "../modal/alert-modal";
+import Image from "next/image";
 export function Navbar() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -61,18 +63,58 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/10 backdrop-blur supports-backdrop-filter:bg-background/10">
-      <div className="px-4 py-2 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 border-b border-border overflow-hidden bg-transparent backdrop-blur supports-backdrop-filter:bg-background/10">
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-animated-gradient" />
+      <div className="absolute inset-0 -z-10 pointer-events-none bg-animated-grid opacity-15 mix-blend-overlay" />
+      <motion.svg
+        className="absolute inset-0 -z-10 pointer-events-none w-full h-full opacity-20"
+        viewBox="0 0 108 16"
+        preserveAspectRatio="none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.path
+          d="M0 10 C 18 8, 36 12, 54 8 S 90 12 108 10"
+          stroke="currentColor"
+          strokeOpacity={0.25}
+          strokeWidth={0.6}
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0.6 }}
+          animate={{ pathLength: 1, opacity: 0.6 }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+        />
+      </motion.svg>
+      <div className="relative z-10 px-4 py-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-foreground">
-              {process.env.NEXT_PUBLIC_APP_NAME}
-            </h1>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/logo_pekanbaru.png"
+              alt="Logo Pemerintah Kota Pekanbaru"
+              width={32}
+              height={32}
+              priority
+              className=" shrink-0 object-contain drop-shadow-sm"
+            />
+
+            <div className="">
+              <div className="text-lg font-bold tracking-tight text-white drop-shadow-md">
+                {process.env.NEXT_PUBLIC_APP_NAME}
+              </div>
+              <div className="text-xs  text-white/90 font-normal">
+                {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               aria-label={
                 isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
