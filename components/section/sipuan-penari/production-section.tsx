@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { type CarouselApi } from '@/components/ui/carousel';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
+import CardComponent from "@/components/card/card-component";
 import ChartPertanianPalawija from './chart-pertanian-palawija';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -116,52 +117,52 @@ export default function ProductionSection() {
   }, []);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="tracking-wide text-primary"> Statistik Produksi Data Pertanian, Perkebunan, Peternakan, dan Perikanan </CardTitle>
-        <CardDescription>
+    <CardComponent
+      title="Statistik Produksi Data Pertanian, Perkebunan, Peternakan, dan Perikanan"
+      description={
+        <>
           Geser untuk melihat data bulanan/triwulan per sub sektor <br />
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Carousel
-          className="w-full"
-          opts={{ loop: true, align: "start" }}
-          setApi={setChartApi}
-          onMouseEnter={() => setChartPaused(true)}
-          onMouseLeave={() => setChartPaused(false)}
-          onTouchStart={() => setChartPaused(true)}
-          onTouchEnd={() => setChartPaused(false)}
-        >
-          <CarouselContent>
-            <CarouselItem>
-              <ChartPertanianPalawija year={year} chartData={chartData} />
-            </CarouselItem>
-            <CarouselItem>
-              <ChartPertanianPalawija year={year} chartData={chartData} />
-            </CarouselItem>
-          </CarouselContent>
-          {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-          {/* <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-        </Carousel>
-        {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2">
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-2 w-2 rounded-full transition-colors",
-                idx === chartSelectedIndex
-                  ? "bg-primary"
-                  : "bg-muted-foreground/30"
-              )}
-            />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      }
+      className="gap-4"
+    >
+      <Carousel
+        className="w-full"
+        opts={{ loop: true, align: "start" }}
+        setApi={setChartApi}
+        onMouseEnter={() => setChartPaused(true)}
+        onMouseLeave={() => setChartPaused(false)}
+        onTouchStart={() => setChartPaused(true)}
+        onTouchEnd={() => setChartPaused(false)}
+      >
+        <CarouselContent>
+          <CarouselItem>
+            <ChartPertanianPalawija year={year} chartData={chartData} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPertanianPalawija year={year} chartData={chartData} />
+          </CarouselItem>
+        </CarouselContent>
+        {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+        {/* <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+      </Carousel>
+      {/* Indikator dot */}
+      <div className="mt-3 flex justify-center gap-2">
+        {chartScrollSnaps.map((_, idx) => (
+          <button
+            key={idx}
+            aria-label={`Ke slide ${idx + 1}`}
+            onClick={() => chartApi?.scrollTo(idx)}
+            className={cn(
+              "h-2 w-2 rounded-full transition-colors",
+              idx === chartSelectedIndex
+                ? "bg-primary"
+                : "bg-muted-foreground/30"
+            )}
+          />
+        ))}
+      </div>
+    </CardComponent>
   )
 }

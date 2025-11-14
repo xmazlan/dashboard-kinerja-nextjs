@@ -189,11 +189,13 @@ export default function PertanianPalawija({ year, chartData }: Props) {
     },
     dataLabels: {
       enabled: true,
-      dropShadow: {
-        enabled: true
+      // dropShadow: {
+      //   enabled: true
+      // },
+      background: {
+        borderRadius: 5,
       },
-
-      formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val),
+      formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + 'Ton',
     },
     plotOptions: {
       line: {
