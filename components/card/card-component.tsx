@@ -18,7 +18,7 @@ export default function CardComponent({
   children: React.ReactNode;
   className?: string;
   title?: string;
-  description?: string;
+  description?: string | React.ReactNode;
   options?: {
     title?: string;
     description?: string;
