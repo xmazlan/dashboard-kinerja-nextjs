@@ -6,6 +6,7 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
 import CardComponent from '@/components/card/card-component';
+import SkeletonList from '@/components/skeleton/SkeletonList';
 import BarChart from '@/components/apexchart/bar-chart';
 
 interface Props {
@@ -234,7 +235,7 @@ export default function ChartPertanianPalawija({ year, chartData }: Props) {
           height={400}
         />
       ) : (
-        'Memuat data..'
+        <SkeletonList />
       )}
     </CardComponent>
   )
