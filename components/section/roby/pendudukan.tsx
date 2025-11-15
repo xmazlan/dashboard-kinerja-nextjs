@@ -15,7 +15,7 @@ import DataEresponMasterData from "./data/data-erespon-master-data";
 import DataCapil from "./data/data-capil";
 import DataEresponOpd from "./data/data-erespon-opd";
 
-export default function ArticleTree() {
+export default function SectionPendudukan() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -103,12 +103,6 @@ export default function ArticleTree() {
             {/* Slide 1: Line Chart Target vs Realisasi */}
             <CarouselItem>
               <DataCapil />
-            </CarouselItem>
-            <CarouselItem>
-              <DataEresponMasterData />
-            </CarouselItem>
-            <CarouselItem>
-              <DataEresponOpd />
             </CarouselItem>
           </CarouselContent>
         </Carousel>

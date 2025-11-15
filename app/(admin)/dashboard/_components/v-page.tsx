@@ -5,6 +5,8 @@ import SectionOne from "@/components/section/section-one";
 import SectionTwo from "@/components/section/section-two";
 import ArticleTree from "@/components/section/roby/article-tree";
 import SectionTree from "@/components/section/section-tree";
+import SectionPengaduan from "@/components/section/roby/pengaduan";
+import SectionPendudukan from "@/components/section/roby/pendudukan";
 
 export default function Dashboard() {
   return (
@@ -16,7 +18,9 @@ export default function Dashboard() {
         <SectionOne />
 
         {/* Charts Grid */}
-        <SectionTwo />
+        {/* <SectionTwo /> */}
+        <SectionPengaduan />
+        <SectionPendudukan />
 
         <SectionTree />
       </main>
