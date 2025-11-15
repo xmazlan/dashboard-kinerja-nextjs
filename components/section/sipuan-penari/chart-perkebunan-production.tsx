@@ -5,6 +5,7 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 // Props
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
+import CardComponent from '@/components/card/card-component';
 import BarChart from '@/components/apexchart/bar-chart';
 
 interface Props {
@@ -78,23 +79,31 @@ export default function ChartPerkebunanProduction({ year, chartData }: Props) {
       data: values,
     },
   ];
+
   return (
-    <>
-      <div className="px-2">
+    <CardComponent
+      title="Statistik Produksi Perkebunan"
+      description={
+        <>
+          Data Produksi Perkebunan <br />
+          <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
+        </>
+      }
+      className="gap-1 pt-0 border-none shadow-none"
+    >
+      <div className="">
         <p className="text-xs text-gray-500"> Khusus untuk <b>Aren</b> data dalam satuan <b>Liter</b>. </p>
       </div>
-      {
-        chartData.isLoaded ? (
-          <BarChart
-            options={options}
-            series={series}
-            type="bar"
-            height={400}
-          />
-        ) : (
-          'Memuat data..'
-        )
-      }
-    </>
-  );
+      {chartData.isLoaded ? (
+        <BarChart
+          options={options}
+          series={series}
+          type="bar"
+          height={400}
+        />
+      ) : (
+        'Memuat data..'
+      )}
+    </CardComponent>
+  )
 }

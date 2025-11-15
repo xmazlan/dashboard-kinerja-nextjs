@@ -235,16 +235,7 @@ export default function ProductionSection() {
   }, []);
 
   return (
-    <CardComponent
-      title="Statistik Produksi Data Pertanian, Perkebunan, Peternakan, dan Perikanan"
-      description={
-        <>
-          Geser untuk melihat data bulanan/triwulan per sub sektor <br />
-          <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
-        </>
-      }
-      className="gap-4"
-    >
+    <CardComponent className="px-0 pt-0 pb-3 shadow-none">
       <Carousel
         className="w-full"
         opts={{ loop: true, align: "start" }}

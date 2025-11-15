@@ -5,6 +5,7 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 // Props
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
+import CardComponent from '@/components/card/card-component';
 import BarChart from '@/components/apexchart/bar-chart';
 
 interface Props {
@@ -70,14 +71,27 @@ export default function ChartPeternakanVaccination({ year, chartData }: Props) {
     }
   ];
 
-  return chartData.isLoaded ? (
-    <BarChart
-      options={options}
-      series={series}
-      type="bar"
-      height={400}
-    />
-  ) : (
-    'Memuat data..'
+  return (
+    <CardComponent
+      title="Statistik Produksi Peternakan"
+      description={
+        <>
+          Data Vaksinasi Hewan <br />
+          <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
+        </>
+      }
+      className="gap-1 pt-0 border-none shadow-none"
+    >
+      {chartData.isLoaded ? (
+        <BarChart
+          options={options}
+          series={series}
+          type="bar"
+          height={400}
+        />
+      ) : (
+        'Memuat data..'
+      )}
+    </CardComponent>
   )
 }
