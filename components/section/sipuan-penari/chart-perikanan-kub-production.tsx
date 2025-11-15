@@ -13,34 +13,24 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPertanianFruitVegetableYear({ year, chartData }: Props) {
+export default function ChartPerikananKUBProduction({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
 
-  const title = 'Data Produksi Tanaman Buah-Buahan dan Sayuran Tahunan';
+  const title = 'Data Produksi Kelompok Usaha Bersama (KUB)';
   const subTitle = 'Tahun ' + year;
 
-  const dataChart = chartData?.data?.fruit_vegetable_year;
+  const dataChart = chartData?.data?.kub_production;
 
-  // // Label bulan
-  // const months = [
-  //   "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-  //   "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-  // ];
-  // // Generate series untuk chart
-  // const series = dataChart?.map(item => ({
-  //   name: item.label,
-  //   data: item.values
-  // }));
   const categories = dataChart?.map((d) => d.label);
   const values = dataChart?.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),
     {
-      // colors: ["#00E396"],
+      // colors: ["#F86624"],
       plotOptions: {
         bar: {
           distributed: true,
@@ -57,12 +47,6 @@ export default function ChartPertanianFruitVegetableYear({ year, chartData }: Pr
           }).format(val),
       },
       tooltip: {
-        // x: {
-        //   formatter: function (_, { dataPointIndex }) {
-        //     // tampilkan nama panjang di tooltip
-        //     return names[dataPointIndex] || '-';
-        //   },
-        // },
         y: {
           formatter: (val: number) =>
             new Intl.NumberFormat('id-ID', {
@@ -90,12 +74,13 @@ export default function ChartPertanianFruitVegetableYear({ year, chartData }: Pr
     },
   ];
 
+
   return (
     <CardComponent
-      title="Statistik Produksi Pertanian"
+      title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Tanaman Buah-Buahan dan Sayuran Tahunan <br />
+          Data Produksi Kelompok Usaha Bersama (KUB) <br />
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

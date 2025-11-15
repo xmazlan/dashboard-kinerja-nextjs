@@ -5,6 +5,7 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 // Props
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
+import CardComponent from '@/components/card/card-component';
 import BarChart from '@/components/apexchart/bar-chart';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPeranianFruitVegetableSeason({ year, chartData }: Props) {
+export default function ChartPertanianFruitVegetableSeason({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
@@ -39,9 +40,21 @@ export default function ChartPeranianFruitVegetableSeason({ year, chartData }: P
   const options = merge(
     barChartOptions(isDark, title, subTitle),
     {
-      colors: ["#00E396"],
+      // colors: ["#00E396"],
+      plotOptions: {
+        bar: {
+          distributed: true,
+        }
+      },
+      legend: {
+        show: false,
+      },
       dataLabels: {
-        formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+        formatter: (val: number) =>
+          new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          }).format(val),
       },
       tooltip: {
         // x: {
@@ -52,7 +65,10 @@ export default function ChartPeranianFruitVegetableSeason({ year, chartData }: P
         // },
         y: {
           formatter: (val: number) =>
-            new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+            new Intl.NumberFormat('id-ID', {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }).format(val) + ' Ton',
         },
       },
       xaxis: {
@@ -74,14 +90,27 @@ export default function ChartPeranianFruitVegetableSeason({ year, chartData }: P
     },
   ];
 
-  return chartData.isLoaded ? (
-    <BarChart
-      options={options}
-      series={series}
-      type="bar"
-      height={400}
-    />
-  ) : (
-    'Memuat data..'
+  return (
+    <CardComponent
+      title="Statistik Produksi Pertanian"
+      description={
+        <>
+          Data Tanaman Sayuran dan Buah-Buahan Semusim <br />
+          <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
+        </>
+      }
+      className="gap-1 pt-0 border-none shadow-none"
+    >
+      {chartData.isLoaded ? (
+        <BarChart
+          options={options}
+          series={series}
+          type="bar"
+          height={400}
+        />
+      ) : (
+        'Memuat data..'
+      )}
+    </CardComponent>
   )
 }
