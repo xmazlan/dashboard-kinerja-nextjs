@@ -12,6 +12,7 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
 import { ChartRadialSistemMerit } from "./chart/sistem-merit";
+import { ChartSakip } from "./chart/sakip";
 
 // Mock data untuk dashboard
 const mockData = {
@@ -184,6 +185,9 @@ export default function ArticleOne() {
             {/* Slide 1: Line Chart Target vs Realisasi */}
             <CarouselItem>
               <ChartRadialSistemMerit />
+            </CarouselItem>
+            <CarouselItem>
+              <ChartSakip />
             </CarouselItem>
             <CarouselItem>
               <div className="relative h-[160px] md:h-[240px]">
