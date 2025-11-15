@@ -12,7 +12,7 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPeranianBiopharmaceutical({ year, chartData }: Props) {
+export default function ChartPertanianBiopharmaceutical({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
@@ -38,9 +38,21 @@ export default function ChartPeranianBiopharmaceutical({ year, chartData }: Prop
   const options = merge(
     barChartOptions(isDark, title, subTitle),
     {
-      colors: ["#00E396"],
+      // colors: ["#00E396"],
+      plotOptions: {
+        bar: {
+          distributed: true,
+        }
+      },
+      legend: {
+        show: false,
+      },
       dataLabels: {
-        formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+        formatter: (val: number) =>
+          new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          }).format(val),
       },
       tooltip: {
         // x: {
@@ -51,7 +63,10 @@ export default function ChartPeranianBiopharmaceutical({ year, chartData }: Prop
         // },
         y: {
           formatter: (val: number) =>
-            new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+            new Intl.NumberFormat('id-ID', {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }).format(val) + ' Ton',
         },
       },
       xaxis: {

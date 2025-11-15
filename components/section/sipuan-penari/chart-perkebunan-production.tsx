@@ -29,9 +29,21 @@ export default function ChartPerkebunanProduction({ year, chartData }: Props) {
   const options = merge(
     barChartOptions(isDark, title, subTitle),
     {
-      colors: ["#4caf50"],
+      // colors: ["#4caf50"],
+      plotOptions: {
+        bar: {
+          distributed: true,
+        }
+      },
+      legend: {
+        show: false,
+      },
       dataLabels: {
-        formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+        formatter: (val: number) =>
+          new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          }).format(val),
       },
       tooltip: {
         // x: {
@@ -42,7 +54,10 @@ export default function ChartPerkebunanProduction({ year, chartData }: Props) {
         // },
         y: {
           formatter: (val: number) =>
-            new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+            new Intl.NumberFormat('id-ID', {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }).format(val) + ' Ton',
         },
       },
       xaxis: {

@@ -22,7 +22,7 @@ export async function getStatisticPertanianAction(paramGet?: string): Promise<Re
     const session = await getServerSession(authOptions);
     const token = session?.accessToken;
 
-    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/pertanian';
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/v1/getResult/sipuanpenari/pertanian';
     if (paramGet) {
       apiURL += '?' + paramGet;
     }
@@ -71,7 +71,7 @@ export async function getStatisticPerkebunanAction(paramGet?: string): Promise<R
     const session = await getServerSession(authOptions);
     const token = session?.accessToken;
 
-    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/perkebunan';
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/v1/getResult/sipuanpenari/perkebunan';
     if (paramGet) {
       apiURL += '?' + paramGet;
     }
@@ -120,7 +120,7 @@ export async function getStatisticPeternakanAction(paramGet?: string): Promise<R
     const session = await getServerSession(authOptions);
     const token = session?.accessToken;
 
-    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/peternakan';
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/v1/getResult/sipuanpenari/peternakan';
     if (paramGet) {
       apiURL += '?' + paramGet;
     }
@@ -169,7 +169,7 @@ export async function getStatisticPerikananAction(paramGet?: string): Promise<Re
     const session = await getServerSession(authOptions);
     const token = session?.accessToken;
 
-    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/perikanan';
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/v1/getResult/sipuanpenari/perikanan';
     if (paramGet) {
       apiURL += '?' + paramGet;
     }

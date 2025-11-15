@@ -4,15 +4,28 @@ import { cn } from '@/lib/utils';
 import { type CarouselApi } from '@/components/ui/carousel';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
-// Pertanian
 import CardComponent from "@/components/card/card-component";
+// Pertanian
 import ChartPertanianPalawija from './chart-pertanian-palawija';
-import ChartPeranianFruitVegetableSeason from './chart-pertanian-fruit-vegetable-season';
-import ChartPeranianFruitVegetableYear from './chart-pertanian-fruit-vegetable-year';
-import ChartPeranianBiopharmaceutical from './chart-pertanian-biopharmaceutical';
-import ChartPeranianOrnamental from './chart-pertanian-ornamental';
+import ChartPertanianFruitVegetableSeason from './chart-pertanian-fruit-vegetable-season';
+import ChartPertanianFruitVegetableYear from './chart-pertanian-fruit-vegetable-year';
+import ChartPertanianBiopharmaceutical from './chart-pertanian-biopharmaceutical';
+import ChartPertanianOrnamental from './chart-pertanian-ornamental';
 // Perkebunan
 import ChartPerkebunanProduction from './chart-perkebunan-production';
+// Peternakan
+import ChartPeternakanPopulation from './chart-peternakan-population';
+import ChartPeternakanSlaughtered from './chart-peternakan-slaughtered';
+import ChartPeternakanProduction from './chart-peternakan-production';
+import ChartPeternakanVaccination from './chart-peternakan-vaccination';
+// Perikanan
+import ChartPerikananSeedCultivation from './chart-perikanan-seed-cultivation';
+import ChartPerikananPondCultivation from './chart-perikanan-pond-cultivation';
+import ChartPerikananCageCultivation from './chart-perikanan-cage-cultivation';
+import ChartPerikananOrnamentalCultivation from './chart-perikanan-ornamental-cultivation';
+import ChartPerikananKUBProduction from './chart-perikanan-kub-production';
+import ChartPerikananUPIFisheryProduct from './chart-perikanan-upi-fishery-product';
+
 import { toast } from "sonner"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 // Actions
@@ -74,8 +87,9 @@ export default function ProductionSection() {
     return () => clearInterval(id);
   }, [contentApi]);
 
-
+  // Year state
   const [year, setYear] = useState(new Date().getFullYear().toString());
+
   // Chart pertanian state
   const [chartDataPertanian, setChartDataPertanian] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
@@ -96,7 +110,7 @@ export default function ProductionSection() {
         }
         else {
           toast.error("Gagal !", {
-            description: res.message || 'API Server Error !'
+            description: res.message || 'API Server Error !',
           })
         }
       }
@@ -117,11 +131,7 @@ export default function ProductionSection() {
   const [chartDataPerkebunan, setChartDataPerkebunan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
     data: {
-      palawija: [],
-      fruit_vegetable_season: [],
-      fruit_vegetable_year: [],
-      biopharmaceutical: [],
-      ornamental: [],
+      production: [],
     }
   });
   useEffect(() => {
@@ -130,6 +140,80 @@ export default function ProductionSection() {
         const res = await getStatisticPerkebunanAction(new URLSearchParams({ year: year }).toString());
         if (res.success) {
           setChartDataPerkebunan(old => ({ ...old, data: res.data, isLoaded: true }))
+        }
+        else {
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
+        }
+      }
+      catch (error) {
+        if (error instanceof Error) {
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
+        } else {
+          console.log('Unknown error:', error)
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Chart peternakan state
+  const [chartDataPeternakan, setChartDataPeternakan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
+    isLoaded: false,
+    data: {
+      population: [],
+      slaughtered: [],
+      production: [],
+      vaccination: [],
+    }
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getStatisticPeternakanAction(new URLSearchParams({ year: year }).toString());
+        if (res.success) {
+          setChartDataPeternakan(old => ({ ...old, data: res.data, isLoaded: true }))
+        }
+        else {
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
+        }
+      }
+      catch (error) {
+        if (error instanceof Error) {
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
+        } else {
+          console.log('Unknown error:', error)
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Chart perikanan state
+  const [chartDataPerikanan, setChartDataPerikanan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
+    isLoaded: false,
+    data: {
+      seed_cultivation: [],
+      pond_cultivation: [],
+      cage_cultivation: [],
+      ornamental_cultivation: [],
+      kub_production: [],
+      upi_fishery_product: [],
+    }
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getStatisticPerikananAction(new URLSearchParams({ year: year }).toString());
+        if (res.success) {
+          setChartDataPerikanan(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
           toast.error("Gagal !", {
@@ -176,23 +260,53 @@ export default function ProductionSection() {
             <ChartPertanianPalawija year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPeranianFruitVegetableSeason year={year} chartData={chartDataPertanian} />
+            <ChartPertanianFruitVegetableSeason year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPeranianFruitVegetableYear year={year} chartData={chartDataPertanian} />
+            <ChartPertanianFruitVegetableYear year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPeranianBiopharmaceutical year={year} chartData={chartDataPertanian} />
+            <ChartPertanianBiopharmaceutical year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPeranianOrnamental year={year} chartData={chartDataPertanian} />
+            <ChartPertanianOrnamental year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           {/* Perkebunan */}
           <CarouselItem>
             <ChartPerkebunanProduction year={year} chartData={chartDataPerkebunan} />
           </CarouselItem>
           {/* Peternakan */}
+          <CarouselItem>
+            <ChartPeternakanPopulation year={year} chartData={chartDataPeternakan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeternakanSlaughtered year={year} chartData={chartDataPeternakan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeternakanProduction year={year} chartData={chartDataPeternakan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeternakanVaccination year={year} chartData={chartDataPeternakan} />
+          </CarouselItem>
           {/* Perikanan */}
+          <CarouselItem>
+            <ChartPerikananSeedCultivation year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPerikananPondCultivation year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPerikananCageCultivation year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPerikananOrnamentalCultivation year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPerikananKUBProduction year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPerikananUPIFisheryProduct year={year} chartData={chartDataPerikanan} />
+          </CarouselItem>
         </CarouselContent>
         {/* <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
         <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
