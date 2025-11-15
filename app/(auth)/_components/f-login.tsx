@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -49,11 +49,10 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
         callbackUrl: "/dashboard",
       });
       toast.success("Login berhasil. Mengalihkan...");
+      router.push(result?.url || "/dashboard");
       if (result?.error) {
         setError(result.error);
         toast.error(result.error);
-      } else if (result?.url) {
-        router.push(result.url);
       }
     } catch (err) {
       setError("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");

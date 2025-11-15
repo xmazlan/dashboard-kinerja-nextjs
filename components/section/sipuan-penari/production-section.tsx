@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 // Props
 import { type CarouselApi } from '@/components/ui/carousel';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
+// Pertanian
 import CardComponent from "@/components/card/card-component";
 import ChartPertanianPalawija from './chart-pertanian-palawija';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ChartPeranianFruitVegetableSeason from './chart-pertanian-fruit-vegetable-season';
+import ChartPeranianFruitVegetableYear from './chart-pertanian-fruit-vegetable-year';
+import ChartPeranianBiopharmaceutical from './chart-pertanian-biopharmaceutical';
+import ChartPeranianOrnamental from './chart-pertanian-ornamental';
+// Perkebunan
+import ChartPerkebunanProduction from './chart-perkebunan-production';
+import { toast } from "sonner"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// Icons
-import { TrendingUp, Users, CheckCircle, AlertCircle } from 'lucide-react';
 // Actions
-import { getStatisticPertanianAction } from '@/actions/SipuanPenariActions';
+import { getStatisticPertanianAction, getStatisticPerkebunanAction, getStatisticPeternakanAction, getStatisticPerikananAction } from '@/actions/SipuanPenariActions';
 
 export default function ProductionSection() {
 
@@ -73,8 +76,8 @@ export default function ProductionSection() {
 
 
   const [year, setYear] = useState(new Date().getFullYear().toString());
-  // Chart state
-  const [chartData, setChartData] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
+  // Chart pertanian state
+  const [chartDataPertanian, setChartDataPertanian] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
     data: {
       palawija: [],
@@ -89,25 +92,56 @@ export default function ProductionSection() {
       try {
         const res = await getStatisticPertanianAction(new URLSearchParams({ year: year }).toString());
         if (res.success) {
-          setChartData(old => ({ ...old, data: res.data, isLoaded: true }))
+          setChartDataPertanian(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: res.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
         }
       }
       catch (error) {
         if (error instanceof Error) {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: error.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
+        } else {
+          console.log('Unknown error:', error)
+        }
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Chart perkebunan state
+  const [chartDataPerkebunan, setChartDataPerkebunan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
+    isLoaded: false,
+    data: {
+      palawija: [],
+      fruit_vegetable_season: [],
+      fruit_vegetable_year: [],
+      biopharmaceutical: [],
+      ornamental: [],
+    }
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getStatisticPerkebunanAction(new URLSearchParams({ year: year }).toString());
+        if (res.success) {
+          setChartDataPerkebunan(old => ({ ...old, data: res.data, isLoaded: true }))
+        }
+        else {
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
+        }
+      }
+      catch (error) {
+        if (error instanceof Error) {
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
         } else {
           console.log('Unknown error:', error)
         }
@@ -137,25 +171,41 @@ export default function ProductionSection() {
         onTouchEnd={() => setChartPaused(false)}
       >
         <CarouselContent>
+          {/* Pertanian */}
           <CarouselItem>
-            <ChartPertanianPalawija year={year} chartData={chartData} />
+            <ChartPertanianPalawija year={year} chartData={chartDataPertanian} />
           </CarouselItem>
           <CarouselItem>
-            <ChartPertanianPalawija year={year} chartData={chartData} />
+            <ChartPeranianFruitVegetableSeason year={year} chartData={chartDataPertanian} />
           </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianFruitVegetableYear year={year} chartData={chartDataPertanian} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianBiopharmaceutical year={year} chartData={chartDataPertanian} />
+          </CarouselItem>
+          <CarouselItem>
+            <ChartPeranianOrnamental year={year} chartData={chartDataPertanian} />
+          </CarouselItem>
+          {/* Perkebunan */}
+          <CarouselItem>
+            <ChartPerkebunanProduction year={year} chartData={chartDataPerkebunan} />
+          </CarouselItem>
+          {/* Peternakan */}
+          {/* Perikanan */}
         </CarouselContent>
-        {/* <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
-        {/* <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+        {/* <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
       </Carousel>
       {/* Indikator dot */}
-      <div className="mt-3 flex justify-center gap-2">
+      <div className="mt-2 flex justify-center gap-2">
         {chartScrollSnaps.map((_, idx) => (
           <button
             key={idx}
             aria-label={`Ke slide ${idx + 1}`}
             onClick={() => chartApi?.scrollTo(idx)}
             className={cn(
-              "h-2 w-2 rounded-full transition-colors",
+              "h-2 w-2 rounded-full transition-colors cursor-pointer",
               idx === chartSelectedIndex
                 ? "bg-primary"
                 : "bg-muted-foreground/30"

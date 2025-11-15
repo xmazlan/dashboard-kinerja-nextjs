@@ -26,7 +26,7 @@ export default function CardComponent({
 }) {
   return (
     <>
-      <Card className={cn("gap-1 py-2", className)}>
+      <Card className={cn("gap-1 py-2 flex flex-col h-full", className)}>
         <CardHeader className="px-3 pt-1 pb-0">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-1 md:gap-2">
             <div className="">
@@ -39,7 +39,7 @@ export default function CardComponent({
             </div>
           </div>
         </CardHeader>
-        <CardContent className="pt-0 px-1 pb-1">{children}</CardContent>
+        <CardContent className="pt-0 px-3 pb-1 flex-1">{children}</CardContent>
       </Card>
     </>
   );

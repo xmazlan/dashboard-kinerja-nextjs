@@ -10,15 +10,17 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import ArticlePengaduan from "./article-pengaduan";
+import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
 import DataEresponMasterData from "./data/data-erespon-master-data";
-import DataCapil from "./data/data-capil";
 
-export default function ArticleTree() {
+export default function ArticlePengaduan() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const { data: masterData, isLoading: isLoadingMasterData } =
+    usePengaduanEresponMasterData();
+  console.log("masterData", masterData);
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
@@ -88,7 +90,11 @@ export default function ArticleTree() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-none">
+      <CardComponent
+        className="gap-1"
+        title="Layanan Kependudukan dan Pecatan Sipil"
+        description="11-04-2025"
+      >
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -99,10 +105,6 @@ export default function ArticleTree() {
           onTouchEnd={() => setChartPaused(false)}
         >
           <CarouselContent>
-            {/* Slide 1: Line Chart Target vs Realisasi */}
-            <CarouselItem>
-              <DataCapil />
-            </CarouselItem>
             <CarouselItem>
               <DataEresponMasterData />
             </CarouselItem>

@@ -42,7 +42,154 @@ export async function getStatisticPertanianAction(paramGet?: string): Promise<Re
         const api = error.response.data;
         return {
           success: false,
-          message: api.message || 'Gagal mengambil jumlah data dataset !',
+          message: api.message || 'Gagal mengambil data produksi pertanian !',
+          errors: api.errors
+        };
+      } else if (error.request) {
+        return {
+          success: false,
+          message: 'Network error - Tidak dapat terhubung ke server !'
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Request error - ' + error.message + ' !'
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Unexpected error occurred !'
+      };
+    }
+  }
+}
+
+export async function getStatisticPerkebunanAction(paramGet?: string): Promise<ResponResult> {
+  try {
+    // Get token from session (server)
+    const session = await getServerSession(authOptions);
+    const token = session?.accessToken;
+
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/perkebunan';
+    if (paramGet) {
+      apiURL += '?' + paramGet;
+    }
+    const response = await axios.get(apiURL, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const api = response.data;
+    return api;
+  }
+  catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        const api = error.response.data;
+        return {
+          success: false,
+          message: api.message || 'Gagal mengambil data produksi perkebunan !',
+          errors: api.errors
+        };
+      } else if (error.request) {
+        return {
+          success: false,
+          message: 'Network error - Tidak dapat terhubung ke server !'
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Request error - ' + error.message + ' !'
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Unexpected error occurred !'
+      };
+    }
+  }
+}
+
+export async function getStatisticPeternakanAction(paramGet?: string): Promise<ResponResult> {
+  try {
+    // Get token from session (server)
+    const session = await getServerSession(authOptions);
+    const token = session?.accessToken;
+
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/peternakan';
+    if (paramGet) {
+      apiURL += '?' + paramGet;
+    }
+    const response = await axios.get(apiURL, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const api = response.data;
+    return api;
+  }
+  catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        const api = error.response.data;
+        return {
+          success: false,
+          message: api.message || 'Gagal mengambil data produksi peternakan !',
+          errors: api.errors
+        };
+      } else if (error.request) {
+        return {
+          success: false,
+          message: 'Network error - Tidak dapat terhubung ke server !'
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Request error - ' + error.message + ' !'
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: 'Unexpected error occurred !'
+      };
+    }
+  }
+}
+
+export async function getStatisticPerikananAction(paramGet?: string): Promise<ResponResult> {
+  try {
+    // Get token from session (server)
+    const session = await getServerSession(authOptions);
+    const token = session?.accessToken;
+
+    let apiURL = process.env.NEXT_PUBLIC_API_URL + '/api/production/perikanan';
+    if (paramGet) {
+      apiURL += '?' + paramGet;
+    }
+    const response = await axios.get(apiURL, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const api = response.data;
+    return api;
+  }
+  catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        const api = error.response.data;
+        return {
+          success: false,
+          message: api.message || 'Gagal mengambil data produksi perikanan !',
           errors: api.errors
         };
       } else if (error.request) {
