@@ -80,7 +80,7 @@ export default function ChartPeternakanPopulation({ year, chartData }: Props) {
       title="Statistik Produksi Peternakan"
       description={
         <>
-          Data Populasi Ternak <br />
+          {/* Data Populasi Ternak <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

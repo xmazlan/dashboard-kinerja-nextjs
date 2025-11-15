@@ -80,7 +80,7 @@ export default function ChartPeternakanSlaughtered({ year, chartData }: Props) {
       title="Statistik Produksi Peternakan"
       description={
         <>
-          Data Pemotongan Hewan <br />
+          {/* Data Pemotongan Hewan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

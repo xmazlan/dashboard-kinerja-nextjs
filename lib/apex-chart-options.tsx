@@ -37,7 +37,7 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     type: "bar",
     background: "transparent",
     dropShadow: {
-      enabled: true,
+      // enabled: true,
       // color: '#000',
       // top: 18,
       // left: 7,
@@ -87,14 +87,22 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     enabled: true,
     offsetY: -10,
     dropShadow: {
-      enabled: true
+      // enabled: true
     },
     // style: {
     //   fontSize: '10px',
     // },
     background: {
-      // padding: 10,
+      enabled: true,
+      foreColor: '#000',
+      // backgroundColor: 'inherit',
       borderRadius: 5,
+      // padding: 10,
+      borderWidth: 1,
+      // borderColor?: string
+      // dropShadow: {
+      //   enabled: true
+      // }
     },
     // formatter: (val: number) =>
     //   new Intl.NumberFormat('id-ID', {
@@ -145,8 +153,15 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     labels: {
       show: true,
       rotate: -45,
-      trim: false,
+      trim: true,
       hideOverlappingLabels: false,
+      maxHeight: 100,
+      // formatter: function (value: string) {
+      //   const maxLength = 15;
+      //   return value.length > maxLength
+      //     ? value.substring(0, maxLength - 3) + ".."
+      //     : value;
+      // }
     },
   },
   yaxis: {

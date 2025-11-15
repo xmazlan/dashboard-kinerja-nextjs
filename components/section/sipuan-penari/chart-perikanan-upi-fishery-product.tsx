@@ -80,7 +80,7 @@ export default function ChartPerikananUPIFisheryProduct({ year, chartData }: Pro
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Unit Pengolahan Ikan (UPI) Pengolahan Hasil Perikanan <br />
+          {/* Data Produksi Unit Pengolahan Ikan (UPI) Pengolahan Hasil Perikanan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

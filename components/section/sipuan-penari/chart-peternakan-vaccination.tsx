@@ -77,7 +77,7 @@ export default function ChartPeternakanVaccination({ year, chartData }: Props) {
       title="Statistik Produksi Peternakan"
       description={
         <>
-          Data Vaksinasi Hewan <br />
+          {/* Data Vaksinasi Hewan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

@@ -95,7 +95,7 @@ export default function ChartPertanianBiopharmaceutical({ year, chartData }: Pro
       title="Statistik Produksi Pertanian"
       description={
         <>
-          Data Tanaman Biofarmaka <br />
+          {/* Data Tanaman Biofarmaka <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

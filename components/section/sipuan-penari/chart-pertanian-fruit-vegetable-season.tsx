@@ -96,7 +96,7 @@ export default function ChartPertanianFruitVegetableSeason({ year, chartData }: 
       title="Statistik Produksi Pertanian"
       description={
         <>
-          Data Tanaman Sayuran dan Buah-Buahan Semusim <br />
+          {/* Data Tanaman Sayuran dan Buah-Buahan Semusim <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

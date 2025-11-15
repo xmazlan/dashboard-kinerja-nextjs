@@ -81,7 +81,7 @@ export default function ChartPerikananKUBProduction({ year, chartData }: Props) 
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Kelompok Usaha Bersama (KUB) <br />
+          {/* Data Produksi Kelompok Usaha Bersama (KUB) <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

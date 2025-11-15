@@ -81,7 +81,7 @@ export default function ChartPerikananCageCultivation({ year, chartData }: Props
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Budidaya Pembesaran Di Keramba/KJA <br />
+          {/* Data Produksi Budidaya Pembesaran Di Keramba/KJA <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

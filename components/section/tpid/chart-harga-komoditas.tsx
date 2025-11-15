@@ -14,7 +14,7 @@ interface Props {
   chartData: { isLoaded: boolean, data: ResponseDataStatistic }
 }
 
-export default function ChartPertanianPalawija({ year, chartData }: Props) {
+export default function ChartHargaKomoditas({ year, chartData }: Props) {
 
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;

@@ -96,7 +96,7 @@ export default function ChartPertanianOrnamental({ year, chartData }: Props) {
       title="Statistik Produksi Pertanian"
       description={
         <>
-          Data Tanaman Hias <br />
+          {/* Data Tanaman Hias <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

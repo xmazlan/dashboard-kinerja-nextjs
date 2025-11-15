@@ -81,7 +81,7 @@ export default function ChartPerikananOrnamentalCultivation({ year, chartData }:
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Budidaya Ikan Hias <br />
+          {/* Data Produksi Budidaya Ikan Hias <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

@@ -81,7 +81,7 @@ export default function ChartPerikananPondCultivation({ year, chartData }: Props
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Budidaya Pembesaran Di Kolam <br />
+          {/* Data Produksi Budidaya Pembesaran Di Kolam <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

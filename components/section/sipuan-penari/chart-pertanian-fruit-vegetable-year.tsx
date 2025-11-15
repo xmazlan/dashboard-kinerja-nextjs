@@ -96,7 +96,7 @@ export default function ChartPertanianFruitVegetableYear({ year, chartData }: Pr
       title="Statistik Produksi Pertanian"
       description={
         <>
-          Data Tanaman Buah-Buahan dan Sayuran Tahunan <br />
+          {/* Data Tanaman Buah-Buahan dan Sayuran Tahunan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }

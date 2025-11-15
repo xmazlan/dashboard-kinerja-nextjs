@@ -86,7 +86,7 @@ export default function ChartPerkebunanProduction({ year, chartData }: Props) {
       title="Statistik Produksi Perkebunan"
       description={
         <>
-          Data Produksi Perkebunan <br />
+          {/* Data Produksi Perkebunan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
       }
