@@ -13,10 +13,10 @@ import ChartPeranianBiopharmaceutical from './chart-pertanian-biopharmaceutical'
 import ChartPeranianOrnamental from './chart-pertanian-ornamental';
 // Perkebunan
 import ChartPerkebunanProduction from './chart-perkebunan-production';
-
+import { toast } from "sonner"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 // Actions
-import { getStatisticPerkebunanAction, getStatisticPertanianAction } from '@/actions/SipuanPenariActions';
+import { getStatisticPertanianAction, getStatisticPerkebunanAction, getStatisticPeternakanAction, getStatisticPerikananAction } from '@/actions/SipuanPenariActions';
 
 export default function ProductionSection() {
 
@@ -95,22 +95,16 @@ export default function ProductionSection() {
           setChartDataPertanian(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: res.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
         }
       }
       catch (error) {
         if (error instanceof Error) {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: error.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
         } else {
           console.log('Unknown error:', error)
         }
@@ -138,22 +132,16 @@ export default function ProductionSection() {
           setChartDataPerkebunan(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: res.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !'
+          })
         }
       }
       catch (error) {
         if (error instanceof Error) {
-          // addToast({
-          //   title: "Gagal !",
-          //   description: error.message || 'API Server Error !',
-          //   color: "danger",
-          //   variant: "flat",
-          // });
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
         } else {
           console.log('Unknown error:', error)
         }
@@ -206,8 +194,8 @@ export default function ProductionSection() {
           {/* Peternakan */}
           {/* Perikanan */}
         </CarouselContent>
-        <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        {/* <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
       </Carousel>
       {/* Indikator dot */}
       <div className="mt-2 flex justify-center gap-2">

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTheme } from "next-themes";
+import merge from "deepmerge";
+import { barChartOptions } from '@/lib/apex-chart-options';
 // Props
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
-import LineChart from '@/components/apexchart/line-chart';
+import BarChart from '@/components/apexchart/bar-chart';
 
 interface Props {
   year: number | string,
@@ -34,134 +36,174 @@ export default function ChartPertanianPalawija({ year, chartData }: Props) {
   const categories = dataChart?.map((d) => d.label);
   const values = dataChart?.map((d) => d.total);
 
-  const options: ApexCharts.ApexOptions = {
-    chart: {
-      type: "line",
-      background: 'transparent',
-      dropShadow: {
-        enabled: true,
-        color: '#000',
-        top: 18,
-        left: 7,
-        blur: 10,
-        opacity: 0.5
-      },
-      zoom: {
-        enabled: false
-      },
-      toolbar: {
-        show: true,
-        export: {
-          svg: { filename: title + ' ' + subTitle },
-          png: { filename: title + ' ' + subTitle },
-          csv: { filename: title + ' ' + subTitle }
-        }
-      }
-    },
-    theme: {
-      mode: isDark ? 'dark' : 'light',
-      // palette: 'palette5',
-      // monochrome: {
-      //   enabled: false,
-      //   color: '#255aee',
-      //   shadeTo: 'light',
-      //   shadeIntensity: 0.65
-      // },
-    },
-    title: {
-      text: title,
-      align: 'left',
-      floating: false,
-    },
-    subtitle: {
-      text: subTitle,
-      align: 'left',
-      floating: false,
-      offsetY: 20,
-    },
-    legend: {
-      show: true,
-      offsetY: 2,
-      position: 'bottom',
-      horizontalAlign: 'center',
-      floating: false,
-    },
-    dataLabels: {
-      enabled: true,
-      // dropShadow: {
-      //   enabled: true
-      // },
-      style: {
-        fontSize: '10px',
-      },
-      background: {
-        // padding: 10,
-        borderRadius: 5,
-      },
-      formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
-    },
-    plotOptions: {
-      line: {
-        isSlopeChart: false,
-      },
-    },
-    tooltip: {
-      // x: {
-      //   formatter: function (_, { dataPointIndex }) {
-      //     // tampilkan nama panjang di tooltip
-      //     return names[dataPointIndex] || '-';
-      //   },
-      // },
-      y: {
-        formatter: (val: number) =>
-          new Intl.NumberFormat('id-ID').format(val) + ' Ton',
-      },
-    },
-    colors: ['#00E396'],
-    stroke: {
-      curve: "smooth",
-      width: 2
-    },
+  // const options: ApexCharts.ApexOptions = {
+  //   chart: {
+  //     type: "bar",
+  //     background: 'transparent',
+  //     dropShadow: {
+  //       enabled: true,
+  //       // color: '#000',
+  //       // top: 18,
+  //       // left: 7,
+  //       // blur: 10,
+  //       // opacity: 0.5
+  //     },
+  //     zoom: {
+  //       enabled: false
+  //     },
+  //     toolbar: {
+  //       show: true,
+  //       export: {
+  //         svg: { filename: title + ' ' + subTitle },
+  //         png: { filename: title + ' ' + subTitle },
+  //         csv: { filename: title + ' ' + subTitle }
+  //       }
+  //     }
+  //   },
+  //   theme: {
+  //     mode: isDark ? 'dark' : 'light',
+  //     // palette: 'palette5',
+  //     // monochrome: {
+  //     //   enabled: false,
+  //     //   color: '#255aee',
+  //     //   shadeTo: 'light',
+  //     //   shadeIntensity: 0.65
+  //     // },
+  //   },
+  //   title: {
+  //     text: title,
+  //     align: 'left',
+  //     floating: false,
+  //   },
+  //   subtitle: {
+  //     text: subTitle,
+  //     align: 'left',
+  //     floating: false,
+  //     offsetY: 20,
+  //   },
+  //   legend: {
+  //     show: true,
+  //     offsetY: 2,
+  //     position: 'bottom',
+  //     horizontalAlign: 'center',
+  //     floating: false,
+  //   },
+  //   dataLabels: {
+  //     enabled: true,
+  //     dropShadow: {
+  //       enabled: true
+  //     },
+  //     // style: {
+  //     //   fontSize: '10px',
+  //     // },
+  //     background: {
+  //       // padding: 10,
+  //       borderRadius: 5,
+  //     },
+  //     formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+  //   },
+  //   plotOptions: {
+  //     bar: {
+  //       horizontal: false,
+  //       columnWidth: '75%',
+  //       borderRadius: 3,
+  //       borderRadiusApplication: 'end',
+  //     },
+  //     line: {
+  //       isSlopeChart: false,
+  //     },
+  //   },
+  //   tooltip: {
+  //     // x: {
+  //     //   formatter: function (_, { dataPointIndex }) {
+  //     //     // tampilkan nama panjang di tooltip
+  //     //     return names[dataPointIndex] || '-';
+  //     //   },
+  //     // },
+  //     y: {
+  //       formatter: (val: number) =>
+  //         new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+  //     },
+  //   },
+  //   colors: ['#00E396'],
+  //   stroke: {
+  //     curve: "smooth",
+  //     width: 2
+  //   },
 
-    xaxis: {
-      categories: categories,
-      title: {
-        text: 'Komoditi',
-      },
-      labels: {
-        rotate: -45,
-        // style: { fontSize: '12px' },
-      },
-    },
-    yaxis: {
-      title: {
-        text: 'Total Produksi (Ton)'
-      },
-      labels: {
-        formatter: function (value) {
-          return Number(value).toLocaleString("id-ID", {
-            maximumFractionDigits: 0
-          });
-        }
-      }
-    },
-    fill: { opacity: 1 },
+  //   xaxis: {
+  //     categories: categories,
+  //     title: {
+  //       text: 'Komoditi',
+  //     },
+  //     tickPlacement: 'between',
+  //     labels: {
+  //       show: true,
+  //       rotate: -45,
+  //       trim: false,
+  //       hideOverlappingLabels: false,
+  //     },
+  //   },
+  //   yaxis: {
+  //     title: {
+  //       text: 'Total Produksi (Ton)'
+  //     },
+  //     labels: {
+  //       formatter: function (value) {
+  //         return Number(value).toLocaleString("id-ID", {
+  //           maximumFractionDigits: 0
+  //         });
+  //       }
+  //     }
+  //   },
+  //   fill: { opacity: 1 },
 
-    // series
-  };
+  //   // series
+  // };
+
+  const options = merge(
+    barChartOptions(isDark, title, subTitle),
+    {
+      colors: ["#00E396"],
+      dataLabels: {
+        formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+      },
+      tooltip: {
+        // x: {
+        //   formatter: function (_, { dataPointIndex }) {
+        //     // tampilkan nama panjang di tooltip
+        //     return names[dataPointIndex] || '-';
+        //   },
+        // },
+        y: {
+          formatter: (val: number) =>
+            new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+        },
+      },
+      xaxis: {
+        categories,
+        title: { text: "Komoditi" },
+      },
+      yaxis: {
+        title: {
+          text: 'Total Produksi (Ton)'
+        },
+      },
+    }
+  );
 
   const series = [
     {
-      name: 'Jumlah Produksi',
+      name: 'Total Produksi',
       data: values,
     },
   ];
 
   return chartData.isLoaded ? (
-    <LineChart
+    <BarChart
       options={options}
       series={series}
-      type="line"
+      type="bar"
       height={400}
     />
   ) : (

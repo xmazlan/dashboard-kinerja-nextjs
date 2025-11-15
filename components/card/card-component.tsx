@@ -39,7 +39,7 @@ export default function CardComponent({
             </div>
           </div>
         </CardHeader>
-        <CardContent className="pt-0 px-1 pb-1">{children}</CardContent>
+        <CardContent className="pt-0 px-3 pb-1">{children}</CardContent>
       </Card>
     </>
   );
