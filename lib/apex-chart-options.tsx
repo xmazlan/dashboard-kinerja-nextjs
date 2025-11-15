@@ -54,6 +54,7 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
   },
   dataLabels: {
     enabled: true,
+    offsetY: -10,
     dropShadow: {
       enabled: true
     },
@@ -64,11 +65,16 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
       // padding: 10,
       borderRadius: 5,
     },
-    // formatter: (val: number) => new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+    // formatter: (val: number) =>
+    //   new Intl.NumberFormat('id-ID', {
+    //     minimumFractionDigits: 0,
+    //     maximumFractionDigits: 2,
+    //   }).format(val),
   },
   plotOptions: {
     bar: {
       horizontal: false,
+      distributed: true,
       columnWidth: '75%',
       borderRadius: 3,
       borderRadiusApplication: 'end',
@@ -88,8 +94,11 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
   //   //   },
   //   // },
   //   y: {
-  //     formatter: (val: number) =>
-  //       new Intl.NumberFormat('id-ID').format(val) + ' Ton',
+  // formatter: (val: number) =>
+  //   new Intl.NumberFormat('id-ID', {
+  //     minimumFractionDigits: 0,
+  //     maximumFractionDigits: 2,
+  //   }).format(val) + ' Ton',
   //   },
   // },
   stroke: {
@@ -111,11 +120,15 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
   },
   yaxis: {
     labels: {
-      formatter: function (value) {
-        return Number(value).toLocaleString("id-ID", {
-          maximumFractionDigits: 0
-        });
-      }
+      // formatter: function (value) {
+      //   return Number(value).toLocaleString("id-ID", {
+      //     maximumFractionDigits: 0
+      //   });
+      // }
+      formatter: (val: number) =>
+        new Intl.NumberFormat('id-ID', {
+          maximumFractionDigits: 0,
+        }).format(val),
     }
   },
   fill: { opacity: 1 },
