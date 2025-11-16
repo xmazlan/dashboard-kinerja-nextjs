@@ -22,13 +22,13 @@ export default function Dashboard() {
         {/* <SectionOne /> */}
 
         {/* Charts Grid */}
-        {/* <SectionTwo /> */}
+        <SectionTwo />
         {/* <DataTpidPasar /> */}
-        <SectionStuntingSweeperKecamatanSlide />
+        {/* <SectionStuntingSweeperKecamatanSlide />
 
-        <SectionTpidSlide />
+        <SectionTpidSlide /> */}
 
-        <SectionStunting />
+        {/* <SectionStunting /> */}
         <SectionPengaduan />
         <SectionPendudukan />
         <SectionTpid />
