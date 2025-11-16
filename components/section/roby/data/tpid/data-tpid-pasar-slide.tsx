@@ -97,7 +97,7 @@ export default function DataTpidPasarSlide() {
           return (
             <>
               <div className="flex items-center gap-2">
-                <InputGroup>
+                {/* <InputGroup>
                   <InputGroupAddon>
                     <Search className="h-4 w-4" />
                   </InputGroupAddon>
@@ -108,7 +108,7 @@ export default function DataTpidPasarSlide() {
                     className="w-[220px] md:w-[280px]"
                   />
                 </InputGroup>
-                <Badge variant="outline">Total pasar: {totalPasar}</Badge>
+                <Badge variant="outline">Total pasar: {totalPasar}</Badge> */}
                 <ModalDetail
                   title="Detail Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
                   description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
@@ -208,7 +208,8 @@ export default function DataTpidPasarSlide() {
                       return (
                         <CarouselItem
                           key={`${mkt.nama_pasar}-${idx}`}
-                          className="md:basis-1/2"
+                          // className="md:basis-1/2"
+                          className=""
                         >
                           <div
                             className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3 flex flex-col gap-2 h-full"
