@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataCapil from "./data/data-capil";
+import DataTpidKomoditi from "./data/tpid/data-tpid-komoditi";
+import DataTpidPasarSlide from "./data/tpid/data-tpid-pasar-slide";
 
-export default function SectionPendudukan() {
+export default function SectionTpidSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -60,28 +61,12 @@ export default function SectionPendudukan() {
           onTouchEnd={() => setChartPaused(false)}
         >
           <CarouselContent>
-            {/* Slide 1: Line Chart Target vs Realisasi */}
             <CarouselItem>
-              <DataCapil />
+              <DataTpidPasarSlide />
             </CarouselItem>
           </CarouselContent>
         </Carousel>
         {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2">
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-2 w-2 rounded-full transition-colors",
-                idx === chartSelectedIndex
-                  ? "bg-primary"
-                  : "bg-muted-foreground/30"
-              )}
-            />
-          ))}
-        </div>
       </CardComponent>
     </>
   );

@@ -20,7 +20,6 @@ export default function ArticlePengaduan() {
   const chartPausedRef = React.useRef(false);
   const { data: masterData, isLoading: isLoadingMasterData } =
     usePengaduanEresponMasterData();
-  console.log("masterData", masterData);
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;

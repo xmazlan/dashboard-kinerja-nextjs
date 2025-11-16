@@ -13,6 +13,7 @@ import CardComponent from "@/components/card/card-component";
 import DataStuntingData from "./data/stunting/data-stunting";
 import DataStuntingBulan from "./data/stunting/data-stunting-bulan";
 import DataStuntingKecamatan from "./data/stunting/data-stunting-kecamatan";
+import DataStuntingKecamatanSlide from "./data/stunting/data-stunting-kecamatan-slide";
 
 export default function SectionStunting() {
   // State & kontrol untuk Carousel CHART
@@ -51,7 +52,7 @@ export default function SectionStunting() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-none">
+      <CardComponent className="p-0  shadow-lg">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -66,10 +67,7 @@ export default function SectionStunting() {
               <DataStuntingData />
             </CarouselItem>
             {/* <CarouselItem>
-              <DataStuntingBulan />
-            </CarouselItem> */}
-            {/* <CarouselItem>
-              <DataStuntingKecamatan />
+              <DataStuntingKecamatanSlide />
             </CarouselItem> */}
           </CarouselContent>
         </Carousel>

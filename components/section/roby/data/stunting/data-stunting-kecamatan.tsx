@@ -9,8 +9,11 @@ import { ShineBorder } from "@/components/magicui/shine-border";
 export default function DataStuntingKecamatan() {
   const { data: apiData, isLoading: isLoadingApiData } =
     useStuntingSweeperKecamatanData();
-  const toNum = (v: any) => Number(v ?? 0);
-  const items: Array<{
+  const toNum = (v: unknown) => {
+    const n = typeof v === "number" ? v : Number(v ?? 0);
+    return Number.isFinite(n) ? n : 0;
+  };
+  interface KecamatanItem {
     nama: string;
     totalBalita: number | string;
     gizi_buruk: number | string;
@@ -20,7 +23,11 @@ export default function DataStuntingKecamatan() {
     obesitas: number | string;
     stunting: number | string;
     bb_kurang: number | string;
-  }> = (apiData?.data ?? []) as any[];
+  }
+  const items: KecamatanItem[] = (() => {
+    const data = (apiData as unknown as { data?: KecamatanItem[] })?.data;
+    return Array.isArray(data) ? data : [];
+  })();
   const itemsSorted = [...items].sort(
     (a, b) => toNum(b.totalBalita) - toNum(a.totalBalita)
   );
@@ -79,7 +86,7 @@ export default function DataStuntingKecamatan() {
                       className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-2 flex flex-col gap-2"
                     >
                       <ShineBorder
-                        shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                        shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
                       <div className="flex items-center justify-between">
                         <div className="text-xs font-semibold">{it.nama}</div>
@@ -102,7 +109,10 @@ export default function DataStuntingKecamatan() {
                         ].map((e) => (
                           <div
                             key={e.label}
-                            className="rounded-lg p-2 border bg-muted/30 flex items-center justify-between"
+                            className={cn(
+                              "rounded-lg p-2 border flex items-center justify-between text-white",
+                              getPatternByKey(e.label)
+                            )}
                           >
                             <div
                               className="text-[12px] font-medium truncate"
@@ -110,14 +120,9 @@ export default function DataStuntingKecamatan() {
                             >
                               {e.label}
                             </div>
-                            <span
-                              className={cn(
-                                "inline-flex items-center rounded-lg px-2 py-0.5 text-[11px] font-mono font-semibold tabular-nums text-white",
-                                getPatternByKey(e.label)
-                              )}
-                            >
+                            <div className="text-[12px] font-mono font-semibold tabular-nums">
                               {e.value.toLocaleString("id-ID")}
-                            </span>
+                            </div>
                           </div>
                         ))}
                       </div>

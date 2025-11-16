@@ -42,13 +42,13 @@ const axios = Axios.create({
 axios.interceptors.request.use(
   (config) => {
     // Log request untuk debugging
-    if (process.env.NODE_ENV === "development") {
-      console.log(`🚀 Request: ${config.method?.toUpperCase()} ${config.url}`, {
-        baseURL: config.baseURL,
-        timeout: config.timeout,
-        headers: config.headers,
-      });
-    }
+    // if (process.env.NODE_ENV === "development") {
+    //   console.log(`🚀 Request: ${config.method?.toUpperCase()} ${config.url}`, {
+    //     baseURL: config.baseURL,
+    //     timeout: config.timeout,
+    //     headers: config.headers,
+    //   });
+    // }
 
     // Add timestamp for tracking
     config.metadata = { startTime: new Date() };
@@ -72,7 +72,7 @@ axios.interceptors.response.use(
       const endTime = new Date();
       const duration =
         endTime.getTime() - response.config.metadata.startTime.getTime();
-      console.log(`✅ Response: ${response.status} in ${duration}ms`);
+      // console.log(`✅ Response: ${response.status} in ${duration}ms`);
     }
 
     return response;
