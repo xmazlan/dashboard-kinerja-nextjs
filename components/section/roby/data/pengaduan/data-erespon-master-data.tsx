@@ -17,10 +17,10 @@ import {
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import DataEresponAll from "@/components/section/roby/data/data-erespon-all";
-import DataEresponKecamatan from "@/components/section/roby/data/data-erespon-kecamatan";
-import DataEresponKelurahan from "@/components/section/roby/data/data-erespon-kelurahan";
-import DataEresponOpd from "@/components/section/roby/data/data-erespon-opd";
+import DataEresponAll from "@/components/section/roby/data/pengaduan/data-erespon-all";
+import DataEresponKecamatan from "@/components/section/roby/data/pengaduan/data-erespon-kecamatan";
+import DataEresponKelurahan from "@/components/section/roby/data/pengaduan/data-erespon-kelurahan";
+import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespon-opd";
 
 export default function DataEresponMasterData() {
   const { data: masterData, isLoading: isLoadingMasterData } =
