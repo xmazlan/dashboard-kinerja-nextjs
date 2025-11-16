@@ -11,7 +11,7 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
 import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
-import DataEresponMasterData from "./data/data-erespon-master-data";
+import DataEresponMasterData from "./data/pengaduan/data-erespon-master-data";
 
 export default function ArticlePengaduan() {
   // State & kontrol untuk Carousel CHART

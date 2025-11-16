@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataEresponMasterData from "./data/pengaduan/data-erespon-master-data";
+import DataStuntingData from "./data/stunting/data-stunting";
+import DataStuntingBulan from "./data/stunting/data-stunting-bulan";
+import DataStuntingKecamatan from "./data/stunting/data-stunting-kecamatan";
 
-export default function SectionPengaduan() {
+export default function SectionStunting() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -61,8 +63,14 @@ export default function SectionPengaduan() {
         >
           <CarouselContent>
             <CarouselItem>
-              <DataEresponMasterData />
+              <DataStuntingData />
             </CarouselItem>
+            {/* <CarouselItem>
+              <DataStuntingBulan />
+            </CarouselItem> */}
+            {/* <CarouselItem>
+              <DataStuntingKecamatan />
+            </CarouselItem> */}
           </CarouselContent>
         </Carousel>
         {/* Indikator dot */}

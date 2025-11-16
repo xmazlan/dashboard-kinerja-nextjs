@@ -18,7 +18,7 @@ export function ModalDetail({
   triggerLabel = "Detail",
   title,
   description,
-  maxWidthClass = "sm:max-w-[1100px] w-[95vw]",
+  maxWidthClass = "sm:max-w-8xl w-[95vw]",
   maxHeightClass = "max-h-[80vh]",
   contentModal,
 }: {

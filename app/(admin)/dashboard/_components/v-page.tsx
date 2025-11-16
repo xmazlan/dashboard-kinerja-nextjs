@@ -7,18 +7,17 @@ import ArticleTree from "@/components/section/roby/article-tree";
 import SectionTree from "@/components/section/section-tree";
 import SectionPengaduan from "@/components/section/roby/pengaduan";
 import SectionPendudukan from "@/components/section/roby/pendudukan";
+import SectionStunting from "@/components/section/roby/stunting";
 
 export default function Dashboard() {
   return (
     <>
       <main className="flex-1 mx-auto w-full  px-4 py-4 space-y-4 sm:px-6 lg:px-8">
-        {/* Tab Navigation */}
-
-        {/* KPI Cards */}
-        <SectionOne />
+        {/* <SectionOne /> */}
 
         {/* Charts Grid */}
         {/* <SectionTwo /> */}
+        <SectionStunting />
         <SectionPengaduan />
         <SectionPendudukan />
 
