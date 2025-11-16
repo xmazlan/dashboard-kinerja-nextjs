@@ -13,7 +13,7 @@ export default function SectionTree() {
       </div>
       <div className="col-span-full md:col-span-2">
         {/* TPID : Komoditas dan Pasar */}
-        {/* <TPIDSection /> */}
+        <TPIDSection />
       </div>
       <div className="col-span-full md:col-span-3">
         {/*  */}

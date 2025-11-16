@@ -1,19 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { chunkArray } from '@/lib/chunk-array';
 // Props
 import { type CarouselApi } from '@/components/ui/carousel';
-import type { ResponseDataStatistic } from '@/types/sipuan-penari';
+import type { HargaKomoditasState } from '@/types/tpid';
 // Components
 import CardComponent from "@/components/card/card-component";
-import ChartHargaKomoditas from './chart-harga-komoditas';
-import ChartHargaPasar from './chart-harga-pasar';
-
+import ViewHargaKomoditas from './view-harga-komoditas';
 import { toast } from "sonner"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 // Actions
-import { getStatisticPertanianAction, getStatisticPerkebunanAction, getStatisticPeternakanAction, getStatisticPerikananAction } from '@/actions/SipuanPenariActions';
+import { getHargaKomoditasAction } from '@/actions/TPIDActions';
 
 export default function ViewSection() {
+
+  // Harga komoditas state
+  const [hargaKomoditas, setHargaKomoditas] = useState<HargaKomoditasState>({
+    isLoaded: false,
+    data: []
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getHargaKomoditasAction();
+        if (res.success) {
+          setHargaKomoditas(old => ({ ...old, data: res.data, isLoaded: true }))
+        }
+        else {
+          fetchData();
+          toast.error("Gagal !", {
+            description: res.message || 'API Server Error !',
+          })
+        }
+      }
+      catch (error) {
+        fetchData();
+        if (error instanceof Error) {
+          toast.error("Gagal !", {
+            description: error.message || 'API Server Error !'
+          })
+        } else {
+          console.log('Unknown error:', error)
+        }
+      }
+    }
+    fetchData();
+  }, []);
 
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
@@ -47,7 +79,7 @@ export default function ViewSection() {
     return () => {
       chartApi.off("select", onSelect);
     };
-  }, [chartApi]);
+  }, [chartApi, hargaKomoditas]);
 
   // State & kontrol untuk Carousel NON-CHART (Contoh Carousel)
   const [contentApi, setContentApi] = React.useState<CarouselApi | null>(null);
@@ -69,11 +101,20 @@ export default function ViewSection() {
     return () => clearInterval(id);
   }, [contentApi]);
 
-  // Year state
-  const [year, setYear] = useState(new Date().getFullYear().toString());
+  // const chunks = chunkArray(hargaKomoditas?.data, 6);
+  const chunks = chunkArray(hargaKomoditas.data || [], 6);
 
   return (
-    <CardComponent className="px-0 pt-0 pb-3">
+    // <CardComponent className="px-0 pt-0 pb-3">
+    <CardComponent
+      title="Harga Rata-Rata Pangan Terbaru"
+      description={
+        <>
+          <span className="italic text-xs">(Sumber : TPID Disperindag)</span>
+        </>
+      }
+      className="py-4 px-3 pb-1"
+    >
       <Carousel
         className="w-full"
         opts={{ loop: true, align: "start" }}
@@ -85,19 +126,18 @@ export default function ViewSection() {
       >
         <CarouselContent>
           {/* Harga Komoditas */}
-          <CarouselItem>
-            {/* <ChartHargaKomoditas /> */}
-          </CarouselItem>
-          {/* Harga Pasar */}
-          <CarouselItem>
-            {/* <ChartHargaPasar /> */}
-          </CarouselItem>
+          {/* <ViewHargaKomoditas hargaKomoditas={hargaKomoditas} /> */}
+          {chunks.map((group, groupIndex) => (
+            <CarouselItem key={groupIndex}>
+              <ViewHargaKomoditas items={group} />
+            </CarouselItem>
+          ))}
         </CarouselContent>
-        {/* <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+        <CarouselPrevious className="-left-6" />
+        <CarouselNext className="-right-6" />
       </Carousel>
       {/* Indikator dot */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 mt-2">
         {chartScrollSnaps.map((_, idx) => (
           <button
             key={idx}
