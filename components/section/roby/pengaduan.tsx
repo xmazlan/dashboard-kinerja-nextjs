@@ -49,7 +49,7 @@ export default function SectionPengaduan() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-none">
+      <CardComponent className="p-0  shadow-lg">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}

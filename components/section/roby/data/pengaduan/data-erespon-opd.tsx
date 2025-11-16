@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import { usePengaduanEresponOpdData } from "@/hooks/query/use-pengaduan-erespon";
 import LoadingSkeleton from "@/components/loading-skeleton";
-import { Tags } from "lucide-react";
+import { Info, Tags } from "lucide-react";
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
 
 export default function DataEresponOpd() {
@@ -49,7 +49,7 @@ export default function DataEresponOpd() {
                         <div className="flex items-center justify-between gap-3 min-h-[92px]">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
-                              <Tags className="w-5 h-5" />
+                              <Info className="w-5 h-5" />
                             </div>
                             <div
                               className="text-[11px] md:text-xs font-semibold uppercase opacity-90 truncate"

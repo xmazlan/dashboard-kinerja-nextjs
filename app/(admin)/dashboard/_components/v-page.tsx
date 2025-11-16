@@ -8,6 +8,12 @@ import SectionTree from "@/components/section/section-tree";
 import SectionPengaduan from "@/components/section/roby/pengaduan";
 import SectionPendudukan from "@/components/section/roby/pendudukan";
 import SectionStunting from "@/components/section/roby/stunting";
+import DataTpidKomoditi from "@/components/section/roby/data/tpid/data-tpid-komoditi";
+import DataTpidPasar from "@/components/section/roby/data/tpid/data-tpid-pasar";
+import SectionTpid from "@/components/section/roby/tpid";
+import DataTpidPasarSlide from "@/components/section/roby/data/tpid/data-tpid-pasar-slide";
+import SectionTpidSlide from "@/components/section/roby/tpid-pasar-slide";
+import SectionStuntingSweeperKecamatanSlide from "@/components/section/roby/stunting-sweeper-kecamatan-slide";
 
 export default function Dashboard() {
   return (
@@ -17,9 +23,15 @@ export default function Dashboard() {
 
         {/* Charts Grid */}
         {/* <SectionTwo /> */}
+        {/* <DataTpidPasar /> */}
+        <SectionStuntingSweeperKecamatanSlide />
+
+        <SectionTpidSlide />
+
         <SectionStunting />
         <SectionPengaduan />
         <SectionPendudukan />
+        <SectionTpid />
 
         {/* <SectionTree /> */}
       </main>

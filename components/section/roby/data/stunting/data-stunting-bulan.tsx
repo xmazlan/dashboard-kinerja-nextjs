@@ -9,10 +9,13 @@ import { ShineBorder } from "@/components/magicui/shine-border";
 export default function DataStuntingBulan() {
   const { data: apiData, isLoading: isLoadingApiData } =
     useStuntingSweeperBulananData();
-  const toNum = (v: any) => Number(v ?? 0);
+  const toNum = (v: unknown) => {
+    const n = typeof v === "number" ? v : Number(v ?? 0);
+    return Number.isFinite(n) ? n : 0;
+  };
   const years = Object.keys(apiData?.data ?? {}).map((y) => Number(y));
   const selectedYear = years.sort((a, b) => b - a)[0];
-  const months: Array<{
+  interface MonthItem {
     tahun: number;
     bulan: number;
     nama_bulan: string;
@@ -24,7 +27,12 @@ export default function DataStuntingBulan() {
     obesitas: number | string;
     stunting: number | string;
     bb_kurang: number | string;
-  }> = (apiData?.data?.[selectedYear as any] ?? []) as any[];
+  }
+  const months: MonthItem[] = (() => {
+    const data = (apiData as unknown as { data?: Record<number, MonthItem[]> })
+      ?.data?.[selectedYear];
+    return Array.isArray(data) ? data : [];
+  })();
   const monthsSorted = [...months].sort((a, b) => a.bulan - b.bulan);
   const totalBalitaYear = monthsSorted.reduce(
     (acc, m) => acc + toNum(m.totalBalita),
@@ -81,7 +89,7 @@ export default function DataStuntingBulan() {
                       className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-2 flex flex-col gap-2"
                     >
                       <ShineBorder
-                        shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                        shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
                       <div className="flex items-center justify-between">
                         <div className="text-xs font-semibold">
@@ -106,7 +114,10 @@ export default function DataStuntingBulan() {
                         ].map((e) => (
                           <div
                             key={e.label}
-                            className="rounded-lg p-2 border bg-muted/30 flex items-center justify-between"
+                            className={cn(
+                              "rounded-lg p-2 border flex items-center justify-between text-white",
+                              getPatternByKey(e.label)
+                            )}
                           >
                             <div
                               className="text-[12px] font-medium truncate"
@@ -114,14 +125,9 @@ export default function DataStuntingBulan() {
                             >
                               {e.label}
                             </div>
-                            <span
-                              className={cn(
-                                "inline-flex items-center rounded-lg px-2 py-0.5 text-[11px] font-mono font-semibold tabular-nums text-white",
-                                getPatternByKey(e.label)
-                              )}
-                            >
+                            <div className="text-[12px] font-mono font-semibold tabular-nums">
                               {e.value.toLocaleString("id-ID")}
-                            </span>
+                            </div>
                           </div>
                         ))}
                       </div>

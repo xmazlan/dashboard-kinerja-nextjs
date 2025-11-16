@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataCapil from "./data/data-capil";
+import DataTpidKomoditi from "./data/tpid/data-tpid-komoditi";
 
-export default function SectionPendudukan() {
+export default function SectionTpid() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -60,9 +60,8 @@ export default function SectionPendudukan() {
           onTouchEnd={() => setChartPaused(false)}
         >
           <CarouselContent>
-            {/* Slide 1: Line Chart Target vs Realisasi */}
             <CarouselItem>
-              <DataCapil />
+              <DataTpidKomoditi />
             </CarouselItem>
           </CarouselContent>
         </Carousel>

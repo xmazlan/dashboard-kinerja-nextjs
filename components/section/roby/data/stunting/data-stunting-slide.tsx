@@ -13,7 +13,7 @@ import DataStuntingKelurahan from "./data-stunting-kelurahan";
 import DataStuntingPuskesmas from "./data-stunting-puskesmas";
 import DataStuntingPosyandu from "./data-stunting-posyandu";
 
-export default function DataStuntingData() {
+export default function DataStuntingSlide() {
   const { data: apiData, isLoading: isLoadingApiData } =
     useStuntingSweeperData();
   const totalBalita = Number(apiData?.data?.totalBalita ?? 0);
@@ -72,7 +72,7 @@ export default function DataStuntingData() {
 
   return (
     <div className="w-full h-full">
-      <CardComponent
+      {/* <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Layanan Penangan Stunting"
         description={
@@ -80,6 +80,7 @@ export default function DataStuntingData() {
             Last update: {apiData?.last_get ?? ""}
             <br />
             <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
+          
           </>
         }
         action={
@@ -116,7 +117,8 @@ export default function DataStuntingData() {
             }
           />
         }
-      >
+      > */}
+      <CardComponent className="p-0  border-none shadow-none w-full h-full">
         {isLoadingApiData ? (
           <LoadingSkeleton rows={2} cols={4} />
         ) : (

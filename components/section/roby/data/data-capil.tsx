@@ -8,7 +8,6 @@ import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-eresp
 export default function DataCapil() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     usePengaduanEresponMasterData();
-  console.log("masterData", masterData);
 
   return (
     <>
