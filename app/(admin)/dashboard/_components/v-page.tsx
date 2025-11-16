@@ -22,7 +22,7 @@ export default function Dashboard() {
         <SectionPengaduan />
         <SectionPendudukan />
 
-        <SectionTree />
+        {/* <SectionTree /> */}
       </main>
     </>
   );
