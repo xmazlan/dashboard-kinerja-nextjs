@@ -162,6 +162,18 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+  --animate-shine: shine var(--duration) infinite linear;
+  @keyframes shine {
+  0% {
+    background-position: 0% 0%;
+    }
+  50% {
+    background-position: 100% 100%;
+    }
+  to {
+    background-position: 0% 0%;
+    }
+  }
 }
 @layer base {
   * {
@@ -187,7 +199,7 @@
 }
 
 .bg-animated-gradient {
-  background-image: linear-gradient(135deg, #2563eb, #1e40af, #fb923c);
+  background-image: linear-gradient(135deg, #2563eb, #1e40af, #FE6500);
   background-size: 200% 200%;
   animation: gradientShift 12s ease-in-out infinite;
 }

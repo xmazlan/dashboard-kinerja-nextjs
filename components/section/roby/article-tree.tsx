@@ -11,8 +11,9 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
 import ArticlePengaduan from "./article-pengaduan";
-import DataEresponMasterData from "./data/data-erespon-master-data";
+import DataEresponMasterData from "./data/pengaduan/data-erespon-master-data";
 import DataCapil from "./data/data-capil";
+import DataEresponOpd from "./data/pengaduan/data-erespon-opd";
 
 export default function ArticleTree() {
   // State & kontrol untuk Carousel CHART
@@ -105,6 +106,9 @@ export default function ArticleTree() {
             </CarouselItem>
             <CarouselItem>
               <DataEresponMasterData />
+            </CarouselItem>
+            <CarouselItem>
+              <DataEresponOpd />
             </CarouselItem>
           </CarouselContent>
         </Carousel>

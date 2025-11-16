@@ -14,6 +14,7 @@ export default function CardComponent({
   title,
   description,
   options,
+  action,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -23,6 +24,7 @@ export default function CardComponent({
     title?: string;
     description?: string;
   };
+  action?: React.ReactNode;
 }) {
   return (
     <>
@@ -36,6 +38,7 @@ export default function CardComponent({
             <div className="text-xs md:text-right text-muted-foreground space-y-1">
               <p>{options?.title}</p>
               <p>{options?.description}</p>
+              {action}
             </div>
           </div>
         </CardHeader>

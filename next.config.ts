@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "tpid.pekanbaru.go.id",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "pekadev.pekanbaru.go.id",
         pathname: "/berkas/**",
       },
