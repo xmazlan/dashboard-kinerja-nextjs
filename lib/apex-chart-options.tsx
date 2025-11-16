@@ -92,14 +92,15 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     // style: {
     //   fontSize: '10px',
     // },
+    distributed: true,
     background: {
       enabled: true,
       foreColor: '#000',
       // backgroundColor: 'inherit',
       borderRadius: 5,
       // padding: 10,
-      borderWidth: 1,
-      // borderColor?: string
+      // borderWidth: 1,
+      // borderColor: '#000',
       // dropShadow: {
       //   enabled: true
       // }
