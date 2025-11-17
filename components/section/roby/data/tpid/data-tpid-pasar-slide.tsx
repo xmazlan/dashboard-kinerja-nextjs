@@ -6,6 +6,7 @@ import LoadingSkeleton from "@/components/loading-skeleton";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import OptimizeImage from "@/components/optimize-image";
 import {
   Collapsible,
   CollapsibleContent,
@@ -41,6 +42,7 @@ export default function DataTpidPasarSlide() {
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
+  const [expandedAll, setExpandedAll] = React.useState(false);
 
   React.useEffect(() => {
     pausedRef.current = paused;
@@ -242,17 +244,14 @@ export default function DataTpidPasarSlide() {
                                   )}
                                 >
                                   <div className="flex items-center gap-2 min-w-0">
-                                    {it.img ? (
-                                      <Image
-                                        src={it.img}
-                                        alt={it.komoditas}
-                                        width={24}
-                                        height={24}
-                                        className="w-7 h-7 rounded-sm object-contain bg-muted"
-                                      />
-                                    ) : (
-                                      <div className="w-7 h-7 rounded-sm bg-muted" />
-                                    )}
+                                    <OptimizeImage
+                                      src={it.img}
+                                      alt={it.komoditas}
+                                      width={28}
+                                      height={28}
+                                      containerClassName="w-7 h-7 rounded-sm bg-muted"
+                                      imgClassName="rounded-sm object-contain"
+                                    />
                                     <div className="min-w-0">
                                       <div className="text-[12px] font-medium truncate">
                                         {it.komoditas}
@@ -270,14 +269,19 @@ export default function DataTpidPasarSlide() {
                             </div>
 
                             {tail.length > 0 && (
-                              <Collapsible>
+                              <Collapsible
+                                open={expandedAll}
+                                onOpenChange={setExpandedAll}
+                              >
                                 <CollapsibleTrigger asChild>
                                   <Button
                                     variant="outline"
                                     size="sm"
                                     className="mt-2"
                                   >
-                                    Lihat semua komoditas ({tail.length} lagi)
+                                    {expandedAll
+                                      ? "Tutup komoditas"
+                                      : `Lihat semua komoditas (${tail.length} lagi)`}
                                   </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
@@ -291,17 +295,14 @@ export default function DataTpidPasarSlide() {
                                         )}
                                       >
                                         <div className="flex items-center gap-2 min-w-0">
-                                          {it.img ? (
-                                            <Image
-                                              src={it.img}
-                                              alt={it.komoditas}
-                                              width={24}
-                                              height={24}
-                                              className="w-7 h-7 rounded-sm object-contain bg-muted"
-                                            />
-                                          ) : (
-                                            <div className="w-7 h-7 rounded-sm bg-muted" />
-                                          )}
+                                          <OptimizeImage
+                                            src={it.img}
+                                            alt={it.komoditas}
+                                            width={28}
+                                            height={28}
+                                            containerClassName="w-7 h-7 rounded-sm bg-muted"
+                                            imgClassName="rounded-sm object-contain"
+                                          />
                                           <div className="min-w-0">
                                             <div className="text-[12px] font-medium truncate">
                                               {it.komoditas}

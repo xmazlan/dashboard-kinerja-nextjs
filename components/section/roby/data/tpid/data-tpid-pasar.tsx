@@ -21,6 +21,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
+import OptimizeImage from "@/components/optimize-image";
 
 export default function DataTpidPasar() {
   const { data: masterData, isLoading: isLoadingMasterData } =
@@ -164,17 +165,14 @@ export default function DataTpidPasar() {
                               )}
                             >
                               <div className="flex items-center gap-2 min-w-0">
-                                {it.img ? (
-                                  <Image
-                                    src={it.img}
-                                    alt={it.komoditas}
-                                    width={24}
-                                    height={24}
-                                    className="w-7 h-7 rounded-sm object-contain bg-muted"
-                                  />
-                                ) : (
-                                  <div className="w-7 h-7 rounded-sm bg-muted" />
-                                )}
+                                <OptimizeImage
+                                  src={it.img}
+                                  alt={it.komoditas}
+                                  width={28}
+                                  height={28}
+                                  containerClassName="w-7 h-7 rounded-sm bg-muted"
+                                  imgClassName="rounded-sm object-contain"
+                                />
                                 <div className="min-w-0">
                                   <div className="text-[12px] font-medium truncate">
                                     {it.komoditas}
