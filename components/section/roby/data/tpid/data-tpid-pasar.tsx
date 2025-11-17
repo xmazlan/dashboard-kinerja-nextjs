@@ -27,6 +27,7 @@ export default function DataTpidPasar() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidPasarData();
   const [query, setQuery] = React.useState("");
+  const [expandedAll, setExpandedAll] = React.useState(false);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -190,14 +191,19 @@ export default function DataTpidPasar() {
                         </div>
 
                         {tail.length > 0 && (
-                          <Collapsible>
+                          <Collapsible
+                            open={expandedAll}
+                            onOpenChange={setExpandedAll}
+                          >
                             <CollapsibleTrigger asChild>
                               <Button
                                 variant="outline"
                                 size="sm"
                                 className="mt-2"
                               >
-                                Lihat semua komoditas ({tail.length} lagi)
+                                {expandedAll
+                                  ? "Tutup komoditas"
+                                  : `Lihat semua komoditas (${tail.length} lagi)`}
                               </Button>
                             </CollapsibleTrigger>
                             <CollapsibleContent>
