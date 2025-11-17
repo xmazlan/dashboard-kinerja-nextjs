@@ -27,7 +27,7 @@ export default function ViewSection() {
           setHargaKomoditas(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
-          fetchData();
+          // fetchData();
           toast.error("Gagal !", {
             description: res.message || 'API Server Error !',
           })
@@ -113,7 +113,7 @@ export default function ViewSection() {
           <span className="italic text-xs">(Sumber : TPID Disperindag)</span>
         </>
       }
-      className="py-4 px-3 pb-1"
+      className="py-4 px-3 pb-1 shadow-lg"
     >
       <Carousel
         className="w-full"

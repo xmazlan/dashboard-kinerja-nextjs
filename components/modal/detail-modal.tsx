@@ -50,7 +50,7 @@ export function ModalDetail({
             <DialogDescription>{description}</DialogDescription>
           ) : null}
         </DialogHeader>
-        <div className="px-6 pb-4">{contentModal}</div>
+        <div className="px-6 pb-4 overflow-y-auto overflow-x-auto">{contentModal}</div>
         <DialogFooter className="px-6 pb-4">
           <DialogClose asChild>
             <Button variant="outline">Tutup</Button>

@@ -8,6 +8,10 @@ import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 import CardComponent from '@/components/card/card-component';
 import SkeletonList from '@/components/skeleton/SkeletonList';
 import BarChart from '@/components/apexchart/bar-chart';
+import TableMonthly from './table-monthly';
+import TableDistrictly from './table-districtly';
+import { ModalDetail } from "@/components/modal/detail-modal";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface Props {
   year: number | string,
@@ -25,8 +29,8 @@ export default function ChartPerikananOrnamentalCultivation({ year, chartData }:
 
   const dataChart = chartData?.data?.ornamental_cultivation;
 
-  const categories = dataChart?.map((d) => d.label);
-  const values = dataChart?.map((d) => d.total);
+  const categories = dataChart?.per_comodity?.map((d) => d.label);
+  const values = dataChart?.per_comodity?.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),
@@ -84,6 +88,30 @@ export default function ChartPerikananOrnamentalCultivation({ year, chartData }:
           {/* Data Produksi Budidaya Ikan Hias <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
+      }
+      action={
+        <ModalDetail
+          // title="Statistik Produksi Perikanan"
+          // description={title + ' ' + subTitle}
+          title={title}
+          description={subTitle}
+          contentModal={
+            <Tabs defaultValue="all" className="flex flex-col gap-3">
+              <TabsList>
+                <TabsTrigger value="komoditi">Per Komoditi</TabsTrigger>
+                <TabsTrigger value="kecamatan">Per Kecamatan</TabsTrigger>
+              </TabsList>
+              <div className="max-h-[60vh] overflow-y-auto rounded-md border">
+                <TabsContent value="komoditi" className="p-0">
+                  <TableMonthly dataFreq="monthly" year={year} unit="Ekor" tableHeadColspan={'Jumlah Produksi Ikan Hias Bulanan Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Budidaya" dataChart={dataChart} />
+                </TabsContent>
+                <TabsContent value="kecamatan" className="p-0">
+                  <TableDistrictly year={year} unit="Ekor" tableHeadColspan={'Jumlah Produksi Ikan Hias Komoditi Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Budidaya" dataCommodities={dataChart?.data_commodities} dataChart={dataChart} />
+                </TabsContent>
+              </div>
+            </Tabs>
+          }
+        />
       }
       className="gap-1 pt-0 border-none shadow-none"
     >

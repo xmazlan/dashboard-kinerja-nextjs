@@ -57,11 +57,6 @@ const nextConfig: NextConfig = {
         hostname: "sipuanpenari.pekanbaru.go.id",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "tpid.pekanbaru.go.id",
-        pathname: "/**",
-      },
       // Tambahkan domain lain jika ada gambar dari sana
     ],
   },
