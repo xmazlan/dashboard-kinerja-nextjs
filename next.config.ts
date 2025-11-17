@@ -103,6 +103,7 @@ const nextConfig: NextConfig = {
               [
                 "connect-src 'self' https: wss: ws:",
                 // API Pemkot Pekanbaru
+                "https://apidashboard.pekanbaru.go.id",
                 "https://superapp-api.pekanbaru.go.id",
                 "https://www.pekanbaru.go.id",
                 "https://pekadev.pekanbaru.go.id",

@@ -31,7 +31,7 @@ export default function Dashboard() {
         {/* <SectionStunting /> */}
         <SectionPengaduan />
         <SectionPendudukan />
-        <SectionTpid />
+        {/* <SectionTpid /> */}
 
         <SectionTree />
       </main>
