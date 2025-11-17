@@ -48,12 +48,16 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
         password: values.password,
         callbackUrl: "/dashboard",
       });
+      if (result?.error) {
+        const msg = /ENOTFOUND|Network Error/i.test(result.error)
+          ? "Tidak dapat terhubung ke server. Periksa NEXT_PUBLIC_API_URL dan koneksi jaringan."
+          : result.error;
+        setError(msg);
+        toast.error(msg);
+        return;
+      }
       toast.success("Login berhasil. Mengalihkan...");
       router.push(result?.url || "/dashboard");
-      if (result?.error) {
-        setError(result.error);
-        toast.error(result.error);
-      }
     } catch (err) {
       setError("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
       toast.error("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
