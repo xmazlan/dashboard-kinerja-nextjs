@@ -121,7 +121,7 @@ export default function DataStuntingKecamatanSlide() {
         action={
           <>
             <div className="flex items-center gap-2">
-              <InputGroup>
+              {/* <InputGroup>
                 <InputGroupAddon>
                   <Search className="h-4 w-4" />
                 </InputGroupAddon>
@@ -134,7 +134,7 @@ export default function DataStuntingKecamatanSlide() {
               </InputGroup>
               <Badge variant="outline">
                 Total kecamatan: {itemsFiltered.length}
-              </Badge>
+              </Badge> */}
               <ModalDetail
                 title="Detail Layanan Penangan Stunting"
                 description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
