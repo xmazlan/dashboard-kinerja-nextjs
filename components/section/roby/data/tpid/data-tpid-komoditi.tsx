@@ -11,6 +11,7 @@ import DataTpidKomoditiDetail from "./data-tpid-komoditi-detail";
 import DataTpidPasar from "./data-tpid-pasar";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import Image from "next/image";
+import OptimizeImage from "@/components/optimize-image";
 export default function DataTpidKomoditi() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidKomoditiData();
@@ -93,17 +94,14 @@ export default function DataTpidKomoditi() {
                         />
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            {imgSrc ? (
-                              <Image
-                                src={imgSrc}
-                                alt={it.nama_komoditas}
-                                width={24}
-                                height={24}
-                                className="w-8 h-8 rounded-sm object-contain bg-muted"
-                              />
-                            ) : (
-                              <div className="w-8 h-8 rounded-sm bg-muted" />
-                            )}
+                            <OptimizeImage
+                              src={imgSrc}
+                              alt={String(it?.nama_komoditas || "-")}
+                              width={28}
+                              height={28}
+                              containerClassName="w-7 h-7 rounded-sm bg-muted"
+                              imgClassName="rounded-sm object-contain"
+                            />
                             <div>
                               <div className="text-[12px] md:text-sm font-semibold">
                                 {it.nama_komoditas}
