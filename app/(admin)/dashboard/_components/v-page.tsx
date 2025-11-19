@@ -14,13 +14,14 @@ import SectionTpid from "@/components/section/roby/tpid";
 import DataTpidPasarSlide from "@/components/section/roby/data/tpid/data-tpid-pasar-slide";
 import SectionTpidSlide from "@/components/section/roby/tpid-pasar-slide";
 import SectionStuntingSweeperKecamatanSlide from "@/components/section/roby/stunting-sweeper-kecamatan-slide";
+import DataPajakPBJT from "@/components/section/roby/data/pajak/data-pajak-PBJT";
 
 export default function Dashboard() {
   return (
     <>
       <main className="flex-1 mx-auto w-full  px-4 py-4 space-y-4 sm:px-6 lg:px-8">
         {/* <SectionOne /> */}
-
+        {/* <DataPajakPBJT /> */}
         {/* Charts Grid */}
         <SectionTwo />
         {/* <DataTpidPasar /> */}
