@@ -22,14 +22,3 @@ export interface BreadcrumbType {
   href: string;
   isCurrent?: boolean;
 }
-
-
-// Export all types
-export * from './mosque';
-export * from './main-menu';
-export * from './permission';
-export * from './role';
-export * from './user';
-export * from './announcement';
-export * from './slider';
-export * from './cta-banner';

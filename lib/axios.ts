@@ -80,7 +80,7 @@ axios.interceptors.response.use(
   (error) => {
     // Enhanced error logging
     if (error.code === "ECONNABORTED") {
-      console.error("⏱️ Request timeout:", error.config?.url);
+      // silent timeout logging
     } else if (error.response) {
       // Server responded with error status
       console.error(`❌ API Error ${error.response.status}:`, {
