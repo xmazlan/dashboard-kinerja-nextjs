@@ -6,7 +6,12 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
 import CardComponent from '@/components/card/card-component';
+import SkeletonList from '@/components/skeleton/SkeletonList';
 import BarChart from '@/components/apexchart/bar-chart';
+import TableMonthly from './table-monthly';
+import TableDistrictly from './table-districtly';
+import { ModalDetail } from "@/components/modal/detail-modal";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface Props {
   year: number | string,
@@ -24,8 +29,8 @@ export default function ChartPerikananSeedCultivation({ year, chartData }: Props
 
   const dataChart = chartData?.data?.seed_cultivation;
 
-  const categories = dataChart?.map((d) => d.label);
-  const values = dataChart?.map((d) => d.total);
+  const categories = dataChart?.per_comodity?.map((d) => d.label);
+  const values = dataChart?.per_comodity?.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),
@@ -80,9 +85,33 @@ export default function ChartPerikananSeedCultivation({ year, chartData }: Props
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Budidaya Pembenihan <br />
+          {/* Data Produksi Budidaya Pembenihan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
+      }
+      action={
+        <ModalDetail
+          // title="Statistik Produksi Perikanan"
+          // description={title + ' ' + subTitle}
+          title={title}
+          description={subTitle}
+          contentModal={
+            <Tabs defaultValue="all" className="flex flex-col gap-3">
+              <TabsList>
+                <TabsTrigger value="komoditi">Per Komoditi</TabsTrigger>
+                <TabsTrigger value="kecamatan">Per Kecamatan</TabsTrigger>
+              </TabsList>
+              <div className="max-h-[60vh] overflow-y-auto rounded-md border">
+                <TabsContent value="komoditi" className="p-0">
+                  <TableMonthly dataFreq="monthly" year={year} unit="Ekor" tableHeadColspan={'Jumlah Produksi Benih Bulanan Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Budidaya" dataChart={dataChart} />
+                </TabsContent>
+                <TabsContent value="kecamatan" className="p-0">
+                  <TableDistrictly year={year} unit="Ekor" tableHeadColspan={'Jumlah Produksi Benih Komoditi Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Budidaya" dataCommodities={dataChart?.data_commodities} dataChart={dataChart} />
+                </TabsContent>
+              </div>
+            </Tabs>
+          }
+        />
       }
       className="gap-1 pt-0 border-none shadow-none"
     >
@@ -94,7 +123,7 @@ export default function ChartPerikananSeedCultivation({ year, chartData }: Props
           height={400}
         />
       ) : (
-        'Memuat data..'
+        <SkeletonList />
       )}
     </CardComponent>
   )

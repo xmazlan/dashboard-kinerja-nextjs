@@ -3,10 +3,15 @@ import { useTheme } from "next-themes";
 import merge from "deepmerge";
 import { barChartOptions } from '@/lib/apex-chart-options';
 // Props
-import type { ResponseDataStatistic } from '@/types/sipuan-penari';
+import type { CommodityProps, ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
 import CardComponent from '@/components/card/card-component';
+import SkeletonList from '@/components/skeleton/SkeletonList';
 import BarChart from '@/components/apexchart/bar-chart';
+import TableMonthly from './table-monthly';
+import TableDistrictly from './table-districtly';
+import { ModalDetail } from "@/components/modal/detail-modal";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface Props {
   year: number | string,
@@ -22,10 +27,16 @@ export default function ChartPeternakanProduction({ year, chartData }: Props) {
   const title = 'Data Produksi Daging';
   const subTitle = 'Tahun ' + year;
 
+  function isCommodityArray(val: unknown): val is CommodityProps[] {
+    return Array.isArray(val);
+  }
+  const dataC = chartData?.data?.data_commodities;
+  const dataCommodities = isCommodityArray(dataC) ? dataC : [];
+
   const dataChart = chartData?.data?.production;
 
-  const categories = dataChart?.map((d) => d.label);
-  const values = dataChart?.map((d) => d.total);
+  const categories = dataChart?.per_comodity?.map((d) => d.label);
+  const values = dataChart?.per_comodity?.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),
@@ -79,9 +90,33 @@ export default function ChartPeternakanProduction({ year, chartData }: Props) {
       title="Statistik Produksi Peternakan"
       description={
         <>
-          Data Produksi Daging <br />
+          {/* Data Produksi Daging <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
+      }
+      action={
+        <ModalDetail
+          // title="Statistik Produksi Peternakan"
+          // description={title + ' ' + subTitle}
+          title={title}
+          description={subTitle}
+          contentModal={
+            <Tabs defaultValue="all" className="flex flex-col gap-3">
+              <TabsList>
+                <TabsTrigger value="komoditi">Per Komoditi</TabsTrigger>
+                <TabsTrigger value="kecamatan">Per Kecamatan</TabsTrigger>
+              </TabsList>
+              <div className="max-h-[60vh] overflow-y-auto rounded-md border">
+                <TabsContent value="komoditi" className="p-0">
+                  <TableMonthly dataFreq="monthly" year={year} unit="Ton" tableHeadColspan={'Jumlah Produksi Bulanan Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Daging" dataChart={dataChart} />
+                </TabsContent>
+                <TabsContent value="kecamatan" className="p-0">
+                  <TableDistrictly year={year} unit="Ton" tableHeadColspan={'Jumlah Produksi Komoditi Tahun ' + year} tableFooterTotal="Total Seluruh Produksi Daging" dataCommodities={dataCommodities} dataChart={dataChart} />
+                </TabsContent>
+              </div>
+            </Tabs>
+          }
+        />
       }
       className="gap-1 pt-0 border-none shadow-none"
     >
@@ -93,7 +128,7 @@ export default function ChartPeternakanProduction({ year, chartData }: Props) {
           height={400}
         />
       ) : (
-        'Memuat data..'
+        <SkeletonList />
       )}
     </CardComponent>
   )

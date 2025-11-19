@@ -89,17 +89,12 @@ export default function ProductionSection() {
 
   // Year state
   const [year, setYear] = useState(new Date().getFullYear().toString());
+  // const [year, setYear] = useState('2023');
 
   // Chart pertanian state
   const [chartDataPertanian, setChartDataPertanian] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
-    data: {
-      palawija: [],
-      fruit_vegetable_season: [],
-      fruit_vegetable_year: [],
-      biopharmaceutical: [],
-      ornamental: [],
-    }
+    data: {}
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -109,12 +104,14 @@ export default function ProductionSection() {
           setChartDataPertanian(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
+          // fetchData();
           toast.error("Gagal !", {
             description: res.message || 'API Server Error !',
           })
         }
       }
       catch (error) {
+        fetchData();
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || 'API Server Error !'
@@ -130,9 +127,7 @@ export default function ProductionSection() {
   // Chart perkebunan state
   const [chartDataPerkebunan, setChartDataPerkebunan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
-    data: {
-      production: [],
-    }
+    data: {}
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -142,12 +137,14 @@ export default function ProductionSection() {
           setChartDataPerkebunan(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
+          // fetchData();
           toast.error("Gagal !", {
             description: res.message || 'API Server Error !'
           })
         }
       }
       catch (error) {
+        fetchData();
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || 'API Server Error !'
@@ -163,12 +160,7 @@ export default function ProductionSection() {
   // Chart peternakan state
   const [chartDataPeternakan, setChartDataPeternakan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
-    data: {
-      population: [],
-      slaughtered: [],
-      production: [],
-      vaccination: [],
-    }
+    data: {}
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -178,12 +170,14 @@ export default function ProductionSection() {
           setChartDataPeternakan(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
+          // fetchData();
           toast.error("Gagal !", {
             description: res.message || 'API Server Error !'
           })
         }
       }
       catch (error) {
+        fetchData();
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || 'API Server Error !'
@@ -199,14 +193,7 @@ export default function ProductionSection() {
   // Chart perikanan state
   const [chartDataPerikanan, setChartDataPerikanan] = useState<{ isLoaded: boolean, data: ResponseDataStatistic }>({
     isLoaded: false,
-    data: {
-      seed_cultivation: [],
-      pond_cultivation: [],
-      cage_cultivation: [],
-      ornamental_cultivation: [],
-      kub_production: [],
-      upi_fishery_product: [],
-    }
+    data: {}
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -216,12 +203,14 @@ export default function ProductionSection() {
           setChartDataPerikanan(old => ({ ...old, data: res.data, isLoaded: true }))
         }
         else {
+          // fetchData();
           toast.error("Gagal !", {
             description: res.message || 'API Server Error !'
           })
         }
       }
       catch (error) {
+        fetchData();
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || 'API Server Error !'
@@ -235,7 +224,7 @@ export default function ProductionSection() {
   }, []);
 
   return (
-    <CardComponent className="px-0 pt-0 pb-3 shadow-none">
+    <CardComponent className="px-0 pt-0 pb-3 shadow-lg">
       <Carousel
         className="w-full"
         opts={{ loop: true, align: "start" }}
@@ -303,7 +292,7 @@ export default function ProductionSection() {
         <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
       </Carousel>
       {/* Indikator dot */}
-      <div className="mt-2 flex justify-center gap-2">
+      <div className="flex justify-center gap-2">
         {chartScrollSnaps.map((_, idx) => (
           <button
             key={idx}
@@ -318,6 +307,9 @@ export default function ProductionSection() {
           />
         ))}
       </div>
+      {/* <pre>
+        {JSON.stringify(chartDataPeternakan, null, 2)}
+      </pre> */}
     </CardComponent>
   )
 }

@@ -6,7 +6,12 @@ import { barChartOptions } from '@/lib/apex-chart-options';
 import type { ResponseDataStatistic } from '@/types/sipuan-penari';
 // Components
 import CardComponent from '@/components/card/card-component';
+import SkeletonList from '@/components/skeleton/SkeletonList';
 import BarChart from '@/components/apexchart/bar-chart';
+import TableMonthly from './table-monthly';
+import TableDistrictly from './table-districtly';
+import { ModalDetail } from "@/components/modal/detail-modal";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface Props {
   year: number | string,
@@ -24,8 +29,8 @@ export default function ChartPerikananUPIFisheryProduct({ year, chartData }: Pro
 
   const dataChart = chartData?.data?.upi_fishery_product;
 
-  const categories = dataChart?.map((d) => d.label);
-  const values = dataChart?.map((d) => d.total);
+  const categories = dataChart?.per_comodity?.map((d) => d.label);
+  const values = dataChart?.per_comodity?.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),
@@ -79,9 +84,33 @@ export default function ChartPerikananUPIFisheryProduct({ year, chartData }: Pro
       title="Statistik Produksi Perikanan"
       description={
         <>
-          Data Produksi Unit Pengolahan Ikan (UPI) Pengolahan Hasil Perikanan <br />
+          {/* Data Produksi Unit Pengolahan Ikan (UPI) Pengolahan Hasil Perikanan <br /> */}
           <span className="italic text-xs">(Sumber : Sipuan Penari Distankan)</span>
         </>
+      }
+      action={
+        <ModalDetail
+          // title="Statistik Produksi Perikanan"
+          // description={title + ' ' + subTitle}
+          title={title}
+          description={subTitle}
+          contentModal={
+            <Tabs defaultValue="all" className="flex flex-col gap-3">
+              <TabsList>
+                <TabsTrigger value="komoditi">Per Komoditi</TabsTrigger>
+                <TabsTrigger value="kecamatan">Per Kecamatan</TabsTrigger>
+              </TabsList>
+              <div className="max-h-[60vh] overflow-y-auto rounded-md border">
+                <TabsContent value="komoditi" className="p-0">
+                  <TableMonthly dataFreq="monthly" year={year} unit="Ton" tableHeadColspan={'Jumlah Produksi UPI Bulanan Tahun ' + year} tableFooterTotal="Total Seluruh Produksi UPI" dataChart={dataChart} />
+                </TabsContent>
+                <TabsContent value="kecamatan" className="p-0">
+                  <TableDistrictly year={year} unit="Ton" tableHeadColspan={'Jumlah Produksi UPI Komoditi Tahun ' + year} tableFooterTotal="Total Seluruh Produksi UPI" dataCommodities={dataChart?.data_commodities} dataChart={dataChart} />
+                </TabsContent>
+              </div>
+            </Tabs>
+          }
+        />
       }
       className="gap-1 pt-0 border-none shadow-none"
     >
@@ -93,7 +122,7 @@ export default function ChartPerikananUPIFisheryProduct({ year, chartData }: Pro
           height={400}
         />
       ) : (
-        'Memuat data..'
+        <SkeletonList />
       )}
     </CardComponent>
   )

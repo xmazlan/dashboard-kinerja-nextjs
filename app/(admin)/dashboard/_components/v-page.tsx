@@ -34,7 +34,7 @@ export default function Dashboard() {
         <SectionPendudukan />
         {/* <SectionTpid /> */}
 
-        {/* <SectionTree /> */}
+        <SectionTree />
       </main>
     </>
   );
