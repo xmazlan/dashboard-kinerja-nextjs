@@ -39,8 +39,14 @@ export default function ChartPertanianPalawija({ year, chartData }: Props) {
   //   name: item.label,
   //   data: item.values
   // }));
-  const categories = dataChart?.per_comodity?.map((d) => d.label);
-  const values = dataChart?.per_comodity?.map((d) => d.total);
+
+  // const categories = dataChart?.per_comodity?.map((d) => d.label) ?? [];
+  // const values = dataChart?.per_comodity?.map((d) => d.total) ?? [];
+  const perComodity = Array.isArray(dataChart?.per_comodity)
+    ? dataChart.per_comodity
+    : [];
+  const categories = perComodity.map((d) => d.label);
+  const values = perComodity.map((d) => d.total);
 
   // const options: ApexCharts.ApexOptions = {
   //   chart: {

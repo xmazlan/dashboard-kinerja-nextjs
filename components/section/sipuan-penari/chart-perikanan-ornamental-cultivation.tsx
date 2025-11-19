@@ -29,8 +29,11 @@ export default function ChartPerikananOrnamentalCultivation({ year, chartData }:
 
   const dataChart = chartData?.data?.ornamental_cultivation;
 
-  const categories = dataChart?.per_comodity?.map((d) => d.label);
-  const values = dataChart?.per_comodity?.map((d) => d.total);
+  const perComodity = Array.isArray(dataChart?.per_comodity)
+    ? dataChart.per_comodity
+    : [];
+  const categories = perComodity.map((d) => d.label);
+  const values = perComodity.map((d) => d.total);
 
   const options = merge(
     barChartOptions(isDark, title, subTitle),

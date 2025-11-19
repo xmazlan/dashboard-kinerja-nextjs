@@ -31,18 +31,21 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
     ];
   }
 
-  const dataPerComodity = dataChart?.per_comodity;
+  // const dataPerComodity = dataChart?.per_comodity;
+  const perCommodity = Array.isArray(dataChart?.per_comodity)
+    ? dataChart.per_comodity
+    : [];
 
-  const sumTotal = dataPerComodity?.reduce((acc, curr) => acc + curr.total, 0);
+  const sumTotal = perCommodity?.reduce((acc, curr) => acc + curr.total, 0);
 
   const frequentlyTotals = Array(FREQS.length).fill(0);
-  dataPerComodity?.forEach((row) => {
+  perCommodity?.forEach((row) => {
     row.values.forEach((val, i) => {
       frequentlyTotals[i] += val;
     });
   });
 
-  const hasUnitProduction = dataPerComodity?.some(
+  const hasUnitProduction = perCommodity?.some(
     (row) => !!row.commodity?.unit_production
   );
 
@@ -73,7 +76,7 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
         </TableHeader>
 
         <TableBody>
-          {dataPerComodity?.map((row) => (
+          {perCommodity?.map((row) => (
             <TableRow key={row.commodity.id}>
               <TableCell className="font-medium text-primary">
                 {row.label}

@@ -15,16 +15,19 @@ interface Props {
 
 export default function TableVaccination({ dataDiseases, year, tableFooterTotal, dataChart }: Props) {
 
-  const dataPerComodity = dataChart?.per_comodity;
+  // const dataPerComodity = dataChart?.per_comodity;
+  const perCommodity = Array.isArray(dataChart?.per_comodity)
+    ? dataChart.per_comodity
+    : [];
 
-  const sumTotal = dataPerComodity?.reduce((acc, curr) => acc + curr.total, 0);
+  const sumTotal = perCommodity?.reduce((acc, curr) => acc + curr.total, 0);
 
-  // const totalInfected = dataPerComodity.reduce((acc, item) => {
+  // const totalInfected = perCommodity.reduce((acc, item) => {
   //   if (typeof item.values !== "number") 
   //     return acc + item.values.reduce((sum, v) => sum + v.infected, 0);
   // }, 0);
 
-  // const totalVaccination = dataPerComodity.reduce((acc, item) => {
+  // const totalVaccination = perCommodity.reduce((acc, item) => {
   //   return acc + item.values.reduce((sum, v) => sum + v.vaccination, 0);
   // }, 0);
   const diseaseTotals: Record<
@@ -33,7 +36,7 @@ export default function TableVaccination({ dataDiseases, year, tableFooterTotal,
   > = {};
 
   // Loop semua komoditas
-  dataPerComodity.forEach(item => {
+  perCommodity.forEach(item => {
     item.values.forEach(v => {
       if (typeof v !== "number") {
         if (!diseaseTotals[v.label]) {
@@ -46,8 +49,8 @@ export default function TableVaccination({ dataDiseases, year, tableFooterTotal,
     });
   });
 
-  const totalInfected = dataPerComodity?.reduce((acc, item) => acc + item.totalInfected, 0);
-  const totalVaccination = dataPerComodity?.reduce((acc, item) => acc + item.totalVaccination, 0);
+  const totalInfected = perCommodity?.reduce((acc, item) => acc + item.totalInfected, 0);
+  const totalVaccination = perCommodity?.reduce((acc, item) => acc + item.totalVaccination, 0);
 
 
   return (
@@ -90,7 +93,7 @@ export default function TableVaccination({ dataDiseases, year, tableFooterTotal,
         </TableHeader>
 
         <TableBody>
-          {dataPerComodity?.map((row) => (
+          {perCommodity?.map((row) => (
             <TableRow key={row.commodity.id}>
               <TableCell className="font-medium text-primary">
                 {row.label}

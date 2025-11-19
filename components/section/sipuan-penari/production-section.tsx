@@ -307,9 +307,6 @@ export default function ProductionSection() {
           />
         ))}
       </div>
-      {/* <pre>
-        {JSON.stringify(chartDataPeternakan, null, 2)}
-      </pre> */}
     </CardComponent>
   )
 }
