@@ -15,12 +15,15 @@ interface Props {
 
 export default function TableDistrictly({ year, unit, tableHeadColspan, tableFooterTotal, dataCommodities, dataChart }: Props) {
 
-  const dataPerDistrict = dataChart?.per_district;
+  // const dataPerDistrict = dataChart?.per_district;
+  const perDistrict = Array.isArray(dataChart?.per_district)
+    ? dataChart.per_district
+    : [];
 
-  const sumTotal = dataPerDistrict?.reduce((acc, curr) => acc + curr.total, 0);
+  const sumTotal = perDistrict?.reduce((acc, curr) => acc + curr.total, 0);
 
   const frequentlyTotals = Array(dataCommodities.length).fill(0);
-  dataPerDistrict?.forEach((row) => {
+  perDistrict?.forEach((row) => {
     row.values.forEach((val, i) => {
       frequentlyTotals[i] += val;
     });
@@ -48,7 +51,7 @@ export default function TableDistrictly({ year, unit, tableHeadColspan, tableFoo
         </TableHeader>
 
         <TableBody>
-          {dataPerDistrict?.map((row) => (
+          {perDistrict?.map((row) => (
             <TableRow key={row.district.id}>
               <TableCell className="font-medium text-primary">
                 {row.label}

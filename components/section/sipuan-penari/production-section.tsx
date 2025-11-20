@@ -288,8 +288,8 @@ export default function ProductionSection() {
             <ChartPerikananUPIFisheryProduct year={year} chartData={chartDataPerikanan} />
           </CarouselItem>
         </CarouselContent>
-        {/* <CarouselPrevious className="top-1/5 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-        <CarouselNext className="top-1/5 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
+        <CarouselPrevious className="top-1/2 -left-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        <CarouselNext className="top-1/2 -right-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
       </Carousel>
       {/* Indikator dot */}
       <div className="flex justify-center gap-2">
@@ -307,9 +307,6 @@ export default function ProductionSection() {
           />
         ))}
       </div>
-      {/* <pre>
-        {JSON.stringify(chartDataPeternakan, null, 2)}
-      </pre> */}
     </CardComponent>
   )
 }
