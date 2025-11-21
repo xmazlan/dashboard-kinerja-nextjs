@@ -20,7 +20,7 @@ import DataPajakREKLAME from "./data/pajak/data-pajak-REKLAME";
 import DataPajakAIRBAWAHTANAH from "./data/pajak/data-pajak-AIRBAWAHTANAH";
 import DataBpkadSp2d from "./data/bpkad/data-bpkad-sp2d";
 import DataBpkadRfk from "./data/bpkad/data-bpkad-rfk";
-
+const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 export default function SectionBpkadDataSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
@@ -38,7 +38,7 @@ export default function SectionBpkadDataSlide() {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
-    }, 4000);
+    }, SPEED_LIDER);
     return () => clearInterval(id);
   }, [chartApi]);
 

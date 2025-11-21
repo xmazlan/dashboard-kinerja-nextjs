@@ -34,7 +34,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
-
+const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 export default function DataTpidPasarSlide() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidPasarData();
@@ -54,7 +54,7 @@ export default function DataTpidPasarSlide() {
       if (!pausedRef.current) {
         api.scrollNext();
       }
-    }, 4000);
+    }, SPEED_LIDER);
     return () => clearInterval(id);
   }, [api]);
 
@@ -247,10 +247,10 @@ export default function DataTpidPasarSlide() {
                                     <OptimizeImage
                                       src={it.img}
                                       alt={it.komoditas}
-                                      width={28}
-                                      height={28}
-                                      containerClassName="w-7 h-7 rounded-sm bg-muted"
-                                      imgClassName="rounded-sm object-contain"
+                                      width={32}
+                                      height={32}
+                                      containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                      imgClassName="rounded-sm object-cover w-full h-full"
                                     />
                                     <div className="min-w-0">
                                       <div className="text-[12px] font-medium truncate">
@@ -298,10 +298,10 @@ export default function DataTpidPasarSlide() {
                                           <OptimizeImage
                                             src={it.img}
                                             alt={it.komoditas}
-                                            width={28}
-                                            height={28}
-                                            containerClassName="w-7 h-7 rounded-sm bg-muted"
-                                            imgClassName="rounded-sm object-contain"
+                                            width={32}
+                                            height={32}
+                                            containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                            imgClassName="rounded-sm object-cover w-full h-full"
                                           />
                                           <div className="min-w-0">
                                             <div className="text-[12px] font-medium truncate">

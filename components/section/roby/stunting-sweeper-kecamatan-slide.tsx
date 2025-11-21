@@ -11,7 +11,7 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
 import DataStuntingKecamatanSlide from "./data/stunting/data-stunting-kecamatan-slide";
-
+const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 export default function SectionStuntingSweeperKecamatanSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
@@ -29,7 +29,7 @@ export default function SectionStuntingSweeperKecamatanSlide() {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
-    }, 4000);
+    }, SPEED_LIDER);
     return () => clearInterval(id);
   }, [chartApi]);
 

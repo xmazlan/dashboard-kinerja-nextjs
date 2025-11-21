@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Select,
@@ -216,7 +217,7 @@ export default function DataPajakPBB() {
         }
       >
         <div className="w-full">
-          <div className=" mx-auto space-y-3">
+          <div className=" space-y-3">
             {isLoadingJenis || isLoadingTahun || isLoadingStat ? (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

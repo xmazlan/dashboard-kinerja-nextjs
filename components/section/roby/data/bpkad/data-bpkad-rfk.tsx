@@ -1,25 +1,10 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import LoadingSkeleton from "@/components/loading-skeleton";
-import {
-  Building2,
-  Tags,
-  ShieldCheck,
-  MapPin,
-  MessageSquare,
-  AlertCircle,
-  Loader2,
-  CheckCircle2,
-  PauseCircle,
-} from "lucide-react";
+
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
-import { ModalDetail } from "@/components/modal/detail-modal";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import DataEresponAll from "@/components/section/roby/data/pengaduan/data-erespon-all";
-import DataEresponKecamatan from "@/components/section/roby/data/pengaduan/data-erespon-kecamatan";
-import DataEresponKelurahan from "@/components/section/roby/data/pengaduan/data-erespon-kelurahan";
-import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespon-opd";
 import { useBpkadRfkData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
 
@@ -35,11 +20,12 @@ export default function DataBpkadRfk() {
         title="Layanan BPKAD (RFK)"
         description={(() => {
           const tanggal = String(masterData?.data?.Rekap_Kota?.Tanggal || "-");
+          const last = String(masterData?.last_get || "");
           return (
             <>
-              Last update: {masterData?.last_get ?? ""}
+              Last update: <span suppressHydrationWarning>{last || "-"}</span>
               <br />
-              Tanggal: {tanggal}
+              Tanggal: <span suppressHydrationWarning>{tanggal || "-"}</span>
               <br />
               <span className="italic text-xs">(Sumber : BPKAD)</span>
             </>
@@ -94,12 +80,12 @@ export default function DataBpkadRfk() {
               {
                 label: "Keuangan",
                 value: `${persenKeu.toFixed(2)}%`,
-                bg: TILE_COLOR,
+                bg: "bg-emerald-600",
               },
               {
                 label: "Fisik",
                 value: `${persenFisik.toFixed(2)}%`,
-                bg: TILE_COLOR,
+                bg: "bg-indigo-700",
               },
             ];
 
@@ -128,7 +114,7 @@ export default function DataBpkadRfk() {
                         {s.label}
                       </div>
                       <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
-                        {s.value}
+                        <span suppressHydrationWarning>{s.value}</span>
                       </div>
                     </div>
                   ))}
@@ -171,10 +157,14 @@ export default function DataBpkadRfk() {
                           </div>
                           <div className="text-right">
                             <div className="text-[11px] font-bold tabular-nums">
-                              {uang.toFixed(2)}% Keu
+                              <span suppressHydrationWarning>
+                                {uang.toFixed(2)}% Keu
+                              </span>
                             </div>
                             <div className="text-[11px] font-bold tabular-nums">
-                              {fisik.toFixed(2)}% Fisik
+                              <span suppressHydrationWarning>
+                                {fisik.toFixed(2)}% Fisik
+                              </span>
                             </div>
                           </div>
                         </div>

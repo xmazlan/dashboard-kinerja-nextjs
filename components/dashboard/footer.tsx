@@ -67,12 +67,9 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                info@dinas.gov.id
+                helpdesk@pekanbaru.go.id
               </li>
-              <li className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                (021) 1234-5678
-              </li>
+
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 Senin–Jumat 08:00–17:00
