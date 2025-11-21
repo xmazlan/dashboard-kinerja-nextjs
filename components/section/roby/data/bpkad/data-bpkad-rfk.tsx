@@ -120,7 +120,7 @@ export default function DataBpkadRfk() {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="text-sm text-muted-foreground">
                     Menampilkan {Math.min(6, sorted.length)} dari{" "}
                     {sorted.length} OPD
@@ -129,6 +129,7 @@ export default function DataBpkadRfk() {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="w-full sm:w-auto"
                       onClick={() => setShowAll((v) => !v)}
                     >
                       {showAll

@@ -74,8 +74,8 @@ export default function DataEresponKelurahan() {
                           </div>
                         </div>
 
-                        <div className="mt-3 grid grid-cols-4 gap-2">
-                          <div className="rounded-md bg-white/15 px-2 py-2">
+                        <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 w-full">
+                          <div className="rounded-md bg白/15 px-2 py-2">
                             <div className="flex items-center gap-1 text-[10px] md:text-xs opacity-90">
                               <span className="inline-block h-2 w-2 rounded-sm bg-amber-400" />
                               <span>Belum</span>

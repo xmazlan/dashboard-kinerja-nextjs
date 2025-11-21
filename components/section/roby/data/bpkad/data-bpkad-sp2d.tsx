@@ -7,6 +7,8 @@ import LoadingSkeleton from "@/components/loading-skeleton";
 import { NEUTRAL_PATTERN } from "@/components/patern-collor";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
+import { ModalDetail } from "@/components/modal/detail-modal";
+import OPDProgressCard from "./opd-progress-card";
 
 export default function DataBpkadSp2d() {
   const { data: apiData, isLoading: isLoadingMasterData } = useBpkadSp2dData();
@@ -30,36 +32,49 @@ export default function DataBpkadSp2d() {
             </>
           );
         })()}
-        // action={
-        //   <ModalDetail
-        //     title="Detail Layanan BPKAD"
-        //     description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
-        //     contentModal={
-        //       <Tabs defaultValue="all" className="flex flex-col gap-3">
-        //         <TabsList>
-        //           <TabsTrigger value="all">Ringkasan</TabsTrigger>
-        //           <TabsTrigger value="opd">OPD</TabsTrigger>
-        //           <TabsTrigger value="kecamatan">Kecamatan</TabsTrigger>
-        //           <TabsTrigger value="kelurahan">Kelurahan</TabsTrigger>
-        //         </TabsList>
-        //         <div className="h-[60vh] overflow-y-auto rounded-md border">
-        //           <TabsContent value="all" className="p-3">
-        //             <DataEresponAll />
-        //           </TabsContent>
-        //           <TabsContent value="kecamatan" className="p-3">
-        //             <DataEresponKecamatan />
-        //           </TabsContent>
-        //           <TabsContent value="kelurahan" className="p-3">
-        //             <DataEresponKelurahan />
-        //           </TabsContent>
-        //           <TabsContent value="opd" className="p-3">
-        //             <DataEresponOpd />
-        //           </TabsContent>
-        //         </div>
-        //       </Tabs>
-        //     }
-        //   />
-        // }
+        action={(() => {
+          type Row = {
+            Persentase?: number | string;
+            Realisasi_OPD?: number | string;
+            PaguAnggaran?: number | string;
+            OPD?: unknown;
+          };
+          const list: Row[] = Array.isArray(masterData?.data?.data)
+            ? (masterData?.data?.data as Row[])
+            : [];
+          return (
+            <div className="w-full sm:hidden">
+              <ModalDetail
+                title="Detail Layanan BPKAD SP2D"
+                description="Tabulasi dan visualisasi detail."
+                contentModal={
+                  <div className="sm:hidden max-h-[65vh] overflow-y-auto space-y-2 pr-1">
+                    {list.map((row, idx) => {
+                      const p = Number(row?.Persentase ?? 0);
+                      const real = Number(row?.Realisasi_OPD ?? 0);
+                      const pagu = Number(row?.PaguAnggaran ?? 0);
+                      const opdName = String(row?.OPD ?? "-");
+                      const clean = (() => {
+                        const str = opdName.trim();
+                        const match = str.match(/^[\d.]+\s+(.+)$/);
+                        return match ? match[1] : str;
+                      })();
+                      return (
+                        <OPDProgressCard
+                          key={idx}
+                          opdName={clean}
+                          percentage={p}
+                          realisasi={real}
+                          pagu={pagu}
+                        />
+                      );
+                    })}
+                  </div>
+                }
+              />
+            </div>
+          );
+        })()}
       >
         {isLoadingMasterData ? (
           <LoadingSkeleton rows={2} cols={3} />
@@ -78,9 +93,6 @@ export default function DataBpkadSp2d() {
             const list: Row[] = Array.isArray(masterData?.data?.data)
               ? (masterData?.data?.data as Row[])
               : [];
-
-            const TILE_COLOR = "bg-blue-700";
-            const pctClass = () => TILE_COLOR;
 
             const summary = [
               {
@@ -127,87 +139,48 @@ export default function DataBpkadSp2d() {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-muted-foreground">
-                    Menampilkan{" "}
-                    <span suppressHydrationWarning>
-                      {Math.min(6, sorted.length)}
-                    </span>{" "}
-                    dari <span suppressHydrationWarning>{sorted.length}</span>{" "}
-                    OPD
+                <div className="hidden sm:block">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="text-sm text-muted-foreground">
+                      Menampilkan{" "}
+                      <span suppressHydrationWarning>
+                        {Math.min(6, sorted.length)}
+                      </span>{" "}
+                      dari <span suppressHydrationWarning>{sorted.length}</span>{" "}
+                      OPD
+                    </div>
+                    {sorted.length > 6 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full sm:w-auto"
+                        onClick={() => setShowAll((v) => !v)}
+                      >
+                        {showAll ? (
+                          "Tutup"
+                        ) : (
+                          <span suppressHydrationWarning>{`Lihat semua (${
+                            sorted.length - 6
+                          } lagi)`}</span>
+                        )}
+                      </Button>
+                    )}
                   </div>
-                  {sorted.length > 6 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowAll((v) => !v)}
-                    >
-                      {showAll ? (
-                        "Tutup"
-                      ) : (
-                        <span suppressHydrationWarning>{`Lihat semua (${
-                          sorted.length - 6
-                        } lagi)`}</span>
-                      )}
-                    </Button>
-                  )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 h-full flex-1">
+                <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 h-full flex-1">
                   {(showAll ? sorted : sorted.slice(0, 6)).map((row, idx) => {
                     const p = Number(row?.Persentase ?? 0);
                     const real = Number(row?.Realisasi_OPD ?? 0);
                     const pagu = Number(row?.PaguAnggaran ?? 0);
                     return (
-                      <div
+                      <OPDProgressCard
                         key={idx}
-                        className={cn(
-                          "rounded-md p-4 text-white h-full shadow-sm ring-1 ring-white/10",
-                          pctClass()
-                        )}
-                        title={String(row?.OPD || "-")}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90 min-w-0 truncate">
-                            {cleanOPDName(row?.OPD)}
-                          </div>
-                          <span className="text-sm font-bold tabular-nums">
-                            <span suppressHydrationWarning>
-                              {p.toFixed(2)}%
-                            </span>
-                          </span>
-                        </div>
-                        <div className="mt-2 h-2 w-full rounded bg-white/20 overflow-hidden">
-                          <div
-                            className="h-full rounded bg-white/80"
-                            style={{
-                              width: `${Math.min(100, Math.max(0, p))}%`,
-                            }}
-                          />
-                        </div>
-                        <div className="mt-3 grid grid-cols-2 gap-2">
-                          <div className="rounded-md p-2 bg-white/10">
-                            <div className="text-[10px] uppercase opacity-90">
-                              Realisasi
-                            </div>
-                            <div className="text-sm font-bold tabular-nums">
-                              <span suppressHydrationWarning>
-                                {real.toLocaleString("id-ID")}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="rounded-md p-2 bg-white/10">
-                            <div className="text-[10px] uppercase opacity-90">
-                              Pagu
-                            </div>
-                            <div className="text-sm font-bold tabular-nums">
-                              <span suppressHydrationWarning>
-                                {pagu.toLocaleString("id-ID")}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        opdName={cleanOPDName(row?.OPD)}
+                        percentage={p}
+                        realisasi={real}
+                        pagu={pagu}
+                      />
                     );
                   })}
                 </div>

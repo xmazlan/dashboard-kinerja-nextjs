@@ -234,7 +234,7 @@ export default function DataTpidPasarSlide() {
                               </Badge>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                               {head.map((it) => (
                                 <div
                                   key={it.key}
@@ -285,7 +285,7 @@ export default function DataTpidPasarSlide() {
                                   </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="mt-2 grid grid-cols-2 gap-2">
+                                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                                     {tail.map((it) => (
                                       <div
                                         key={it.key}

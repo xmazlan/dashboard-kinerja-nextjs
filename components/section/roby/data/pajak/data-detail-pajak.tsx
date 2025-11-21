@@ -117,56 +117,61 @@ export default function DataDetailPajak({
               const maxValue = Math.max(...Object.values(values));
               return (
                 <div className="w-full">
-                  <div className="grid grid-cols-7 gap-2 mb-2">
-                    {headers.map((h, i) => (
-                      <div
-                        key={i}
-                        className="text-[11px] font-semibold text-center text-muted-foreground"
-                      >
-                        {h}
+                  <div className="w-full overflow-x-auto">
+                    <div className="min-w-[560px]">
+                      <div className="grid grid-cols-7 gap-2 mb-2">
+                        {headers.map((h, i) => (
+                          <div
+                            key={i}
+                            className="text-[11px] font-semibold text-center text-muted-foreground"
+                          >
+                            {h}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <div className="grid grid-cols-7 gap-2">
-                    {cells.map((d, i) =>
-                      d > 0 ? (
-                        <div
-                          key={i}
-                          className="rounded-lg border p-2 min-h-[56px] flex flex-col transition-all hover:shadow-md cursor-pointer"
-                          style={{
-                            backgroundColor:
-                              values[d] > 0
-                                ? `rgba(59, 130, 246, ${
-                                    0.2 + (values[d] / (maxValue || 1)) * 0.6
-                                  })`
-                                : isDark
-                                ? "#0f172a"
-                                : "#f8fafc",
-                            borderColor:
-                              values[d] > 0
-                                ? "#3b82f6"
-                                : isDark
-                                ? "#1f2937"
-                                : "#e5e7eb",
-                          }}
-                        >
-                          <div className="text-[11px] font-bold text-foreground mb-1">
-                            {d}
-                          </div>
-                          <div className="text-[10px] font-medium ">
-                            {values[d] > 0 ? formatNumber(values[d]) : "-"}
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          key={i}
-                          className="rounded-lg p-2 min-h-[56px]"
-                          style={{
-                            backgroundColor: isDark ? "#0f172a" : "#f8fafc",
-                          }}
-                        />
-                      )
-                    )}
+                      <div className="grid grid-cols-7 gap-2">
+                        {cells.map((d, i) =>
+                          d > 0 ? (
+                            <div
+                              key={i}
+                              className="rounded-lg border p-2 min-h-[56px] flex flex-col transition-all hover:shadow-md cursor-pointer"
+                              style={{
+                                backgroundColor:
+                                  values[d] > 0
+                                    ? `rgba(59, 130, 246, ${
+                                        0.2 +
+                                        (values[d] / (maxValue || 1)) * 0.6
+                                      })`
+                                    : isDark
+                                    ? "#0f172a"
+                                    : "#f8fafc",
+                                borderColor:
+                                  values[d] > 0
+                                    ? "#3b82f6"
+                                    : isDark
+                                    ? "#1f2937"
+                                    : "#e5e7eb",
+                              }}
+                            >
+                              <div className="text-[11px] font-bold text-foreground mb-1">
+                                {d}
+                              </div>
+                              <div className="text-[10px] font-medium ">
+                                {values[d] > 0 ? formatNumber(values[d]) : "-"}
+                              </div>
+                            </div>
+                          ) : (
+                            <div
+                              key={i}
+                              className="rounded-lg p-2 min-h-[56px]"
+                              style={{
+                                backgroundColor: isDark ? "#0f172a" : "#f8fafc",
+                              }}
+                            />
+                          )
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               );

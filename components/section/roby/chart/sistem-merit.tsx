@@ -14,7 +14,7 @@ export function ChartRadialSistemMerit() {
   return (
     <>
       <div className="w-full h-full">
-        <div className="grid grid-cols-3 gap-3 w-full h-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full h-full">
           {charts.map((c, idx) => (
             <div
               key={idx}
@@ -22,7 +22,9 @@ export function ChartRadialSistemMerit() {
               style={{ backgroundColor: c.color }}
             >
               <div className="text-white text-3xl font-bold">{c.value}</div>
-              <div className="text-white/90 text-sm font-semibold">{c.label}</div>
+              <div className="text-white/90 text-sm font-semibold">
+                {c.label}
+              </div>
               <div className="mt-2">
                 <span className="rounded-full bg-white/20 text-white px-3 py-1 text-xs font-semibold">
                   {c.year}

@@ -95,7 +95,7 @@ export default function DataTpidKomoditiDetail() {
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                           <div
                             className={cn(
                               "rounded-lg p-2 text-white",
@@ -143,7 +143,7 @@ export default function DataTpidKomoditiDetail() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {Object.entries(hargaPerPasar).map(
                             ([pasar, harga]) => (
                               <div
