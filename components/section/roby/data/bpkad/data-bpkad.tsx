@@ -135,7 +135,7 @@ export default function DataBpkad() {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="text-sm text-muted-foreground">
                     Menampilkan {Math.min(6, sorted.length)} dari{" "}
                     {sorted.length} OPD
@@ -144,6 +144,7 @@ export default function DataBpkad() {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="w-full sm:w-auto"
                       onClick={() => setShowAll((v) => !v)}
                     >
                       {showAll
@@ -183,7 +184,7 @@ export default function DataBpkad() {
                             }}
                           />
                         </div>
-                        <div className="mt-3 grid grid-cols-2 gap-2">
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <div className="rounded-md p-2 bg-white/10">
                             <div className="text-[10px] uppercase opacity-90">
                               Realisasi

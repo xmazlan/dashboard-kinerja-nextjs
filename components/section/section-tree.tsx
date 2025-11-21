@@ -5,7 +5,7 @@ import TPIDSection from "./tpid/view-section";
 
 export default function SectionTree() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-6 gap-4 w-full">
       <div className="col-span-full ">
         {/* Sipuan Penari : Data Produksi */}
         <SipuanPenariProductionSection />

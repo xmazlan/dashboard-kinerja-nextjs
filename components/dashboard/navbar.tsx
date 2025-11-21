@@ -7,18 +7,12 @@ import { LogOut, Maximize, Minimize2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -45,9 +39,7 @@ export function Navbar() {
       } else {
         void document.exitFullscreen();
       }
-    } catch (e) {
-      // noop: Fullscreen might be blocked by browser
-    }
+    } catch {}
   };
 
   const handleLogout = async () => {
@@ -55,7 +47,7 @@ export function Navbar() {
       setIsLoggingOut(true);
       await signOut({ callbackUrl: "/", redirect: true });
       toast.success("Logout berhasil. Mengalihkan...");
-    } catch (error) {
+    } catch {
       toast.error("Logout gagal. Silakan coba lagi.");
     } finally {
       setIsLoggingOut(false);
@@ -103,18 +95,20 @@ export function Navbar() {
               className=" shrink-0 object-contain drop-shadow-sm"
             />
 
-            <div className="">
-              <div className="text-lg font-bold tracking-tight text-white drop-shadow-md">
+            <div className="min-w-0">
+              <div className="text-base sm:text-lg font-bold tracking-tight text-white drop-shadow-md truncate max-w-[55vw] sm:max-w-[40vw]">
                 {process.env.NEXT_PUBLIC_APP_NAME}
               </div>
-              <div className="text-xs  text-white/90 font-normal">
+              <div className="hidden sm:block text-xs text-white/90 font-normal truncate max-w-[55vw] sm:max-w-[40vw]">
                 {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <DigitalClock variant="navbar" />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="hidden md:block">
+              <DigitalClock variant="navbar" />
+            </div>
 
             <Button
               variant="outline"
@@ -123,7 +117,7 @@ export function Navbar() {
                 isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
               }
               onClick={toggleFullscreen}
-              className="hover:bg-muted"
+              className="hover:bg-muted hidden sm:inline-flex"
             >
               {isFullscreen ? (
                 <Minimize2 className="w-5 h-5" />
@@ -132,7 +126,9 @@ export function Navbar() {
               )}
             </Button>
 
-            <ThemeSwitcher />
+            <div className="">
+              <ThemeSwitcher />
+            </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-10 w-10 rounded-lg">

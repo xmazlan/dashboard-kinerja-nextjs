@@ -22,10 +22,21 @@ function GridSkeleton({
 }: Omit<LoadingSkeletonProps, "variant" | "showHeader" | "headerLines">) {
   const total = rows * cols;
   const tiles = Array.from({ length: total });
+  const colsClass = (() => {
+    if (cols <= 1) return "grid-cols-1";
+    if (cols === 2) return "grid-cols-1 sm:grid-cols-2";
+    if (cols === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+    if (cols === 4)
+      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+    return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+  })();
   return (
-    <div className={cn("grid gap-3 h-full", className)} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+    <div className={cn("grid gap-3 h-full w-full", colsClass, className)}>
       {tiles.map((_, idx) => (
-        <div key={idx} className={cn("rounded-md p-4 h-full bg-muted/10", tileClassName)}>
+        <div
+          key={idx}
+          className={cn("rounded-md p-4 h-full bg-muted/10", tileClassName)}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {showIcon && <Skeleton className="size-8 rounded-md" />}
@@ -44,12 +55,18 @@ function ListSkeleton({
   className,
   tileClassName,
   showIcon = true,
-}: Omit<LoadingSkeletonProps, "variant" | "cols" | "showHeader" | "headerLines">) {
+}: Omit<
+  LoadingSkeletonProps,
+  "variant" | "cols" | "showHeader" | "headerLines"
+>) {
   const items = Array.from({ length: rows });
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {items.map((_, idx) => (
-        <div key={idx} className={cn("rounded-md p-3 bg-muted/10", tileClassName)}>
+        <div
+          key={idx}
+          className={cn("rounded-md p-3 bg-muted/10", tileClassName)}
+        >
           <div className="flex items-center gap-3">
             {showIcon && <Skeleton className="size-8 rounded-md" />}
             <div className="flex-1 space-y-2">
@@ -85,14 +102,22 @@ function CardSkeleton({
           </div>
         </div>
       )}
-      <GridSkeleton rows={rows} cols={cols} tileClassName={tileClassName} showIcon={showIcon} />
+      <GridSkeleton
+        rows={rows}
+        cols={cols}
+        tileClassName={tileClassName}
+        showIcon={showIcon}
+      />
     </div>
   );
 }
 
-export default function LoadingSkeleton({ variant = "card", ...props }: LoadingSkeletonProps) {
-  if (variant === "grid") return <GridSkeleton {...props} /> as any;
-  if (variant === "list") return <ListSkeleton {...props} /> as any;
+export default function LoadingSkeleton({
+  variant = "card",
+  ...props
+}: LoadingSkeletonProps) {
+  if (variant === "grid") return (<GridSkeleton {...props} />) as any;
+  if (variant === "list") return (<ListSkeleton {...props} />) as any;
   return <CardSkeleton {...props} />;
 }
 

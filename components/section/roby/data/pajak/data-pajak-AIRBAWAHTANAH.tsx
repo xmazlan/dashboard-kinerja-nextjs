@@ -35,6 +35,7 @@ import { usePajakFilterStore } from "@/store/use-pajak-filter";
 import { useTheme } from "next-themes";
 import { Skeleton } from "@/components/ui/skeleton";
 import LoadingPajak from "./loading-pajak";
+import PajakFilterControls from "./pajak-filter-controls";
 
 export default function DataPajakAIRBAWAHTANAH() {
   const { theme, systemTheme } = useTheme();
@@ -154,18 +155,7 @@ export default function DataPajakAIRBAWAHTANAH() {
           </>
         }
         action={
-          <div className="flex items-center gap-2">
-            <ModalDetail
-              title="Detail Pajak AIRBAWAHTANAH"
-              description="Tabulasi dan visualisasi detail."
-              contentModal={
-                <DataDetailPajak
-                  jenispajak={jenispajak}
-                  bulan={bulan}
-                  tahun={tahun}
-                />
-              }
-            />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             {/* <Select value={jenispajak} onValueChange={(v) => setJenisPajak(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Jenis pajak" />
@@ -178,42 +168,26 @@ export default function DataPajakAIRBAWAHTANAH() {
                 ))}
               </SelectContent>
             </Select> */}
-            <Select value={bulan} onValueChange={(v) => setBulan(v)}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Pilih bulan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">Januari</SelectItem>
-                <SelectItem value="2">Februari</SelectItem>
-                <SelectItem value="3">Maret</SelectItem>
-                <SelectItem value="4">April</SelectItem>
-                <SelectItem value="5">Mei</SelectItem>
-                <SelectItem value="6">Juni</SelectItem>
-                <SelectItem value="7">Juli</SelectItem>
-                <SelectItem value="8">Agustus</SelectItem>
-                <SelectItem value="9">September</SelectItem>
-                <SelectItem value="10">Oktober</SelectItem>
-                <SelectItem value="11">November</SelectItem>
-                <SelectItem value="12">Desember</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={tahun} onValueChange={(v) => setTahun(v)}>
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Pilih tahun" />
-              </SelectTrigger>
-              <SelectContent>
-                {tahunOptions.map((opt, idx) => (
-                  <SelectItem key={idx} value={String(opt.value)}>
-                    {String(opt.text)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {dirty && (
-              <Button variant="outline" onClick={clearFilter}>
-                Bersihkan
-              </Button>
-            )}
+            <PajakFilterControls
+              bulan={bulan}
+              setBulan={setBulan}
+              tahun={tahun}
+              setTahun={setTahun}
+              tahunOptions={tahunOptions}
+              dirty={dirty}
+              clearFilter={clearFilter}
+            />
+            <ModalDetail
+              title="Detail Pajak AIRBAWAHTANAH"
+              description="Tabulasi dan visualisasi detail."
+              contentModal={
+                <DataDetailPajak
+                  jenispajak={jenispajak}
+                  bulan={bulan}
+                  tahun={tahun}
+                />
+              }
+            />
           </div>
         }
       >
@@ -226,7 +200,7 @@ export default function DataPajakAIRBAWAHTANAH() {
             ) : (
               <>
                 {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2  gap-3">
                   <div className="bg-card rounded-xl shadow-lg p-4 border hover:shadow-xl transition-shadow">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium text-muted-foreground">
@@ -265,7 +239,7 @@ export default function DataPajakAIRBAWAHTANAH() {
                     </div>
                   </div>
 
-                  <div className="bg-card rounded-xl shadow-lg p-4 border hover:shadow-xl transition-shadow">
+                  {/* <div className="bg-card rounded-xl shadow-lg p-4 border hover:shadow-xl transition-shadow">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium text-muted-foreground">
                         Persentase Capaian
@@ -280,11 +254,11 @@ export default function DataPajakAIRBAWAHTANAH() {
                     <div className="text-[11px] text-muted-foreground">
                       {isAboveTarget ? "Melebihi target" : "Dari total target"}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Main Charts */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {/* Pie Chart */}
                   <div className="bg-card rounded-xl shadow-lg p-4 border">
                     <h3 className="text-base font-semibold text-foreground mb-3 pb-2 border-b">
@@ -354,8 +328,7 @@ export default function DataPajakAIRBAWAHTANAH() {
                             >
                               <span className="truncate">{it.Jenis}</span>
                               <span className="font-mono">
-                                {formatCurrency(Number(it.Target || 0))} (
-                                {pct.toFixed(2)}%)
+                                {formatCurrency(Number(it.Target || 0))}
                               </span>
                             </div>
                           );
