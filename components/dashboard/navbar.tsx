@@ -24,6 +24,7 @@ import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import AlertModal from "../modal/alert-modal";
 import Image from "next/image";
+import DigitalClock from "@/components/dashboard/digital-clock";
 export function Navbar() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -113,6 +114,8 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <DigitalClock variant="navbar" />
+
             <Button
               variant="outline"
               size="icon"
@@ -128,6 +131,7 @@ export function Navbar() {
                 <Maximize className="w-5 h-5" />
               )}
             </Button>
+
             <ThemeSwitcher />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

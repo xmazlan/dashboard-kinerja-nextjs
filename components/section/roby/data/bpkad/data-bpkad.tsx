@@ -35,11 +35,12 @@ export default function DataBpkad() {
         title="Layanan BPKAD"
         description={(() => {
           const periode = String(masterData?.data?.Rekap_Kota?.Periode || "-");
+          const last = String(masterData?.last_get || "");
           return (
             <>
-              Last update: {masterData?.last_get ?? ""}
+              Last update: <span suppressHydrationWarning>{last || "-"}</span>
               <br />
-              Periode: {periode}
+              Periode: <span suppressHydrationWarning>{periode || "-"}</span>
               <br />
               <span className="italic text-xs">(Sumber : BPKAD)</span>
             </>

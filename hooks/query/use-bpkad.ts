@@ -11,6 +11,14 @@ export const useBpkadSp2dData = () => {
     slug_aplikasi: "sp2d",
     slug_url: "ver2",
   };
+  const CACHE_KEY = `bpkad-sp2d:${slug.slug_aplikasi}:${slug.slug_url}`;
+  let initialData: any = undefined;
+  if (typeof window !== "undefined") {
+    try {
+      const raw = window.localStorage.getItem(CACHE_KEY);
+      if (raw) initialData = JSON.parse(raw);
+    } catch {}
+  }
   return useQuery<any>({
     queryKey: [
       "data-bpkad-sp2d",
@@ -29,15 +37,23 @@ export const useBpkadSp2dData = () => {
           },
         }
       );
-      return response.data;
+      const data = response.data;
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        } catch {}
+      }
+      return data;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
     enabled: !!session?.data?.token,
     staleTime: Infinity,
+    gcTime: Infinity,
     retry: 1,
     retryDelay: 1000,
+    initialData,
   });
 };
 export const useBpkadRfkData = () => {

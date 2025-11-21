@@ -1,33 +1,17 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import LoadingSkeleton from "@/components/loading-skeleton";
-import {
-  Building2,
-  Tags,
-  ShieldCheck,
-  MapPin,
-  MessageSquare,
-  AlertCircle,
-  Loader2,
-  CheckCircle2,
-  PauseCircle,
-} from "lucide-react";
-import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
-import { ModalDetail } from "@/components/modal/detail-modal";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import DataEresponAll from "@/components/section/roby/data/pengaduan/data-erespon-all";
-import DataEresponKecamatan from "@/components/section/roby/data/pengaduan/data-erespon-kecamatan";
-import DataEresponKelurahan from "@/components/section/roby/data/pengaduan/data-erespon-kelurahan";
-import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespon-opd";
+
+import { NEUTRAL_PATTERN } from "@/components/patern-collor";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
 
 export default function DataBpkadSp2d() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
-    useBpkadSp2dData();
+  const { data: apiData, isLoading: isLoadingMasterData } = useBpkadSp2dData();
   const [showAll, setShowAll] = React.useState(false);
-
+  const masterData = apiData;
   return (
     <div className="w-full h-full">
       <CardComponent
@@ -35,11 +19,12 @@ export default function DataBpkadSp2d() {
         title="Layanan BPKAD SP2D"
         description={(() => {
           const periode = String(masterData?.data?.Rekap_Kota?.Periode || "-");
+          const last = String(masterData?.last_get || "");
           return (
             <>
-              Last update: {masterData?.last_get ?? ""}
+              Last update: <span suppressHydrationWarning>{last || "-"}</span>
               <br />
-              Periode: {periode}
+              Periode: <span suppressHydrationWarning>{periode || "-"}</span>
               <br />
               <span className="italic text-xs">(Sumber : BPKAD)</span>
             </>
@@ -84,21 +69,27 @@ export default function DataBpkadSp2d() {
             const jumlahRealisasi = Number(rekap?.Jumlah_Realisasi ?? 0);
             const jumlahPagu = Number(rekap?.Jumlah_Pagu ?? 0);
             const persentase = Number(rekap?.Persentase ?? 0);
-            const list = Array.isArray(masterData?.data?.data)
-              ? (masterData?.data?.data as Array<any>)
+            type Row = {
+              Persentase?: number | string;
+              Realisasi_OPD?: number | string;
+              PaguAnggaran?: number | string;
+              OPD?: unknown;
+            };
+            const list: Row[] = Array.isArray(masterData?.data?.data)
+              ? (masterData?.data?.data as Row[])
               : [];
 
             const TILE_COLOR = "bg-blue-700";
-            const pctClass = (_p: number) => TILE_COLOR;
+            const pctClass = () => TILE_COLOR;
 
             const summary = [
               {
                 label: "Jumlah Realisasi",
                 value: jumlahRealisasi,
-                bg: TILE_COLOR,
+                bg: "bg-emerald-600",
               },
-              { label: "Jumlah Pagu", value: jumlahPagu, bg: TILE_COLOR },
-              { label: "Persentase", value: persentase, bg: TILE_COLOR },
+              { label: "Jumlah Pagu", value: jumlahPagu, bg: "bg-indigo-700" },
+              { label: "Persentase", value: persentase, bg: "bg-orange-600" },
             ];
 
             const sorted = [...list].sort(
@@ -126,9 +117,11 @@ export default function DataBpkadSp2d() {
                         {s.label}
                       </div>
                       <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
-                        {s.label === "Persentase"
-                          ? `${Number(s.value).toFixed(2)}%`
-                          : Number(s.value).toLocaleString("id-ID")}
+                        <span suppressHydrationWarning>
+                          {s.label === "Persentase"
+                            ? `${Number(s.value).toFixed(2)}%`
+                            : Number(s.value).toLocaleString("id-ID")}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -136,8 +129,12 @@ export default function DataBpkadSp2d() {
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-muted-foreground">
-                    Menampilkan {Math.min(6, sorted.length)} dari{" "}
-                    {sorted.length} OPD
+                    Menampilkan{" "}
+                    <span suppressHydrationWarning>
+                      {Math.min(6, sorted.length)}
+                    </span>{" "}
+                    dari <span suppressHydrationWarning>{sorted.length}</span>{" "}
+                    OPD
                   </div>
                   {sorted.length > 6 && (
                     <Button
@@ -145,9 +142,13 @@ export default function DataBpkadSp2d() {
                       size="sm"
                       onClick={() => setShowAll((v) => !v)}
                     >
-                      {showAll
-                        ? "Tutup"
-                        : `Lihat semua (${sorted.length - 6} lagi)`}
+                      {showAll ? (
+                        "Tutup"
+                      ) : (
+                        <span suppressHydrationWarning>{`Lihat semua (${
+                          sorted.length - 6
+                        } lagi)`}</span>
+                      )}
                     </Button>
                   )}
                 </div>
@@ -162,7 +163,7 @@ export default function DataBpkadSp2d() {
                         key={idx}
                         className={cn(
                           "rounded-md p-4 text-white h-full shadow-sm ring-1 ring-white/10",
-                          pctClass(p)
+                          pctClass()
                         )}
                         title={String(row?.OPD || "-")}
                       >
@@ -171,7 +172,9 @@ export default function DataBpkadSp2d() {
                             {cleanOPDName(row?.OPD)}
                           </div>
                           <span className="text-sm font-bold tabular-nums">
-                            {p.toFixed(2)}%
+                            <span suppressHydrationWarning>
+                              {p.toFixed(2)}%
+                            </span>
                           </span>
                         </div>
                         <div className="mt-2 h-2 w-full rounded bg-white/20 overflow-hidden">
@@ -188,7 +191,9 @@ export default function DataBpkadSp2d() {
                               Realisasi
                             </div>
                             <div className="text-sm font-bold tabular-nums">
-                              {real.toLocaleString("id-ID")}
+                              <span suppressHydrationWarning>
+                                {real.toLocaleString("id-ID")}
+                              </span>
                             </div>
                           </div>
                           <div className="rounded-md p-2 bg-white/10">
@@ -196,7 +201,9 @@ export default function DataBpkadSp2d() {
                               Pagu
                             </div>
                             <div className="text-sm font-bold tabular-nums">
-                              {pagu.toLocaleString("id-ID")}
+                              <span suppressHydrationWarning>
+                                {pagu.toLocaleString("id-ID")}
+                              </span>
                             </div>
                           </div>
                         </div>

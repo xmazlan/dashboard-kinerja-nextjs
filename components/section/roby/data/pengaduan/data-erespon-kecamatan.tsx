@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import {

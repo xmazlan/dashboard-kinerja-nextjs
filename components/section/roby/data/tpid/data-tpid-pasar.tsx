@@ -168,11 +168,11 @@ export default function DataTpidPasar() {
                               <div className="flex items-center gap-2 min-w-0">
                                 <OptimizeImage
                                   src={it.img}
-                                  alt={it.komoditas}
-                                  width={28}
-                                  height={28}
-                                  containerClassName="w-7 h-7 rounded-sm bg-muted"
-                                  imgClassName="rounded-sm object-contain"
+                                  alt={String(it?.komoditas || "-")}
+                                  width={32}
+                                  height={32}
+                                  containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                  imgClassName="rounded-sm object-cover w-full h-full"
                                 />
                                 <div className="min-w-0">
                                   <div className="text-[12px] font-medium truncate">
@@ -218,12 +218,13 @@ export default function DataTpidPasar() {
                                   >
                                     <div className="flex items-center gap-2 min-w-0">
                                       {it.img ? (
-                                        <Image
+                                        <OptimizeImage
                                           src={it.img}
-                                          alt={it.komoditas}
-                                          width={24}
-                                          height={24}
-                                          className="w-7 h-7 rounded-sm object-contain bg-muted"
+                                          alt={String(it?.komoditas || "-")}
+                                          width={32}
+                                          height={32}
+                                          containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                          imgClassName="rounded-sm object-cover w-full h-full"
                                         />
                                       ) : (
                                         <div className="w-7 h-7 rounded-sm bg-muted" />

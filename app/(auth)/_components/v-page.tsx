@@ -20,6 +20,7 @@ import { ImageCarousel } from "@/components/image-carousel";
 import { LoginForm } from "./f-login";
 import Image from "next/image";
 import { motion } from "motion/react";
+import DigitalClock from "@/components/dashboard/digital-clock";
 
 export default function Vlogin() {
   const { resolvedTheme } = useTheme();
@@ -200,10 +201,10 @@ export default function Vlogin() {
               </div>
             </div>
           </motion.div>
-
+          <DigitalClock variant="hero" />
           {/* Carousel */}
           <motion.div
-            className="relative z-10 h-70 w-full mt-4 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-[1px]/30"
+            className="relative z-10 h-70 w-full  rounded-2xl overflow-hidden shadow-2xl backdrop-blur-[1px]/30"
             initial={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.6, ease: "easeOut" }}

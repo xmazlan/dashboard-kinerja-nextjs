@@ -18,7 +18,7 @@ import DataPajakMINERAL from "./data/pajak/data-pajak-MINERAL";
 import DataPajakWALET from "./data/pajak/data-pajak-WALET";
 import DataPajakREKLAME from "./data/pajak/data-pajak-REKLAME";
 import DataPajakAIRBAWAHTANAH from "./data/pajak/data-pajak-AIRBAWAHTANAH";
-
+const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 export default function SectionPajakDataSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
@@ -36,7 +36,7 @@ export default function SectionPajakDataSlide() {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
-    }, 4000);
+    }, SPEED_LIDER);
     return () => clearInterval(id);
   }, [chartApi]);
 

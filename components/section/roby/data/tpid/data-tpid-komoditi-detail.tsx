@@ -71,10 +71,10 @@ export default function DataTpidKomoditiDetail() {
                             <OptimizeImage
                               src={imgSrc}
                               alt={String(it?.nama_komoditas || "-")}
-                              width={28}
-                              height={28}
-                              containerClassName="w-7 h-7 rounded-sm bg-muted"
-                              imgClassName="rounded-sm object-contain"
+                              width={32}
+                              height={32}
+                              containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                              imgClassName="rounded-sm object-cover w-full h-full"
                             />
                             <div>
                               <div className="text-[12px] md:text-sm font-semibold">
