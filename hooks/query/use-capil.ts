@@ -6,14 +6,25 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Domain akan ditangkap otomatis oleh axios dari env/hostname,
 // sehingga parameter tidak wajib.
-export const useBpkadSp2dData = () => {
+export const useCapilIkdData = (tanggal?: string) => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const slug = {
-    slug_aplikasi: "sp2d",
-    slug_url: "ver2",
+    opd: "capil",
+    application: "ikd",
   };
-  const CACHE_KEY = `bpkad-sp2d:${slug.slug_aplikasi}:${slug.slug_url}`;
+  const tgl = (() => {
+    const raw = tanggal ? String(tanggal).trim() : "";
+    const ok = /^\d{4}-\d{2}-\d{2}$/.test(raw);
+    if (!ok) return "";
+    const d = new Date(raw);
+    if (Number.isNaN(d.valueOf())) return "";
+    const iso = d.toISOString().slice(0, 10);
+    return iso === raw ? raw : "";
+  })();
+  const CACHE_KEY = `capil-ikd:${slug.opd}:${slug.application}:tgl:${
+    tgl ?? ""
+  }`;
   React.useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -22,9 +33,10 @@ export const useBpkadSp2dData = () => {
         const data = JSON.parse(raw);
         queryClient.setQueryData(
           [
-            "data-bpkad-sp2d",
-            slug?.slug_aplikasi,
-            slug?.slug_url,
+            "data-capil-ikd",
+            slug?.opd,
+            slug?.application,
+            tgl ?? "",
             session?.data?.token,
           ],
           data
@@ -35,15 +47,17 @@ export const useBpkadSp2dData = () => {
   }, [queryClient, session?.data?.token]);
   return useQuery<any>({
     queryKey: [
-      "data-bpkad-sp2d",
-      slug?.slug_aplikasi,
-      slug?.slug_url,
+      "data-capil-ikd",
+      slug?.opd,
+      slug?.application,
+      tgl ?? "",
       session?.data?.token,
     ],
     queryFn: async () => {
       const response = await axios.get(
-        `${API_URL}/api/v1/getResult/${slug?.slug_aplikasi}/${slug?.slug_url}`,
+        `${API_URL}/api/v1/json/${slug?.opd}/${slug?.application}`,
         {
+          params: tgl ? { tanggal: tgl } : undefined,
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -60,46 +74,11 @@ export const useBpkadSp2dData = () => {
       return data;
     },
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    refetchOnReconnect: false,
-    enabled: !!session?.data?.token,
-    staleTime: Infinity,
-    gcTime: Infinity,
-    retry: 1,
-    retryDelay: 1000,
-  });
-};
-export const useBpkadRfkData = () => {
-  const { data: session } = useSession();
-  const slug = {
-    slug_aplikasi: "api-rfk",
-    slug_url: "ver2",
-  };
-  return useQuery<any>({
-    queryKey: [
-      "data-bpkad-rfk",
-      slug?.slug_aplikasi,
-      slug?.slug_url,
-      session?.data?.token,
-    ],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${API_URL}/api/v1/getResult/${slug?.slug_aplikasi}/${slug?.slug_url}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.data?.token}`,
-          },
-        }
-      );
-      return response.data;
-    },
-    refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
     enabled: !!session?.data?.token,
     staleTime: Infinity,
+    gcTime: Infinity,
     retry: 1,
     retryDelay: 1000,
   });

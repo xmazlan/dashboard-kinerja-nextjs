@@ -30,6 +30,8 @@ import DataPajakPBJT from "@/components/section/roby/data/pajak/data-pajak-PBJT"
 import DataBpkad from "@/components/section/roby/data/bpkad/data-bpkad";
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
+import SectionCapilIkd from "@/components/section/roby/data/capil/data-capil-ikd";
+import DataDisdikDoItm from "@/components/section/roby/data/disdik/data-disdik-doitm";
 
 export default function Dashboard() {
   const { status } = useSession();
@@ -40,12 +42,12 @@ export default function Dashboard() {
   };
   return (
     <>
-    <AlertDialog open={isUnauthenticated}>
+      <AlertDialog open={isUnauthenticated}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Session Expired</AlertDialogTitle>
             <AlertDialogDescription>
-             Session expired. Please login again.
+              Session expired. Please login again.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -55,21 +57,11 @@ export default function Dashboard() {
       </AlertDialog>
 
       <main className="flex-1 mx-auto w-full  px-4 py-4 space-y-4 sm:px-6 lg:px-8">
-        {/* <DataBpkad /> */}
-        {/* <SectionOne /> */}
-        {/* <DataPajakPBJT /> */}
-        {/* Charts Grid */}
+        <SectionOne />
         <SectionTwo />
-        {/* <DataTpidPasar /> */}
-        {/* <SectionStuntingSweeperKecamatanSlide />
-
-        <SectionTpidSlide /> */}
-
-        {/* <SectionStunting /> */}
+        <DataDisdikDoItm />
         <SectionPengaduan />
-        <SectionPendudukan />
-        {/* <SectionTpid /> */}
-
+        <SectionCapilIkd />
         <SectionTree />
       </main>
     </>

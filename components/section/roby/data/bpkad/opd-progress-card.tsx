@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { cn } from "@/lib/utils";
+import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
+import { ShineBorder } from "@/components/magicui/shine-border";
 
 interface Props {
   opdName: string;
@@ -23,7 +25,8 @@ export default function OPDProgressCard({
   return (
     <div
       className={cn(
-        "rounded-md p-4 text-white shadow-sm ring-1 ring-white/10 bg-blue-700 w-full",
+        "rounded-md p-4 text-white shadow-sm ring-1 ring-white/10 w-full",
+        getPatternByKey(opdName) || NEUTRAL_PATTERN,
         className
       )}
     >
@@ -42,13 +45,15 @@ export default function OPDProgressCard({
         />
       </div>
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <div className="rounded-md p-2 bg-white/10">
+        <div className="relative rounded-md p-2 bg-white/10">
+          <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
           <div className="text-[10px] uppercase opacity-90">Realisasi</div>
           <div className="text-sm font-bold tabular-nums">
             <span suppressHydrationWarning>{real.toLocaleString("id-ID")}</span>
           </div>
         </div>
-        <div className="rounded-md p-2 bg-white/10">
+        <div className="relative rounded-md p-2 bg-white/10">
+          <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
           <div className="text-[10px] uppercase opacity-90">Pagu</div>
           <div className="text-sm font-bold tabular-nums">
             <span suppressHydrationWarning>{pg.toLocaleString("id-ID")}</span>
