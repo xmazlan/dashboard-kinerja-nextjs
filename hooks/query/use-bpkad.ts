@@ -1,5 +1,6 @@
+import * as React from "react";
 import axios from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -7,18 +8,31 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // sehingga parameter tidak wajib.
 export const useBpkadSp2dData = () => {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
   const slug = {
     slug_aplikasi: "sp2d",
     slug_url: "ver2",
   };
   const CACHE_KEY = `bpkad-sp2d:${slug.slug_aplikasi}:${slug.slug_url}`;
-  let initialData: any = undefined;
-  if (typeof window !== "undefined") {
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
     try {
       const raw = window.localStorage.getItem(CACHE_KEY);
-      if (raw) initialData = JSON.parse(raw);
+      if (raw) {
+        const data = JSON.parse(raw);
+        queryClient.setQueryData(
+          [
+            "data-bpkad-sp2d",
+            slug?.slug_aplikasi,
+            slug?.slug_url,
+            session?.data?.token,
+          ],
+          data
+        );
+      }
     } catch {}
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryClient, session?.data?.token]);
   return useQuery<any>({
     queryKey: [
       "data-bpkad-sp2d",
@@ -53,7 +67,6 @@ export const useBpkadSp2dData = () => {
     gcTime: Infinity,
     retry: 1,
     retryDelay: 1000,
-    initialData,
   });
 };
 export const useBpkadRfkData = () => {
@@ -91,4 +104,3 @@ export const useBpkadRfkData = () => {
     retryDelay: 1000,
   });
 };
-
