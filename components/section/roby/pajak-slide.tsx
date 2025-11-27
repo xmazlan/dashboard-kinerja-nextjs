@@ -18,6 +18,8 @@ import DataPajakMINERAL from "./data/pajak/data-pajak-MINERAL";
 import DataPajakWALET from "./data/pajak/data-pajak-WALET";
 import DataPajakREKLAME from "./data/pajak/data-pajak-REKLAME";
 import DataPajakAIRBAWAHTANAH from "./data/pajak/data-pajak-AIRBAWAHTANAH";
+import DataDisdikDoItm from "./data/disdik/data-disdik-doitm";
+import DataDisdikKebutuhanGuru from "./data/disdik/data-disdik-kebutuhan_guru";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 export default function SectionPajakDataSlide() {
   // State & kontrol untuk Carousel CHART
@@ -67,6 +69,9 @@ export default function SectionPajakDataSlide() {
           onTouchEnd={() => setChartPaused(false)}
         >
           <CarouselContent>
+            <CarouselItem>
+              <DataDisdikDoItm />
+            </CarouselItem>
             <CarouselItem>
               <DataPajakPBJT />
             </CarouselItem>

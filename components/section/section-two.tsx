@@ -7,14 +7,6 @@ import SectionTpidSlide from "./roby/tpid-pasar-slide";
 export default function SectionTwo() {
   return (
     <>
-      <div className="grid grid-cols- gap-4 ">
-        {/* <ArticleTree /> */}
-        <SectionPajakDataSlide />
-      </div>
-      <div className="grid grid-cols- gap-4 ">
-        {/* <ArticleTree /> */}
-        <SectionBpkadDataSlide />
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         {/* <ArticleTree /> */}
         <SectionStuntingSweeperKecamatanSlide />

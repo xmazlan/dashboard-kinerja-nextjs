@@ -72,9 +72,9 @@ export default function SectionBpkadDataSlide() {
             <CarouselItem>
               <DataBpkadSp2d />
             </CarouselItem>
-            <CarouselItem>
+            {/* <CarouselItem>
               <DataBpkadRfk />
-            </CarouselItem>
+            </CarouselItem> */}
           </CarouselContent>
         </Carousel>
         {/* Indikator Warna */}

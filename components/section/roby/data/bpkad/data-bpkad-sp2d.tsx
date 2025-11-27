@@ -4,16 +4,34 @@ import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import LoadingSkeleton from "@/components/loading-skeleton";
 
-import { NEUTRAL_PATTERN } from "@/components/patern-collor";
+import {
+  NEUTRAL_PATTERN,
+  getGradientStyleByKey,
+} from "@/components/patern-collor";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
-import { Button } from "@/components/ui/button";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { ShineBorder } from "@/components/magicui/shine-border";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import OPDProgressCard from "./opd-progress-card";
+import formatCurrency from "@/lib/format-currency";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DataBpkadSp2d() {
-  const { data: apiData, isLoading: isLoadingMasterData } = useBpkadSp2dData();
-  const [showAll, setShowAll] = React.useState(false);
+  const {
+    data: apiData,
+    isLoading: isLoadingMasterData,
+    isFetching: isFetchingMasterData,
+  } = useBpkadSp2dData();
   const masterData = apiData;
+
   return (
     <div className="w-full h-full">
       <CardComponent
@@ -43,12 +61,12 @@ export default function DataBpkadSp2d() {
             ? (masterData?.data?.data as Row[])
             : [];
           return (
-            <div className="w-full sm:hidden">
+            <div className="w-full">
               <ModalDetail
                 title="Detail Layanan BPKAD SP2D"
                 description="Tabulasi dan visualisasi detail."
                 contentModal={
-                  <div className="sm:hidden max-h-[65vh] overflow-y-auto space-y-2 pr-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 max-h-[65vh] overflow-y-auto space-y-2 pr-2">
                     {list.map((row, idx) => {
                       const p = Number(row?.Persentase ?? 0);
                       const real = Number(row?.Realisasi_OPD ?? 0);
@@ -76,8 +94,31 @@ export default function DataBpkadSp2d() {
           );
         })()}
       >
-        {isLoadingMasterData ? (
-          <LoadingSkeleton rows={2} cols={3} />
+        {isLoadingMasterData || isFetchingMasterData ? (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+              <div className="grid grid-cols-1 lg:col-span-1 gap-2">
+                <div className="bg-card rounded-lg p-3 border">
+                  <Skeleton className="h-4 w-24 mb-2" />
+                  <Skeleton className="h-5 w-36 mb-1.5" />
+                  <Skeleton className="h-3 w-28" />
+                </div>
+                <div className="bg-card rounded-lg p-3 border">
+                  <Skeleton className="h-4 w-24 mb-2" />
+                  <Skeleton className="h-5 w-36 mb-1.5" />
+                  <Skeleton className="h-3 w-28" />
+                </div>
+              </div>
+              <div className="bg-card rounded-lg p-3 border lg:col-span-1">
+                <Skeleton className="h-5 w-40 mb-2" />
+                <Skeleton className="h-[160px] w-full" />
+                <div className="mt-2 space-y-1">
+                  <Skeleton className="h-3 w-2/3" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
           (() => {
             const rekap = masterData?.data?.Rekap_Kota ?? {};
@@ -104,85 +145,140 @@ export default function DataBpkadSp2d() {
               { label: "Persentase", value: persentase, bg: "bg-orange-600" },
             ];
 
-            const sorted = [...list].sort(
-              (a, b) => Number(b?.Persentase ?? 0) - Number(a?.Persentase ?? 0)
-            );
-
             const cleanOPDName = (s: unknown) => {
               const str = String(s ?? "").trim();
               const match = str.match(/^[\d.]+\s+(.+)$/);
               return match ? match[1] : str;
             };
 
-            return (
-              <div className="h-full flex flex-col space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {summary.map((s, idx) => (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "rounded-md p-4 text-white flex items-center justify-between h-full shadow-sm ring-1 ring-white/10",
-                        s.bg || NEUTRAL_PATTERN
-                      )}
-                    >
-                      <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
-                        {s.label}
-                      </div>
-                      <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
-                        <span suppressHydrationWarning>
-                          {s.label === "Persentase"
-                            ? `${Number(s.value).toFixed(2)}%`
-                            : Number(s.value).toLocaleString("id-ID")}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            const pieData = [
+              { name: "Jumlah Realisasi", value: jumlahRealisasi },
+              { name: "Jumlah Pagu", value: jumlahPagu },
+            ];
+            const totalPie = jumlahRealisasi + jumlahPagu;
+            const periodeDisplay = String(rekap?.Periode ?? "-");
+            const isAboveTarget = jumlahRealisasi >= jumlahPagu;
 
-                <div className="hidden sm:block">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="text-sm text-muted-foreground">
-                      Menampilkan{" "}
-                      <span suppressHydrationWarning>
-                        {Math.min(6, sorted.length)}
-                      </span>{" "}
-                      dari <span suppressHydrationWarning>{sorted.length}</span>{" "}
-                      OPD
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-1 lg:col-span-2 gap-2">
+                  <div
+                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
+                    style={getGradientStyleByKey("pajak-target")}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white/90">
+                        Total Pagu
+                      </span>
+                      <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
+                        <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                      </div>
                     </div>
-                    {sorted.length > 6 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full sm:w-auto"
-                        onClick={() => setShowAll((v) => !v)}
-                      >
-                        {showAll ? (
-                          "Tutup"
+                    <div className="text-md font-bold text-white mb-1">
+                      {formatCurrency(jumlahPagu)}
+                    </div>
+                    <div className="text-[11px] text-white/80">
+                      Periode {periodeDisplay}
+                    </div>
+                  </div>
+
+                  <div
+                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
+                    style={getGradientStyleByKey("pajak-realisasi")}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white/90">
+                        Total Realisasi
+                      </span>
+                      <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
+                        {isAboveTarget ? (
+                          <TrendingUp className="w-4 h-4 text-muted-foreground" />
                         ) : (
-                          <span suppressHydrationWarning>{`Lihat semua (${
-                            sorted.length - 6
-                          } lagi)`}</span>
+                          <TrendingDown className="w-4 h-4 text-muted-foreground" />
                         )}
-                      </Button>
-                    )}
+                      </div>
+                    </div>
+                    <div className="text-md font-bold text-white mb-1">
+                      {formatCurrency(jumlahRealisasi)}
+                    </div>
+                    <div className="text-[11px] text-white/80">
+                      Periode {periodeDisplay}
+                    </div>
                   </div>
                 </div>
 
-                <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 h-full flex-1">
-                  {(showAll ? sorted : sorted.slice(0, 6)).map((row, idx) => {
-                    const p = Number(row?.Persentase ?? 0);
-                    const real = Number(row?.Realisasi_OPD ?? 0);
-                    const pagu = Number(row?.PaguAnggaran ?? 0);
-                    return (
-                      <OPDProgressCard
-                        key={idx}
-                        opdName={cleanOPDName(row?.OPD)}
-                        percentage={p}
-                        realisasi={real}
-                        pagu={pagu}
-                      />
-                    );
-                  })}
+                <div className="relative bg-card rounded-md shadow-sm lg:col-span-4 p-2 border">
+                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
+                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                    Proporsi Realisasi vs Pagu
+                  </h3>
+                  {pieData.length > 0 && (
+                    <div className="h-[180px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieData}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={70}
+                          >
+                            {pieData.map((_, i) => {
+                              const palette = [
+                                "#3b82f6",
+                                "#f59e0b",
+                                "#10b981",
+                                "#8b5cf6",
+                                "#ef4444",
+                                "#14b8a6",
+                              ];
+                              return (
+                                <Cell
+                                  key={i}
+                                  fill={palette[i % palette.length]}
+                                />
+                              );
+                            })}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: "#ffffff",
+                              borderColor: "#e5e7eb",
+                            }}
+                            itemStyle={{ color: "#334155" }}
+                            labelStyle={{ color: "#334155" }}
+                          />
+                          <Legend
+                            wrapperStyle={{
+                              fontSize: "11px",
+                              paddingTop: "12px",
+                              color: "#334155",
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+                  {pieData.length > 0 && (
+                    <div className="mt-1.5 space-y-1">
+                      {pieData.map((it, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between text-[10px] text-muted-foreground"
+                        >
+                          <span className="truncate">{it.name}</span>
+                          <span className="font-mono">
+                            {`${formatCurrency(it.value)} (${
+                              totalPie > 0
+                                ? ((it.value / totalPie) * 100).toFixed(2)
+                                : "0.00"
+                            } %)`}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );
