@@ -1,7 +1,5 @@
-import ArticleOne from "./roby/article-one";
-import ArticleTwo from "./roby/article-two";
-import SectionBpkadDataSlide from "./roby/bpkad-slide";
-import SectionPajakDataSlide from "./roby/pajak-slide";
+import ColumnSectionOneLeft from "./colum/colum-section-one-left";
+import ColumnSectionOneRight from "./colum/colum-section-one-right";
 
 export default function SectionOne() {
   return (
@@ -9,10 +7,10 @@ export default function SectionOne() {
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 ">
         {/* <ArticleTree /> */}
         <div className="col-span-3">
-          <SectionPajakDataSlide />
+          <ColumnSectionOneLeft />
         </div>
         <div className="col-span-2">
-          <SectionBpkadDataSlide />
+          <ColumnSectionOneRight />
         </div>
       </div>
     </>

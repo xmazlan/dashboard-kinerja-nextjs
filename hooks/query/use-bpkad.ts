@@ -10,8 +10,8 @@ export const useBpkadSp2dData = () => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const slug = {
-    slug_aplikasi: "sp2d",
-    slug_url: "ver2",
+    slug_aplikasi: "realisasi",
+    slug_url: "realisasi",
   };
   const CACHE_KEY = `bpkad-sp2d:${slug.slug_aplikasi}:${slug.slug_url}`;
   React.useEffect(() => {
@@ -69,22 +69,25 @@ export const useBpkadSp2dData = () => {
     retryDelay: 1000,
   });
 };
-export const useBpkadRfkData = () => {
+export const useBpkadRfkData = (opts?: { tanggal?: string }) => {
   const { data: session } = useSession();
   const slug = {
-    slug_aplikasi: "api-rfk",
-    slug_url: "ver2",
+    slug_aplikasi: "rfk",
+    slug_url: "rfk",
   };
+  const tanggal = opts?.tanggal?.trim();
+  const qs = tanggal ? `?${new URLSearchParams({ Tanggal: tanggal }).toString()}` : "";
   return useQuery<any>({
     queryKey: [
       "data-bpkad-rfk",
       slug?.slug_aplikasi,
       slug?.slug_url,
+      tanggal ?? "",
       session?.data?.token,
     ],
     queryFn: async () => {
       const response = await axios.get(
-        `${API_URL}/api/v1/getResult/${slug?.slug_aplikasi}/${slug?.slug_url}`,
+        `${API_URL}/api/v1/getResult/${slug?.slug_aplikasi}/${slug?.slug_url}${qs}`,
         {
           headers: {
             Accept: "application/json",

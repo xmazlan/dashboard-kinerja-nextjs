@@ -59,7 +59,7 @@ export default function Dashboard() {
       <main className="flex-1 mx-auto w-full  px-4 py-4 space-y-4 sm:px-6 lg:px-8">
         <SectionOne />
         <SectionTwo />
-        <DataDisdikDoItm />
+        {/* <DataDisdikDoItm /> */}
         <SectionPengaduan />
         <SectionCapilIkd />
         <SectionTree />

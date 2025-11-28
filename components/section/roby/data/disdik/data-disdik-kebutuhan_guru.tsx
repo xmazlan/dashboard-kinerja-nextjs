@@ -66,55 +66,69 @@ export default function DataDisdikKebutuhanGuru() {
 
   return (
     <div className="w-full h-full">
-      {isLoadingApiData ? (
-        <LoadingSkeleton rows={2} cols={4} />
-      ) : (
-        (() => {
+      <CardComponent
+        className="gap-1 border-none shadow-none w-full h-full"
+        title="Layanan Disdik Kebutuhan Guru"
+        description={(() => {
+          const last = String(lastGet || "");
           return (
-            <div className="grid grid-cols-1 gap-3">
-              <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
-                <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-                <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                  Kebutuhan Guru
-                </h3>
-                <div className="h-[220px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={barData}
-                      margin={{ top: 28, right: 16, bottom: 12, left: 0 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <YAxis hide domain={[0, "dataMax + 50"]} />
-                      <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                      <Tooltip
-                        formatter={(v: unknown) =>
-                          typeof v === "number"
-                            ? v.toLocaleString("id-ID")
-                            : String(v)
-                        }
-                      />
-                      <Legend />
-                      <Bar
-                        dataKey="value"
-                        name="Jumlah"
-                        fill="#2563eb"
-                        radius={[4, 4, 0, 0]}
+            <>
+              Last update: <span suppressHydrationWarning>{last || "-"}</span>
+              <br />
+              <span className="italic text-xs">(Sumber : Kebutuhan Guru)</span>
+            </>
+          );
+        })()}
+      >
+        {isLoadingApiData ? (
+          <LoadingSkeleton rows={2} cols={4} />
+        ) : (
+          (() => {
+            return (
+              <div className="grid grid-cols-1 gap-3">
+                <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
+                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
+                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                    Kebutuhan Guru
+                  </h3>
+                  <div className="h-[220px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={barData}
+                        margin={{ top: 28, right: 16, bottom: 12, left: 0 }}
                       >
-                        <LabelList
-                          dataKey="value"
-                          position="top"
-                          offset={8}
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <YAxis hide domain={[0, "dataMax + 50"]} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <Tooltip
                           formatter={(v: unknown) =>
                             typeof v === "number"
                               ? v.toLocaleString("id-ID")
                               : String(v)
                           }
                         />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-                {/* {barData.length > 0 && (
+                        <Legend />
+                        <Bar
+                          dataKey="value"
+                          name="Jumlah"
+                          fill="#2563eb"
+                          radius={[4, 4, 0, 0]}
+                        >
+                          <LabelList
+                            dataKey="value"
+                            position="top"
+                            offset={8}
+                            formatter={(v: unknown) =>
+                              typeof v === "number"
+                                ? v.toLocaleString("id-ID")
+                                : String(v)
+                            }
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {/* {barData.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-2">
                       {barData.map((it, idx) => (
                         <div
@@ -134,11 +148,12 @@ export default function DataDisdikKebutuhanGuru() {
                       ))}
                     </div>
                   )} */}
+                </div>
               </div>
-            </div>
-          );
-        })()
-      )}
+            );
+          })()
+        )}
+      </CardComponent>
     </div>
   );
 }
