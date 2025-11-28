@@ -10,6 +10,8 @@ interface Props {
   realisasi: number;
   pagu: number;
   className?: string;
+  leftLabel?: string;
+  rightLabel?: string;
 }
 
 export default function OPDProgressCard({
@@ -18,6 +20,8 @@ export default function OPDProgressCard({
   realisasi,
   pagu,
   className,
+  leftLabel,
+  rightLabel,
 }: Props) {
   const pct = Number(percentage ?? 0);
   const real = Number(realisasi ?? 0);
@@ -47,14 +51,14 @@ export default function OPDProgressCard({
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div className="relative rounded-md p-2 bg-white/10">
           <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-          <div className="text-[10px] uppercase opacity-90">Realisasi</div>
+          <div className="text-[10px] uppercase opacity-90">{leftLabel ?? "Realisasi"}</div>
           <div className="text-sm font-bold tabular-nums">
             <span suppressHydrationWarning>{real.toLocaleString("id-ID")}</span>
           </div>
         </div>
         <div className="relative rounded-md p-2 bg-white/10">
           <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-          <div className="text-[10px] uppercase opacity-90">Pagu</div>
+          <div className="text-[10px] uppercase opacity-90">{rightLabel ?? "Pagu"}</div>
           <div className="text-sm font-bold tabular-nums">
             <span suppressHydrationWarning>{pg.toLocaleString("id-ID")}</span>
           </div>

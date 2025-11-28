@@ -4,14 +4,34 @@ import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import LoadingSkeleton from "@/components/loading-skeleton";
 
-import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
+import {
+  getPatternByKey,
+  NEUTRAL_PATTERN,
+  getGradientStyleByKey,
+} from "@/components/patern-collor";
 import { useBpkadRfkData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { ShineBorder } from "@/components/magicui/shine-border";
+import { TrendingUp, TrendingDown } from "lucide-react";
+import OPDProgressCard from "./opd-progress-card";
+import { ModalDetail } from "@/components/modal/detail-modal";
+import { Input } from "@/components/ui/input";
 
 export default function DataBpkadRfk() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
-    useBpkadRfkData();
-  const [showAll, setShowAll] = React.useState(false);
+  const [tanggal, setTanggal] = React.useState(() =>
+    new Date().toISOString().slice(0, 10)
+  );
+  const { data: masterData, isLoading: isLoadingMasterData } = useBpkadRfkData({
+    tanggal,
+  });
 
   return (
     <div className="w-full h-full">
@@ -31,39 +51,83 @@ export default function DataBpkadRfk() {
             </>
           );
         })()}
-        // action={
-        //   <ModalDetail
-        //     title="Detail Layanan BPKAD"
-        //     description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
-        //     contentModal={
-        //       <Tabs defaultValue="all" className="flex flex-col gap-3">
-        //         <TabsList>
-        //           <TabsTrigger value="all">Ringkasan</TabsTrigger>
-        //           <TabsTrigger value="opd">OPD</TabsTrigger>
-        //           <TabsTrigger value="kecamatan">Kecamatan</TabsTrigger>
-        //           <TabsTrigger value="kelurahan">Kelurahan</TabsTrigger>
-        //         </TabsList>
-        //         <div className="h-[60vh] overflow-y-auto rounded-md border">
-        //           <TabsContent value="all" className="p-3">
-        //             <DataEresponAll />
-        //           </TabsContent>
-        //           <TabsContent value="kecamatan" className="p-3">
-        //             <DataEresponKecamatan />
-        //           </TabsContent>
-        //           <TabsContent value="kelurahan" className="p-3">
-        //             <DataEresponKelurahan />
-        //           </TabsContent>
-        //           <TabsContent value="opd" className="p-3">
-        //             <DataEresponOpd />
-        //           </TabsContent>
-        //         </div>
-        //       </Tabs>
-        //     }
-        //   />
-        // }
+        action={(() => {
+          type Row = {
+            PER_UANG?: number | string;
+            PER_FISIK?: number | string;
+            OPD?: unknown;
+          };
+          const list: Row[] = Array.isArray(masterData?.data?.data)
+            ? (masterData?.data?.data as Row[])
+            : [];
+          return (
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Input
+                  type="date"
+                  value={tanggal}
+                  onChange={(e) => setTanggal(e.target.value)}
+                  className="w-[160px]"
+                />
+              </div>
+              <ModalDetail
+                title="Detail Layanan BPKAD RFK"
+                description={`Detail layanan BPKAD RFK pada tanggal ${tanggal}`}
+                contentModal={
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 max-h-[65vh] overflow-y-auto space-y-2 pr-2">
+                    {list.map((row, idx) => {
+                      const uang = Number(row?.PER_UANG ?? 0);
+                      const fisik = Number(row?.PER_FISIK ?? 0);
+                      const opdName = String(row?.OPD ?? "-");
+                      const clean = (() => {
+                        const str = opdName.trim();
+                        const match = str.match(/^[\d.]+\s+(.+)$/);
+                        return match ? match[1] : str;
+                      })();
+                      return (
+                        <OPDProgressCard
+                          key={idx}
+                          opdName={clean}
+                          percentage={uang}
+                          realisasi={uang}
+                          pagu={fisik}
+                          leftLabel="Uang"
+                          rightLabel="Fisik"
+                        />
+                      );
+                    })}
+                  </div>
+                }
+              />
+            </div>
+          );
+        })()}
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={2} cols={3} />
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+              <div className="grid grid-cols-1 lg:col-span-1 gap-2">
+                <div className="bg-card rounded-lg p-3 border">
+                  <div className="h-4 w-24 mb-2 bg-muted animate-pulse rounded" />
+                  <div className="h-5 w-36 mb-1.5 bg-muted animate-pulse rounded" />
+                  <div className="h-3 w-28 bg-muted animate-pulse rounded" />
+                </div>
+                <div className="bg-card rounded-lg p-3 border">
+                  <div className="h-4 w-24 mb-2 bg-muted animate-pulse rounded" />
+                  <div className="h-5 w-36 mb-1.5 bg-muted animate-pulse rounded" />
+                  <div className="h-3 w-28 bg-muted animate-pulse rounded" />
+                </div>
+              </div>
+              <div className="bg-card rounded-lg p-3 border lg:col-span-1">
+                <div className="h-5 w-40 mb-2 bg-muted animate-pulse rounded" />
+                <div className="h-[160px] w-full bg-muted animate-pulse rounded" />
+                <div className="mt-2 space-y-1">
+                  <div className="h-3 w-2/3 bg-muted animate-pulse rounded" />
+                  <div className="h-3 w-1/2 bg-muted animate-pulse rounded" />
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
           (() => {
             const rekap = masterData?.data?.Rekap_Kota ?? {};
@@ -73,123 +137,142 @@ export default function DataBpkadRfk() {
               ? (masterData?.data?.data as Array<any>)
               : [];
 
-            const TILE_COLOR = "bg-blue-700";
-            const pctClass = (_p: number) => TILE_COLOR;
-
-            const summary = [
-              {
-                label: "Keuangan",
-                value: `${persenKeu.toFixed(2)}%`,
-                bg: "bg-emerald-600",
-              },
-              {
-                label: "Fisik",
-                value: `${persenFisik.toFixed(2)}%`,
-                bg: "bg-indigo-700",
-              },
+            const pieData = [
+              { name: "Keuangan", value: persenKeu },
+              { name: "Fisik", value: persenFisik },
             ];
-
-            const sorted = [...list].sort(
-              (a, b) => Number(b?.Persentase ?? 0) - Number(a?.Persentase ?? 0)
-            );
-
-            const cleanOPDName = (s: unknown) => {
-              const str = String(s ?? "").trim();
-              const match = str.match(/^[\d.]+\s+(.+)$/);
-              return match ? match[1] : str;
-            };
+            const totalPie = persenKeu + persenFisik;
+            const isKeuUp = persenKeu >= persenFisik;
+            const tanggalDisplay = String(rekap?.Tanggal ?? "-");
 
             return (
-              <div className="h-full flex flex-col space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {summary.map((s, idx) => (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "rounded-md p-4 text-white flex items-center justify-between h-full shadow-sm ring-1 ring-white/10",
-                        s.bg || NEUTRAL_PATTERN
-                      )}
-                    >
-                      <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
-                        {s.label}
-                      </div>
-                      <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
-                        <span suppressHydrationWarning>{s.value}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-1 lg:col-span-2 gap-2">
+                  <div
+                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
+                    style={getGradientStyleByKey("pajak-target")}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white/90">
+                        Keuangan
+                      </span>
+                      <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
+                        {isKeuUp ? (
+                          <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-muted-foreground" />
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="text-sm text-muted-foreground">
-                    Menampilkan {Math.min(6, sorted.length)} dari{" "}
-                    {sorted.length} OPD
+                    <div className="text-md font-bold text-white mb-1">
+                      <span suppressHydrationWarning>{`${persenKeu.toFixed(
+                        2
+                      )}%`}</span>
+                    </div>
+                    <div className="text-[11px] text-white/80">
+                      Tanggal {tanggalDisplay}
+                    </div>
                   </div>
-                  {sorted.length > 6 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full sm:w-auto"
-                      onClick={() => setShowAll((v) => !v)}
-                    >
-                      {showAll
-                        ? "Tutup"
-                        : `Lihat semua (${sorted.length - 6} lagi)`}
-                    </Button>
-                  )}
+
+                  <div
+                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
+                    style={getGradientStyleByKey("pajak-realisasi")}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white/90">
+                        Fisik
+                      </span>
+                      <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
+                        {persenFisik >= persenKeu ? (
+                          <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-muted-foreground" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-md font-bold text-white mb-1">
+                      <span suppressHydrationWarning>{`${persenFisik.toFixed(
+                        2
+                      )}%`}</span>
+                    </div>
+                    <div className="text-[11px] text-white/80">
+                      Tanggal {tanggalDisplay}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 h-full flex-1">
-                  {(showAll ? sorted : sorted.slice(0, 6)).map((row, idx) => {
-                    const uang = Number(row?.PER_UANG ?? 0);
-                    const fisik = Number(row?.PER_FISIK ?? 0);
-                    return (
-                      <div
-                        key={idx}
-                        className={cn(
-                          "rounded-md p-4 text-white h-full shadow-sm ring-1 ring-white/10",
-                          pctClass(0)
-                        )}
-                        title={String(row?.OPD || "-")}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90 min-w-0 truncate">
-                            {cleanOPDName(row?.OPD)}
-                          </div>
-                          <div className="text-right">
-                            <div className="text-[11px] font-bold tabular-nums">
-                              <span suppressHydrationWarning>
-                                {uang.toFixed(2)}% Keu
-                              </span>
-                            </div>
-                            <div className="text-[11px] font-bold tabular-nums">
-                              <span suppressHydrationWarning>
-                                {fisik.toFixed(2)}% Fisik
-                              </span>
-                            </div>
-                          </div>
+                <div className="relative bg-card rounded-md shadow-sm lg:col-span-4 p-2 border">
+                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
+                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                    Proporsi Keuangan vs Fisik
+                  </h3>
+                  {pieData.length > 0 && (
+                    <div className="h-[180px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieData}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={70}
+                          >
+                            {pieData.map((_, i) => {
+                              const palette = [
+                                "#3b82f6",
+                                "#f59e0b",
+                                "#10b981",
+                                "#8b5cf6",
+                                "#ef4444",
+                                "#14b8a6",
+                              ];
+                              return (
+                                <Cell
+                                  key={i}
+                                  fill={palette[i % palette.length]}
+                                />
+                              );
+                            })}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: "#ffffff",
+                              borderColor: "#e5e7eb",
+                            }}
+                            itemStyle={{ color: "#334155" }}
+                            labelStyle={{ color: "#334155" }}
+                          />
+                          <Legend
+                            wrapperStyle={{
+                              fontSize: "11px",
+                              paddingTop: "12px",
+                              color: "#334155",
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+                  {pieData.length > 0 && (
+                    <div className="mt-1.5 space-y-1">
+                      {pieData.map((it, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between text-[10px] text-muted-foreground"
+                        >
+                          <span className="truncate">{it.name}</span>
+                          <span className="font-mono">
+                            {`${it.value.toFixed(2)}% (${
+                              totalPie > 0
+                                ? ((it.value / totalPie) * 100).toFixed(2)
+                                : "0.00"
+                            } %)`}
+                          </span>
                         </div>
-                        <div className="mt-2 space-y-2">
-                          <div className="h-2 w-full rounded bg-white/20 overflow-hidden">
-                            <div
-                              className="h-full rounded bg-white/80"
-                              style={{
-                                width: `${Math.min(100, Math.max(0, uang))}%`,
-                              }}
-                            />
-                          </div>
-                          <div className="h-2 w-full rounded bg-white/20 overflow-hidden">
-                            <div
-                              className="h-full rounded bg-white/80"
-                              style={{
-                                width: `${Math.min(100, Math.max(0, fisik))}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );

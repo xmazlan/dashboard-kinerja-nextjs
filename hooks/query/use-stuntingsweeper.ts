@@ -3,13 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Domain akan ditangkap otomatis oleh axios dari env/hostname,
-// sehingga parameter tidak wajib.
 export const useStuntingSweeperData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboard",
+    slug_url: "getDashboard",
   };
   return useQuery<any>({
     queryKey: [

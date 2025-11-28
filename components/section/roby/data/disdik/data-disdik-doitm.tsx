@@ -84,27 +84,38 @@ export default function DataDisdikDoItm() {
   const ltmTableSorted = [...ltmTableData].sort((a, b) =>
     ltmAsc ? a.value - b.value : b.value - a.value
   );
-  const staticDoChartData = [
-    { name: "T 1", value: 95 },
-    { name: "T 2", value: 129 },
-    { name: "T 3", value: 144 },
-    { name: "T 4", value: 184 },
-    { name: "T 5", value: 261 },
-    { name: "T 6", value: 170 },
-    { name: "T 7", value: 288 },
-    { name: "T 8", value: 458 },
-    { name: "T 9", value: 326 },
-  ];
-  const staticLtmChartData = [
-    { name: "SD", value: 1023 },
-    { name: "SMP", value: 1521 },
-  ];
+  const doChartData = doItems.map((it) => ({
+    name: String(it?.nama ?? ""),
+    value: Number(it?.nilai ?? 0),
+  }));
+  const ltmChartData = ltmItems.map((it) => ({
+    name: String(it?.nama ?? ""),
+    value: Number(it?.nilai ?? 0),
+  }));
+
+  const AxisTick = (props: any) => {
+    const { x, y, payload } = props;
+    const label = String(payload?.payload?.name ?? payload?.value ?? "");
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          transform="rotate(-45)"
+          textAnchor="end"
+          fontSize={10}
+          fill="#64748b"
+          dy={16}
+        >
+          {label}
+        </text>
+      </g>
+    );
+  };
 
   return (
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Disdik DOITM"
+        title="Layanan Disdik DO dan LTM"
         description={(() => {
           const last = String(lastGet || "");
           return (
@@ -112,7 +123,8 @@ export default function DataDisdikDoItm() {
               Last update: <span suppressHydrationWarning>{last || "-"}</span>
               <br />
               <span className="italic text-xs">
-                (Sumber : Disdik dan Kebutuhan Guru)
+                (Sumber : Disdik DO (Drop Out) dan LTM (Lulus Tindak
+                Melanjutkan))
               </span>
             </>
           );
@@ -155,9 +167,7 @@ export default function DataDisdikDoItm() {
                               <TableHead className="w-[20%] text-right">
                                 Jumlah
                               </TableHead>
-                              <TableHead className="w-[15%] text-right">
-                                Kontribusi
-                              </TableHead>
+
                               <TableHead className="w-[15%] text-right">
                                 Tahun
                               </TableHead>
@@ -178,9 +188,7 @@ export default function DataDisdikDoItm() {
                                 <TableCell className="text-right tabular-nums font-mono">
                                   {it.value.toLocaleString("id-ID")}
                                 </TableCell>
-                                <TableCell className="text-right tabular-nums font-mono">
-                                  {it.pct}%
-                                </TableCell>
+
                                 <TableCell className="text-right">
                                   {it.tahun}
                                 </TableCell>
@@ -222,9 +230,7 @@ export default function DataDisdikDoItm() {
                               <TableHead className="w-[20%] text-right">
                                 Jumlah
                               </TableHead>
-                              <TableHead className="w-[15%] text-right">
-                                Kontribusi
-                              </TableHead>
+
                               <TableHead className="w-[15%] text-right">
                                 Tahun
                               </TableHead>
@@ -245,9 +251,7 @@ export default function DataDisdikDoItm() {
                                 <TableCell className="text-right tabular-nums font-mono">
                                   {it.value.toLocaleString("id-ID")}
                                 </TableCell>
-                                <TableCell className="text-right tabular-nums font-mono">
-                                  {it.pct}%
-                                </TableCell>
+
                                 <TableCell className="text-right">
                                   {it.tahun}
                                 </TableCell>
@@ -272,26 +276,30 @@ export default function DataDisdikDoItm() {
             return (
               <div className="max-h-full space-y-3">
                 <div className="grid grid-cols-1 lg:grid-cols-7 gap-3">
-                  <div className="grid-cols-1 lg:col-span-3">
+                  <div className="grid-cols-1 lg:col-span-5">
                     <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
                       <ShineBorder
                         shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
                       <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                        DO • Chart (Statik)
+                        DO • Chart
                       </h3>
 
                       <div className="h-[220px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart
-                            data={staticDoChartData}
-                            margin={{ top: 8, right: 16, bottom: 0, left: 0 }}
+                            data={doChartData}
+                            margin={{ top: 8, right: 16, bottom: 50, left: 0 }}
                           >
                             <CartesianGrid
                               strokeDasharray="3 3"
                               stroke="#e5e7eb"
                             />
-                            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                            <XAxis
+                              dataKey="name"
+                              interval={0}
+                              tick={AxisTick}
+                            />
                             <Tooltip
                               formatter={(v: unknown) =>
                                 typeof v === "number"
@@ -299,7 +307,7 @@ export default function DataDisdikDoItm() {
                                   : String(v)
                               }
                             />
-                            <Legend />
+                            {/* <Legend /> */}
                             <Bar
                               dataKey="value"
                               name="Jumlah"
@@ -323,29 +331,26 @@ export default function DataDisdikDoItm() {
                   </div>
 
                   <div className="grid-cols-1 lg:col-span-2">
-                    <DataDisdikKebutuhanGuru />
-                  </div>
-                  <div className="grid-cols-1 lg:col-span-2">
                     <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
                       <ShineBorder
                         shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
                       <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                        LTM • Chart (Statik)
+                        LTM • Chart
                       </h3>
-                      {staticLtmChartData.length > 0 && (
+                      {ltmChartData.length > 0 && (
                         <div className="h-[180px]">
                           <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                               <Pie
-                                data={staticLtmChartData}
+                                data={ltmChartData}
                                 dataKey="value"
                                 nameKey="name"
                                 cx="50%"
                                 cy="50%"
                                 outerRadius={70}
                               >
-                                {staticLtmChartData.map((_, i) => {
+                                {ltmChartData.map((_, i) => {
                                   const palette = [
                                     "#3b82f6",
                                     "#f59e0b",
@@ -381,9 +386,9 @@ export default function DataDisdikDoItm() {
                           </ResponsiveContainer>
                         </div>
                       )}
-                      {staticLtmChartData.length > 0 && (
+                      {ltmChartData.length > 0 && (
                         <div className="mt-1.5 space-y-1">
-                          {staticLtmChartData.map((it, idx) => (
+                          {ltmChartData.map((it, idx) => (
                             <div
                               key={idx}
                               className="flex items-center justify-between text-[10px] text-muted-foreground"

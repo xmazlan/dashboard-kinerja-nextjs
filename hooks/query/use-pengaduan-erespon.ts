@@ -8,7 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const usePengaduanEresponMasterData = () => {
     const { data: session } = useSession();
     const slug ={
-        slug_aplikasi:'e-respone' ,
+        slug_aplikasi:'e-respon' ,
         slug_url: 'master-data',
     }
   return useQuery<any>({
@@ -36,7 +36,7 @@ export const usePengaduanEresponMasterData = () => {
 export const usePengaduanEresponSemuaData = () => {
     const { data: session } = useSession();
     const slug ={
-        slug_aplikasi:'e-respone' ,
+        slug_aplikasi:'e-respon' ,
         slug_url: 'jenis-aduan-all',
     }
   return useQuery<any>({
@@ -63,7 +63,7 @@ export const usePengaduanEresponSemuaData = () => {
 export const usePengaduanEresponOpdData = () => {
     const { data: session } = useSession();
     const slug ={
-        slug_aplikasi:'e-respone' ,
+        slug_aplikasi:'e-respon' ,
         slug_url: 'jenis-aduan-peropd',
     }
   return useQuery<any>({
@@ -90,7 +90,7 @@ export const usePengaduanEresponOpdData = () => {
 export const usePengaduanEresponKecamtanData = () => {
     const { data: session } = useSession();
     const slug ={
-        slug_aplikasi:'e-respone' ,
+        slug_aplikasi:'e-respon' ,
         slug_url: 'per-kecamatan',
     }
   return useQuery<any>({
@@ -117,7 +117,7 @@ export const usePengaduanEresponKecamtanData = () => {
 export const usePengaduanEresponKelurahanData = () => {
     const { data: session } = useSession();
     const slug ={
-        slug_aplikasi:'e-respone' ,
+        slug_aplikasi:'e-respon' ,
         slug_url: 'per-kelurahan',
     }
   return useQuery<any>({
