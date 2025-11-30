@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import {
@@ -9,10 +10,6 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import { useLayoutStore } from "@/hooks/use-layout";
-import SectionOne from "./section-one";
-import SectionTwo from "./section-two";
-import SectionTree from "./section-tree";
-import { useDashboardStore } from "@/hooks/use-dashboard";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
 import DisdikSlide from "./roby/slider-content/disdik-slide";
@@ -35,27 +32,32 @@ export default function GlobSlider({
   React.useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
-
+  const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
-    if (!api) return;
-    const speed = useDashboardStore.getState().speed || SPEED_LIDER;
-    const id = setInterval(() => {
-      if (!pausedRef.current) api.scrollNext();
-    }, speed);
-    return () => clearInterval(id);
-  }, [api]);
+    setMounted(true);
+  }, []);
 
   const [snaps, setSnaps] = React.useState<number[]>([]);
   const [selected, setSelected] = React.useState(0);
+  const didAdvanceRef = React.useRef(false);
   React.useEffect(() => {
     if (!api) return;
     setSnaps(api.scrollSnapList());
-    const onSelect = () => setSelected(api.selectedScrollSnap());
+    const onSelect = () => {
+      setSelected(api.selectedScrollSnap());
+      didAdvanceRef.current = false;
+    };
     api.on("select", onSelect);
     onSelect();
     return () => {
       api.off("select", onSelect);
     };
+  }, [api]);
+
+  const handleInnerDone = React.useCallback(() => {
+    if (didAdvanceRef.current) return;
+    didAdvanceRef.current = true;
+    if (!pausedRef.current) api?.scrollNext();
   }, [api]);
 
   const images = [
@@ -97,6 +99,8 @@ export default function GlobSlider({
     ? Math.max((footerSize?.height ?? 0) + bottomGap, 0)
     : 0;
 
+  // Selalu render konten; perilaku aktif/autoplay tetap digating oleh 'mounted'
+
   return (
     <div
       className={fullScreen ? "fixed inset-0" : "relative w-full h-full"}
@@ -108,14 +112,19 @@ export default function GlobSlider({
       <div
         className={
           (fullScreen ? "absolute left-0 right-0" : "relative w-full h-full") +
-          " px-4"
+          " px-4 md:px-6 py-3 md:py-4"
         }
         style={
-          fullScreen ? { top: topOffset, bottom: bottomOffset } : undefined
+          fullScreen
+            ? {
+                top: mounted ? topOffset : 0,
+                bottom: mounted ? bottomOffset : 0,
+              }
+            : undefined
         }
       >
         <Carousel
-          className="w-full h-full"
+          className="w-full h-full py-2"
           opts={{ loop: true, align: "start" }}
           setApi={setApi}
           onMouseEnter={() => setPaused(true)}
@@ -123,46 +132,70 @@ export default function GlobSlider({
           onTouchStart={() => setPaused(true)}
           onTouchEnd={() => setPaused(false)}
         >
-          <CarouselContent>
+          <CarouselContent className="h-full">
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <SectionPajakDataSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionPajakDataSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 0}
+                  />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <SectionBpkadDataSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionBpkadDataSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 1}
+                  />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <DisdikSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <DisdikSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 2}
+                  />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <DataTpidPasarSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <DataTpidPasarSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 3}
+                  />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <SectionCapilDataSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionCapilDataSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 4}
+                  />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
-                  <SipuanPenariSlide />
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
+                  <SipuanPenariSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 5}
+                  />
                 </div>
               </div>
             </CarouselItem>
@@ -170,7 +203,7 @@ export default function GlobSlider({
           <CarouselPrevious className="hidden md:flex left-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
           <CarouselNext className="hidden md:flex right-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
         </Carousel>
-        <div className="absolute bottom--1 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {snaps.map((_, idx) => (
             <button
               key={idx}

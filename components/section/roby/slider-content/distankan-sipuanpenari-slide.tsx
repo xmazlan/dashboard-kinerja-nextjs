@@ -39,7 +39,8 @@ import ChartPerikananOrnamentalCultivation from "../../sipuan-penari/chart-perik
 import ChartPerikananKUBProduction from "../../sipuan-penari/chart-perikanan-kub-production";
 import ChartPerikananUPIFisheryProduct from "../../sipuan-penari/chart-perikanan-upi-fishery-product";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function SipuanPenariSlide() {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -51,28 +52,46 @@ export default function SipuanPenariSlide() {
 
   // Autoplay setiap 4 detik, berhenti saat hover/touch (CHART)
   React.useEffect(() => {
-    if (!chartApi) return;
+    if (!chartApi || !active) return;
     const id = setInterval(() => {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
     }, SPEED_LIDER);
     return () => clearInterval(id);
-  }, [chartApi]);
+  }, [chartApi, active]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
 
+  const prevRef = React.useRef(0);
   React.useEffect(() => {
     if (!chartApi) return;
-    setChartScrollSnaps(chartApi.scrollSnapList());
-    const onSelect = () => setChartSelectedIndex(chartApi.selectedScrollSnap());
+    const snaps = chartApi.scrollSnapList();
+    setChartScrollSnaps(snaps);
+    const last = Math.max(0, snaps.length - 1);
+    const onSelect = () => {
+      const cur = chartApi.selectedScrollSnap();
+      setChartSelectedIndex(cur);
+      if (active && snaps.length > 1 && prevRef.current === last && cur === 0) {
+        onDone?.();
+      }
+      prevRef.current = cur;
+    };
     chartApi.on("select", onSelect);
     onSelect();
     return () => {
       chartApi.off("select", onSelect);
     };
-  }, [chartApi]);
+  }, [chartApi, active, onDone]);
+  React.useEffect(() => {
+    if (!chartApi) return;
+    const snaps = chartApi.scrollSnapList();
+    if (active && snaps.length <= 1) {
+      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      return () => clearTimeout(id);
+    }
+  }, [chartApi, active, onDone]);
 
   // State & kontrol untuk Carousel NON-CHART (Contoh Carousel)
   const [contentApi, setContentApi] = React.useState<CarouselApi | null>(null);
@@ -259,15 +278,15 @@ export default function SipuanPenariSlide() {
   }, []);
 
   return (
-    <CardComponent className="p-2 shadow-lg w-full">
+    <CardComponent className="p-0 shadow-lg w-full h-full">
       <Carousel
-        className="w-full"
+        className="w-full h-full"
         opts={{ loop: true, align: "start" }}
         setApi={setChartApi}
-        onMouseEnter={() => setChartPaused(true)}
-        onMouseLeave={() => setChartPaused(false)}
-        onTouchStart={() => setChartPaused(true)}
-        onTouchEnd={() => setChartPaused(false)}
+        onMouseEnter={() => active && setChartPaused(true)}
+        onMouseLeave={() => active && setChartPaused(false)}
+        onTouchStart={() => active && setChartPaused(true)}
+        onTouchEnd={() => active && setChartPaused(false)}
       >
         <CarouselContent>
           {/* Pertanian */}

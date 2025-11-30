@@ -6,7 +6,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-1 sm:px-6 lg:px-8">
         <div className="text-center">
           {/* Info Dinas */}
           <div className="flex flex-col items-center justify-center gap-1">
@@ -22,7 +22,7 @@ export function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="mt-1 border-border pt-1">
+        <div className=" border-border">
           <p className="text-center text-xs text-muted-foreground">
             © {currentYear} {process.env.NEXT_PUBLIC_APP_NAME}. Semua hak
             dilindungi. {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
