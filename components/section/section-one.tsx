@@ -1,18 +1,21 @@
-import ColumnSectionOneLeft from "./colum/colum-section-one-left";
-import ColumnSectionOneRight from "./colum/colum-section-one-right";
+"use client";
+import SectionContainer from "./section-container";
+import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
+import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
 
 export default function SectionOne() {
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 ">
-        {/* <ArticleTree /> */}
-        <div className="col-span-3">
-          <ColumnSectionOneLeft />
+      <SectionContainer>
+        <div className="grid grid-cols-1  gap-4 sm:gap-5">
+          <div className="col-span-full sm:col-span-1">
+            <SectionPajakDataSlide />
+          </div>
+          <div className="col-span-full sm:col-span-1">
+            <SectionBpkadDataSlide />
+          </div>
         </div>
-        <div className="col-span-2">
-          <ColumnSectionOneRight />
-        </div>
-      </div>
+      </SectionContainer>
     </>
   );
 }

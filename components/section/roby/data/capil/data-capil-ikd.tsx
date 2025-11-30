@@ -18,7 +18,7 @@ export default function SectionCapilIkd() {
 
   return (
     <CardComponent
-      className="shadow-lg p-2"
+      className="shadow-none border-none p-0 w-full"
       title="Layanan Capil"
       description={(() => {
         const periode = String(dataRespon?.data?.Periode || "-");
@@ -93,7 +93,7 @@ export default function SectionCapilIkd() {
             0
           );
           return (
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-3">
               <div className="md:col-span-3">
                 <div className="relative rounded-xl bg-card border p-4 shadow-sm">
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
