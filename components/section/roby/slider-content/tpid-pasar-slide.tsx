@@ -10,18 +10,10 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-
-import DataPajakPBJT from "./data/pajak/data-pajak-PBJT";
-import DataPajakPBB from "./data/pajak/data-pajak-PBB";
-import DataPajakBPHTB from "./data/pajak/data-pajak-BPHTB";
-import DataPajakMINERAL from "./data/pajak/data-pajak-MINERAL";
-import DataPajakWALET from "./data/pajak/data-pajak-WALET";
-import DataPajakREKLAME from "./data/pajak/data-pajak-REKLAME";
-import DataPajakAIRBAWAHTANAH from "./data/pajak/data-pajak-AIRBAWAHTANAH";
-import DataBpkadSp2d from "./data/bpkad/data-bpkad-sp2d";
-import DataBpkadRfk from "./data/bpkad/data-bpkad-rfk";
+import DataTpidKomoditi from "../data/tpid/data-tpid-komoditi";
+import DataTpidPasarSlide from "./data-tpid-pasar-slide";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function SectionBpkadDataSlide() {
+export default function SectionTpidSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -70,43 +62,11 @@ export default function SectionBpkadDataSlide() {
         >
           <CarouselContent>
             <CarouselItem>
-              <DataBpkadSp2d />
+              <DataTpidPasarSlide />
             </CarouselItem>
-            {/* <CarouselItem>
-              <DataBpkadRfk />
-            </CarouselItem> */}
           </CarouselContent>
         </Carousel>
-        {/* Indikator Warna */}
-        {/* <div className=" rounded-xl shadow-lg p-6 border border-slate-200">
-          <h3 className="text-sm font-semibold mb-3">Panduan Warna</h3>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-blue-500" />
-              <span className="text-sm ">Realisasi</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-amber-500" />
-              <span className="text-sm ">Target</span>
-            </div>
-          </div>
-        </div> */}
         {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2 mb-3">
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-2 w-2 rounded-full transition-colors",
-                idx === chartSelectedIndex
-                  ? "bg-primary"
-                  : "bg-muted-foreground/30"
-              )}
-            />
-          ))}
-        </div>
       </CardComponent>
     </>
   );

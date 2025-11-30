@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataStuntingKecamatanSlide from "./data/stunting/data-stunting-kecamatan-slide";
+
+import DataBpkadSp2d from "../data/bpkad/data-bpkad-sp2d";
+import DataBpkadRfk from "../data/bpkad/data-bpkad-rfk";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function SectionStuntingSweeperKecamatanSlide() {
+export default function SectionBpkadDataSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -49,7 +51,7 @@ export default function SectionStuntingSweeperKecamatanSlide() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-lg">
+      <CardComponent className="p-2  shadow-lg">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -61,11 +63,30 @@ export default function SectionStuntingSweeperKecamatanSlide() {
         >
           <CarouselContent>
             <CarouselItem>
-              <DataStuntingKecamatanSlide />
+              <DataBpkadSp2d />
+            </CarouselItem>
+            <CarouselItem>
+              <DataBpkadRfk />
             </CarouselItem>
           </CarouselContent>
         </Carousel>
+
         {/* Indikator dot */}
+        <div className="mt-3 flex justify-center gap-2 mb-3">
+          {chartScrollSnaps.map((_, idx) => (
+            <button
+              key={idx}
+              aria-label={`Ke slide ${idx + 1}`}
+              onClick={() => chartApi?.scrollTo(idx)}
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                idx === chartSelectedIndex
+                  ? "bg-primary"
+                  : "bg-muted-foreground/30"
+              )}
+            />
+          ))}
+        </div>
       </CardComponent>
     </>
   );

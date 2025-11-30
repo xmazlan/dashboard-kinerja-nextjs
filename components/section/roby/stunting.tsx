@@ -13,7 +13,7 @@ import CardComponent from "@/components/card/card-component";
 import DataStuntingData from "./data/stunting/data-stunting";
 import DataStuntingBulan from "./data/stunting/data-stunting-bulan";
 import DataStuntingKecamatan from "./data/stunting/data-stunting-kecamatan";
-import DataStuntingKecamatanSlide from "./data/stunting/data-stunting-kecamatan-slide";
+import DataStuntingKecamatanSlide from "./slider-content/data-stunting-kecamatan-slide";
 
 export default function SectionStunting() {
   // State & kontrol untuk Carousel CHART

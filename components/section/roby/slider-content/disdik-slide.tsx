@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataTpidKomoditi from "./data/tpid/data-tpid-komoditi";
-import DataTpidPasarSlide from "./data/tpid/data-tpid-pasar-slide";
+import DataDisdikDoItm from "../data/disdik/data-disdik-doitm";
+import DataDisdikKebutuhanGuru from "../data/disdik/data-disdik-kebutuhan_guru";
+
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function SectionTpidSlide() {
+export default function DisdikSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -50,7 +51,7 @@ export default function SectionTpidSlide() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-lg">
+      <CardComponent className="p-3 shadow-lg border rounded-lg bg-card">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -62,11 +63,30 @@ export default function SectionTpidSlide() {
         >
           <CarouselContent>
             <CarouselItem>
-              <DataTpidPasarSlide />
+              <DataDisdikDoItm />
+            </CarouselItem>
+            <CarouselItem>
+              <DataDisdikKebutuhanGuru />
             </CarouselItem>
           </CarouselContent>
         </Carousel>
+
         {/* Indikator dot */}
+        <div className="mt-3 flex justify-center gap-2 mb-3">
+          {chartScrollSnaps.map((_, idx) => (
+            <button
+              key={idx}
+              aria-label={`Ke slide ${idx + 1}`}
+              onClick={() => chartApi?.scrollTo(idx)}
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                idx === chartSelectedIndex
+                  ? "bg-primary"
+                  : "bg-muted-foreground/30"
+              )}
+            />
+          ))}
+        </div>
       </CardComponent>
     </>
   );

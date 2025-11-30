@@ -13,15 +13,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
-import DataStuntingData from "./data-stunting";
+import DataStuntingData from "../data/stunting/data-stunting";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import DataStuntingBulan from "./data-stunting-bulan";
-import DataStuntingPuskesmas from "./data-stunting-puskesmas";
-import DataStuntingPosyandu from "./data-stunting-posyandu";
-import DataStuntingKecamatan from "./data-stunting-kecamatan";
-import DataStuntingKelurahan from "./data-stunting-kelurahan";
-import DataStuntingSlide from "./data-stunting-slide";
+import DataStuntingBulan from "../data/stunting/data-stunting-bulan";
+import DataStuntingPuskesmas from "../data/stunting/data-stunting-puskesmas";
+import DataStuntingPosyandu from "../data/stunting/data-stunting-posyandu";
+import DataStuntingKecamatan from "../data/stunting/data-stunting-kecamatan";
+import DataStuntingKelurahan from "../data/stunting/data-stunting-kelurahan";
+import DataStuntingSlide from "../data/stunting/data-stunting-slide";
 import {
   InputGroup,
   InputGroupAddon,
@@ -93,9 +93,9 @@ export default function DataStuntingKecamatanSlide() {
   );
 
   return (
-    <div className="w-full h-full">
+    <>
       <CardComponent
-        className="gap-1 border-none shadow-none w-full h-full"
+        className="p-2  shadow-lg"
         title="Layanan Penangan Stunting"
         description={
           <>
@@ -271,8 +271,6 @@ export default function DataStuntingKecamatanSlide() {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
                 </Carousel>
                 <div className="mt-3 flex justify-center gap-2">
                   {scrollSnaps.map((_, idx) => (
@@ -294,6 +292,6 @@ export default function DataStuntingKecamatanSlide() {
           })()
         )}
       </CardComponent>
-    </div>
+    </>
   );
 }

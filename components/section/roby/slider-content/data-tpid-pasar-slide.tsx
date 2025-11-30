@@ -25,8 +25,8 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DataTpidKomoditiDetail from "./data-tpid-komoditi-detail";
-import DataTpidPasar from "./data-tpid-pasar";
+import DataTpidKomoditiDetail from "../data/tpid/data-tpid-komoditi-detail";
+import DataTpidPasar from "../data/tpid/data-tpid-pasar";
 import Image from "next/image";
 import {
   InputGroup,
@@ -191,7 +191,7 @@ export default function DataTpidPasarSlide() {
               );
             }
 
-            const FIRST_N = 8;
+            const FIRST_N = 15;
             return (
               <div className="h-full flex flex-col gap-3">
                 <Carousel
@@ -234,7 +234,7 @@ export default function DataTpidPasarSlide() {
                               </Badge>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
                               {head.map((it) => (
                                 <div
                                   key={it.key}
@@ -285,7 +285,7 @@ export default function DataTpidPasarSlide() {
                                   </Button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+                                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
                                     {tail.map((it) => (
                                       <div
                                         key={it.key}
@@ -326,8 +326,6 @@ export default function DataTpidPasarSlide() {
                       );
                     })}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
                 </Carousel>
                 <div className="mt-3 flex justify-center gap-2">
                   {scrollSnaps.map((_, idx) => (

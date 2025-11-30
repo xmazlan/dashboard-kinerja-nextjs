@@ -10,17 +10,10 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
-import DataDisdikDoItm from "../roby/data/disdik/data-disdik-doitm";
-import DataPajakPBJT from "../roby/data/pajak/data-pajak-PBJT";
-import DataPajakPBB from "../roby/data/pajak/data-pajak-PBB";
-import DataPajakBPHTB from "../roby/data/pajak/data-pajak-BPHTB";
-import DataPajakMINERAL from "../roby/data/pajak/data-pajak-MINERAL";
-import DataPajakWALET from "../roby/data/pajak/data-pajak-WALET";
-import DataPajakREKLAME from "../roby/data/pajak/data-pajak-REKLAME";
-import DataPajakAIRBAWAHTANAH from "../roby/data/pajak/data-pajak-AIRBAWAHTANAH";
 
+import SectionCapilIkd from "../data/capil/data-capil-ikd";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function ColumnSectionOneLeft() {
+export default function SectionCapilDataSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -57,7 +50,7 @@ export default function ColumnSectionOneLeft() {
 
   return (
     <>
-      <CardComponent className="p-0  shadow-lg">
+      <CardComponent className="p-2  shadow-lg">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -69,42 +62,11 @@ export default function ColumnSectionOneLeft() {
         >
           <CarouselContent>
             <CarouselItem>
-              <DataPajakPBJT />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakPBB />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakBPHTB />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakMINERAL />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakWALET />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakREKLAME />
-            </CarouselItem>
-            <CarouselItem>
-              <DataPajakAIRBAWAHTANAH />
+              <SectionCapilIkd />
             </CarouselItem>
           </CarouselContent>
         </Carousel>
-        {/* Indikator Warna */}
-        {/* <div className=" rounded-xl shadow-lg p-6 border border-slate-200">
-          <h3 className="text-sm font-semibold mb-3">Panduan Warna</h3>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-blue-500" />
-              <span className="text-sm ">Realisasi</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-amber-500" />
-              <span className="text-sm ">Target</span>
-            </div>
-          </div>
-        </div> */}
+
         {/* Indikator dot */}
         <div className="mt-3 flex justify-center gap-2 mb-3">
           {chartScrollSnaps.map((_, idx) => (

@@ -13,6 +13,12 @@ import SectionOne from "./section-one";
 import SectionTwo from "./section-two";
 import SectionTree from "./section-tree";
 import { useDashboardStore } from "@/hooks/use-dashboard";
+import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
+import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
+import DisdikSlide from "./roby/slider-content/disdik-slide";
+import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
+import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
+import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER) || 4000;
 
@@ -118,45 +124,45 @@ export default function GlobSlider({
           onTouchEnd={() => setPaused(false)}
         >
           <CarouselContent>
-            {/* {images.map((img, idx) => (
-              <CarouselItem key={idx} className="h-full">
-                <div className="relative w-full h-full overflow-hidden rounded-md">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover"
-                    priority={idx === 0}
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/30 via-black/10 to-transparent" />
-                </div>
-              </CarouselItem>
-            ))} */}
-
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3">
-                  <div className="flex h-full min-h-0 items-center justify-center">
-                    <SectionOne />
-                  </div>
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <SectionPajakDataSlide />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3">
-                  <div className="flex h-full min-h-0 items-center justify-center">
-                    <SectionTwo />
-                  </div>
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <SectionBpkadDataSlide />
                 </div>
               </div>
             </CarouselItem>
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-auto rounded-md">
-                <div className="w-full h-full p-2 md:p-3">
-                  <div className="flex h-full min-h-0 items-center justify-center">
-                    <SectionTree />
-                  </div>
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <DisdikSlide />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-auto rounded-md">
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <DataTpidPasarSlide />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-auto rounded-md">
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <SectionCapilDataSlide />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-auto rounded-md">
+                <div className="w-full h-full p-2 md:p-3 flex items-center justify-center">
+                  <SipuanPenariSlide />
                 </div>
               </div>
             </CarouselItem>
@@ -164,7 +170,7 @@ export default function GlobSlider({
           <CarouselPrevious className="hidden md:flex left-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
           <CarouselNext className="hidden md:flex right-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
         </Carousel>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute bottom--1 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {snaps.map((_, idx) => (
             <button
               key={idx}

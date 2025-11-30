@@ -1,18 +1,22 @@
-import ArticleTree from "./roby/article-tree";
-import SectionBpkadDataSlide from "./roby/bpkad-slide";
-import SectionPajakDataSlide from "./roby/pajak-slide";
-import SectionStuntingSweeperKecamatanSlide from "./roby/stunting-sweeper-kecamatan-slide";
-import SectionTpidSlide from "./roby/tpid-pasar-slide";
+"use client";
+import SectionContainer from "./section-container";
+import DataStuntingKecamatanSlide from "./roby/slider-content/data-stunting-kecamatan-slide";
+import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
+import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
 
 export default function SectionTwo() {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        {/* <ArticleTree /> */}
-        <SectionStuntingSweeperKecamatanSlide />
-
-        <SectionTpidSlide />
-      </div>
+      <SectionContainer>
+        <div className="grid grid-cols-1  gap-4 sm:gap-5">
+          <div className="">
+            <DataStuntingKecamatanSlide />
+          </div>
+          <div className="">
+            <SectionCapilDataSlide />
+          </div>
+        </div>
+      </SectionContainer>
     </>
   );
 }

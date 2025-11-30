@@ -6,26 +6,6 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
-// Pertanian
-import ChartPertanianPalawija from "./chart-pertanian-palawija";
-import ChartPertanianFruitVegetableSeason from "./chart-pertanian-fruit-vegetable-season";
-import ChartPertanianFruitVegetableYear from "./chart-pertanian-fruit-vegetable-year";
-import ChartPertanianBiopharmaceutical from "./chart-pertanian-biopharmaceutical";
-import ChartPertanianOrnamental from "./chart-pertanian-ornamental";
-// Perkebunan
-import ChartPerkebunanProduction from "./chart-perkebunan-production";
-// Peternakan
-import ChartPeternakanPopulation from "./chart-peternakan-population";
-import ChartPeternakanSlaughtered from "./chart-peternakan-slaughtered";
-import ChartPeternakanProduction from "./chart-peternakan-production";
-import ChartPeternakanVaccination from "./chart-peternakan-vaccination";
-// Perikanan
-import ChartPerikananSeedCultivation from "./chart-perikanan-seed-cultivation";
-import ChartPerikananPondCultivation from "./chart-perikanan-pond-cultivation";
-import ChartPerikananCageCultivation from "./chart-perikanan-cage-cultivation";
-import ChartPerikananOrnamentalCultivation from "./chart-perikanan-ornamental-cultivation";
-import ChartPerikananKUBProduction from "./chart-perikanan-kub-production";
-import ChartPerikananUPIFisheryProduct from "./chart-perikanan-upi-fishery-product";
 
 import { toast } from "sonner";
 import {
@@ -42,8 +22,24 @@ import {
   getStatisticPeternakanAction,
   getStatisticPerikananAction,
 } from "@/actions/SipuanPenariActions";
+import ChartPertanianPalawija from "../../sipuan-penari/chart-pertanian-palawija";
+import ChartPertanianFruitVegetableSeason from "../../sipuan-penari/chart-pertanian-fruit-vegetable-season";
+import ChartPertanianFruitVegetableYear from "../../sipuan-penari/chart-pertanian-fruit-vegetable-year";
+import ChartPertanianBiopharmaceutical from "../../sipuan-penari/chart-pertanian-biopharmaceutical";
+import ChartPertanianOrnamental from "../../sipuan-penari/chart-pertanian-ornamental";
+import ChartPerkebunanProduction from "../../sipuan-penari/chart-perkebunan-production";
+import ChartPeternakanPopulation from "../../sipuan-penari/chart-peternakan-population";
+import ChartPeternakanSlaughtered from "../../sipuan-penari/chart-peternakan-slaughtered";
+import ChartPeternakanProduction from "../../sipuan-penari/chart-peternakan-production";
+import ChartPeternakanVaccination from "../../sipuan-penari/chart-peternakan-vaccination";
+import ChartPerikananSeedCultivation from "../../sipuan-penari/chart-perikanan-seed-cultivation";
+import ChartPerikananPondCultivation from "../../sipuan-penari/chart-perikanan-pond-cultivation";
+import ChartPerikananCageCultivation from "../../sipuan-penari/chart-perikanan-cage-cultivation";
+import ChartPerikananOrnamentalCultivation from "../../sipuan-penari/chart-perikanan-ornamental-cultivation";
+import ChartPerikananKUBProduction from "../../sipuan-penari/chart-perikanan-kub-production";
+import ChartPerikananUPIFisheryProduct from "../../sipuan-penari/chart-perikanan-upi-fishery-product";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function ProductionSection() {
+export default function SipuanPenariSlide() {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -263,7 +259,7 @@ export default function ProductionSection() {
   }, []);
 
   return (
-    <CardComponent className="px-0 pt-0 pb-3 shadow-lg">
+    <CardComponent className="p-2 shadow-lg w-full">
       <Carousel
         className="w-full"
         opts={{ loop: true, align: "start" }}
@@ -375,8 +371,8 @@ export default function ProductionSection() {
             />
           </CarouselItem>
         </CarouselContent>
-        <CarouselPrevious className="top-1/2 -left-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-        <CarouselNext className="top-1/2 -right-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        {/* <CarouselPrevious className="top-1/2 -left-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+        <CarouselNext className="top-1/2 -right-3 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" /> */}
       </Carousel>
       {/* Indikator dot */}
       <div className="flex justify-center gap-2">

@@ -1,27 +1,23 @@
+"use client";
 import React from "react";
 // Components
 import SipuanPenariProductionSection from "./sipuan-penari/production-section";
 import TPIDSection from "./tpid/view-section";
+import SectionContainer from "./section-container";
+import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
+import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 
 export default function SectionTree() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-6 gap-4 w-full">
-      <div className="col-span-full ">
-        {/* Sipuan Penari : Data Produksi */}
-        <SipuanPenariProductionSection />
+    <SectionContainer>
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 w-full">
+        <div className="col-span-full ">
+          <KominfoEresponSlide />
+        </div>
+        <div className="col-span-full ">
+          <SipuanPenariSlide />
+        </div>
       </div>
-      <div className="col-span-full md:col-span-2">
-        {/* TPID : Komoditas dan Pasar */}
-        {/* <TPIDSection /> */}
-      </div>
-      <div className="col-span-full md:col-span-3">
-        {/*  */}
-        {/* <SipuanPenariProductionSection /> */}
-      </div>
-      <div className="col-span-full md:col-span-3">
-        {/*  */}
-        {/* <SipuanPenariProductionSection /> */}
-      </div>
-    </div>
+    </SectionContainer>
   );
 }

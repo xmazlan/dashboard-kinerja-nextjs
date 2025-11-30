@@ -29,8 +29,8 @@ import SectionStunting from "@/components/section/roby/stunting";
 import DataTpidKomoditi from "@/components/section/roby/data/tpid/data-tpid-komoditi";
 import DataTpidPasar from "@/components/section/roby/data/tpid/data-tpid-pasar";
 import SectionTpid from "@/components/section/roby/tpid";
-import DataTpidPasarSlide from "@/components/section/roby/data/tpid/data-tpid-pasar-slide";
-import SectionTpidSlide from "@/components/section/roby/tpid-pasar-slide";
+import DataTpidPasarSlide from "@/components/section/roby/slider-content/data-tpid-pasar-slide";
+import SectionTpidSlide from "@/components/section/roby/slider-content/tpid-pasar-slide";
 import SectionStuntingSweeperKecamatanSlide from "@/components/section/roby/stunting-sweeper-kecamatan-slide";
 import DataPajakPBJT from "@/components/section/roby/data/pajak/data-pajak-PBJT";
 import DataBpkad from "@/components/section/roby/data/bpkad/data-bpkad";
@@ -143,16 +143,8 @@ export default function Dashboard() {
             </div> */}
 
             {/* <ViewportInfo /> */}
-            {viewMode === "slide" ? (
+            {viewMode === "slide" && (
               <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
-            ) : (
-              <div className="relative w-full h-full overflow-auto px-4 py-3">
-                <div className="space-y-4">
-                  <SectionOne />
-                  <SectionTwo />
-                  <SectionTree />
-                </div>
-              </div>
             )}
           </section>
         </main>
