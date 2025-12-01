@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import CardComponent from "@/components/card/card-component";
 import { Button } from "@/components/ui/button";
 
-export default function NextAuthErrorPage() {
+function ErrorContent() {
   const params = useSearchParams();
   const router = useRouter();
   const error = params.get("error") || "";
@@ -53,5 +53,17 @@ export default function NextAuthErrorPage() {
         </div>
       </CardComponent>
     </div>
+  );
+}
+
+export default function NextAuthErrorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-6 text-sm text-muted-foreground">Memuat error...</div>
+      }
+    >
+      <ErrorContent />
+    </Suspense>
   );
 }
