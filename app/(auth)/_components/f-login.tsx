@@ -24,6 +24,7 @@ import {
 import { LoginSchemaValues, loginSchema } from "./schema-login";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 export function LoginForm({ className }: React.ComponentProps<"form">) {
   const DEMO_EMAIL =
     process.env.NEXT_PUBLIC_DUMMY_EMAIL ?? "demo@kominfo.go.id";
@@ -31,6 +32,11 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
+  const addLog = (msg: string) => {
+    const ts = new Date().toLocaleTimeString();
+    setLogs((prev) => [...prev, `[${ts}] ${msg}`]);
+  };
   const router = useRouter();
   const form = useForm<LoginSchemaValues>({
     resolver: zodResolver(loginSchema),
@@ -41,28 +47,37 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
   const onSubmit = async (values: LoginSchemaValues) => {
     setLoading(true);
     setError(null);
+    setLogs([]);
+    addLog("Memulai proses login");
     try {
+      addLog("Validasi input");
+      const start = Date.now();
+      addLog("Mengirim request credentials ke server");
       const result = await signIn("credentials", {
         redirect: false,
         email: values.email,
         password: values.password,
         callbackUrl: "/dashboard",
       });
+      const ms = Date.now() - start;
+      addLog(`Respons diterima dalam ${ms} ms`);
       if (result?.error) {
-        const msg = /ENOTFOUND|Network Error/i.test(result.error)
-          ? "Tidak dapat terhubung ke server. Periksa NEXT_PUBLIC_API_URL dan koneksi jaringan."
-          : result.error;
+        const msg = result.error;
         setError(msg);
         toast.error(msg);
+        addLog(`Gagal: ${msg}`);
         return;
       }
       toast.success("Login berhasil. Mengalihkan...");
+      addLog("Login berhasil, melakukan redirect");
       router.push(result?.url || "/dashboard");
     } catch (err) {
       setError("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
       toast.error("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
+      addLog("Kesalahan tidak diketahui saat login");
     } finally {
       setLoading(false);
+      addLog("Selesai");
     }
   };
   return (
@@ -210,6 +225,38 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
             "Masuk"
           )}
         </Button>
+
+        <div className="mt-4 bg-card border rounded-lg">
+          <div className="flex items-center justify-between px-3 py-2 border-b">
+            <span className="text-xs font-semibold text-muted-foreground">
+              Log proses
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => setLogs([])}
+              >
+                Bersihkan
+              </Button>
+            </div>
+          </div>
+          <ScrollArea className="max-h-48">
+            <div className="px-3 py-2 font-mono text-[11px] leading-relaxed space-y-1">
+              {logs.length === 0 ? (
+                <div className="text-muted-foreground">Belum ada log</div>
+              ) : (
+                logs.map((l, i) => (
+                  <div key={i} className="text-foreground/90">
+                    {l}
+                  </div>
+                ))
+              )}
+            </div>
+          </ScrollArea>
+        </div>
       </form>
     </Form>
   );

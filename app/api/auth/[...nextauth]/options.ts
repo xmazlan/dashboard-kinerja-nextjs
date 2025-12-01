@@ -65,6 +65,7 @@ export const authOptions: AuthOptions = {
 
           const signinUrl =
             process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login";
+          const reqTimeout = Number(process.env.AUTH_TIMEOUT_MS ?? 0);
 
           const res = await axios.post(
             signinUrl,
@@ -76,7 +77,7 @@ export const authOptions: AuthOptions = {
               headers: {
                 "Content-Type": "application/json",
               },
-              timeout: 0,
+              timeout: reqTimeout,
             }
           );
 
@@ -166,7 +167,7 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth",
+    signIn: "/",
     signOut: "/logout",
     error: "/error",
   },
