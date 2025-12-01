@@ -42,7 +42,7 @@ declare module "next-auth/jwt" {
 export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt" as SessionStrategy,
-    maxAge: 60 * 60 * 24 * 7, 
+    maxAge: 60 * 60 * 24 * 7,
     // maxAge: 20,
   },
   jwt: {
@@ -63,9 +63,8 @@ export const authOptions: AuthOptions = {
             throw new Error("Email and password are required");
           }
 
-          
-
-          const signinUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login";
+          const signinUrl =
+            process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login";
 
           const res = await axios.post(
             signinUrl,
@@ -77,7 +76,7 @@ export const authOptions: AuthOptions = {
               headers: {
                 "Content-Type": "application/json",
               },
-              timeout: 10000, // 10 detik
+              timeout: 0,
             }
           );
 
