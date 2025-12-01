@@ -115,7 +115,7 @@ export default function SectionPajakDataSlide({
               </CarouselItem>
             </CarouselContent>
           </Carousel>
-          <div className="mt-3 flex justify-center gap-2 mb-3">
+          <div className=" flex justify-center gap-2 mb-3">
             {chartScrollSnaps.map((_, idx) => (
               <button
                 key={idx}

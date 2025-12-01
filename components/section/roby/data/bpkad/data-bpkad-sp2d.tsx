@@ -1,8 +1,5 @@
 "use client";
-import React from "react";
-import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
-import LoadingSkeleton from "@/components/loading-skeleton";
 
 import {
   NEUTRAL_PATTERN,
@@ -22,7 +19,8 @@ import { TrendingUp, TrendingDown } from "lucide-react";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import OPDProgressCard from "./opd-progress-card";
 import formatCurrency from "@/lib/format-currency";
-import { Skeleton } from "@/components/ui/skeleton";
+import LoadingContent from "../loading-content";
+import LayoutCard from "@/components/card/layout-card";
 
 export default function DataBpkadSp2d() {
   const {
@@ -96,28 +94,7 @@ export default function DataBpkadSp2d() {
       >
         {isLoadingMasterData || isFetchingMasterData ? (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
-              <div className="grid grid-cols-1 lg:col-span-1 gap-2">
-                <div className="bg-card rounded-lg p-3 border">
-                  <Skeleton className="h-4 w-24 mb-2" />
-                  <Skeleton className="h-5 w-36 mb-1.5" />
-                  <Skeleton className="h-3 w-28" />
-                </div>
-                <div className="bg-card rounded-lg p-3 border">
-                  <Skeleton className="h-4 w-24 mb-2" />
-                  <Skeleton className="h-5 w-36 mb-1.5" />
-                  <Skeleton className="h-3 w-28" />
-                </div>
-              </div>
-              <div className="bg-card rounded-lg p-3 border lg:col-span-1">
-                <Skeleton className="h-5 w-40 mb-2" />
-                <Skeleton className="h-[160px] w-full" />
-                <div className="mt-2 space-y-1">
-                  <Skeleton className="h-3 w-2/3" />
-                  <Skeleton className="h-3 w-1/2" />
-                </div>
-              </div>
-            </div>
+            <LoadingContent />
           </>
         ) : (
           (() => {
@@ -207,79 +184,84 @@ export default function DataBpkadSp2d() {
                   </div>
                 </div>
 
-                <div className="relative bg-card rounded-md shadow-sm lg:col-span-4 p-2 border">
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                    Proporsi Realisasi vs Pagu
-                  </h3>
-                  {pieData.length > 0 && (
-                    <div className="h-[180px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={pieData}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={70}
+                <LayoutCard
+                  className="relative bg-card rounded-lg shadow-lg p-2 border lg:col-span-4"
+                  ratioDesktop={0.5}
+                  ratioMobile={0.38}
+                >
+                  <div className="flex h-full flex-col">
+                    <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                      Proporsi Realisasi vs Pagu
+                    </h3>
+                    {pieData.length > 0 && (
+                      <div className="flex-1 min-h-0">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={pieData}
+                              dataKey="value"
+                              nameKey="name"
+                              cx="50%"
+                              cy="50%"
+                              outerRadius={70}
+                            >
+                              {pieData.map((_, i) => {
+                                const palette = [
+                                  "#3b82f6",
+                                  "#f59e0b",
+                                  "#10b981",
+                                  "#8b5cf6",
+                                  "#ef4444",
+                                  "#14b8a6",
+                                ];
+                                return (
+                                  <Cell
+                                    key={i}
+                                    fill={palette[i % palette.length]}
+                                  />
+                                );
+                              })}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#ffffff",
+                                borderColor: "#e5e7eb",
+                              }}
+                              itemStyle={{ color: "#334155" }}
+                              labelStyle={{ color: "#334155" }}
+                            />
+                            <Legend
+                              wrapperStyle={{
+                                fontSize: "11px",
+                                paddingTop: "12px",
+                                color: "#334155",
+                              }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+                    {pieData.length > 0 && (
+                      <div className="mt-1.5 space-y-1">
+                        {pieData.map((it, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between text-[10px] text-muted-foreground"
                           >
-                            {pieData.map((_, i) => {
-                              const palette = [
-                                "#3b82f6",
-                                "#f59e0b",
-                                "#10b981",
-                                "#8b5cf6",
-                                "#ef4444",
-                                "#14b8a6",
-                              ];
-                              return (
-                                <Cell
-                                  key={i}
-                                  fill={palette[i % palette.length]}
-                                />
-                              );
-                            })}
-                          </Pie>
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "#ffffff",
-                              borderColor: "#e5e7eb",
-                            }}
-                            itemStyle={{ color: "#334155" }}
-                            labelStyle={{ color: "#334155" }}
-                          />
-                          <Legend
-                            wrapperStyle={{
-                              fontSize: "11px",
-                              paddingTop: "12px",
-                              color: "#334155",
-                            }}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                  {pieData.length > 0 && (
-                    <div className="mt-1.5 space-y-1">
-                      {pieData.map((it, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between text-[10px] text-muted-foreground"
-                        >
-                          <span className="truncate">{it.name}</span>
-                          <span className="font-mono">
-                            {`${formatCurrency(it.value)} (${
-                              totalPie > 0
-                                ? ((it.value / totalPie) * 100).toFixed(2)
-                                : "0.00"
-                            } %)`}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                            <span className="truncate">{it.name}</span>
+                            <span className="font-mono">
+                              {`${formatCurrency(it.value)} (${
+                                totalPie > 0
+                                  ? ((it.value / totalPie) * 100).toFixed(2)
+                                  : "0.00"
+                              } %)`}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </LayoutCard>
               </div>
             );
           })()

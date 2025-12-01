@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import KecamatanGroupGrid from "../data/stunting/kecamatan-group-grid";
 
 export default function DataStuntingKecamatanSlide() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -196,78 +197,7 @@ export default function DataStuntingKecamatanSlide() {
                     </CarouselItem>
                     {pages.map((group, pidx) => (
                       <CarouselItem key={`page-${pidx}`}>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
-                          {group.map((it, idx) => (
-                            <div
-                              key={`${it.nama}-${idx}`}
-                              className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-2 flex flex-col gap-2 h-full"
-                            >
-                              <ShineBorder
-                                shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                              />
-                              <div className="flex items-center justify-between">
-                                <div className="text-xs font-semibold">
-                                  {it.nama}
-                                </div>
-                                <div className="text-xs font-bold tabular-nums">
-                                  {toNum(it.totalBalita).toLocaleString(
-                                    "id-ID"
-                                  )}
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-1 gap-2">
-                                {[
-                                  {
-                                    label: "Gizi Buruk",
-                                    value: toNum(it.gizi_buruk),
-                                  },
-                                  {
-                                    label: "Gizi Kurang",
-                                    value: toNum(it.gizi_kurang),
-                                  },
-                                  {
-                                    label: "Gizi Baik",
-                                    value: toNum(it.gizi_baik),
-                                  },
-                                  {
-                                    label: "Gizi Lebih",
-                                    value: toNum(it.gizi_lebih),
-                                  },
-                                  {
-                                    label: "Obesitas",
-                                    value: toNum(it.obesitas),
-                                  },
-                                  {
-                                    label: "Stunting",
-                                    value: toNum(it.stunting),
-                                  },
-                                  {
-                                    label: "BB Kurang",
-                                    value: toNum(it.bb_kurang),
-                                  },
-                                ].map((e) => (
-                                  <div
-                                    key={e.label}
-                                    className={cn(
-                                      "rounded-lg p-2 border flex items-center justify-between text-white",
-                                      getPatternByKey(e.label)
-                                    )}
-                                  >
-                                    <div
-                                      className="text-[12px] font-medium truncate"
-                                      title={e.label}
-                                    >
-                                      {e.label}
-                                    </div>
-                                    <div className="text-[12px] font-mono font-semibold tabular-nums">
-                                      {e.value.toLocaleString("id-ID")}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                        <KecamatanGroupGrid group={group} />
                       </CarouselItem>
                     ))}
                   </CarouselContent>

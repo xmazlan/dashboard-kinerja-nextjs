@@ -29,6 +29,8 @@ import {
 } from "recharts";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import DataDisdikKebutuhanGuru from "./data-disdik-kebutuhan_guru";
+import LoadingContent from "../loading-content";
+import LayoutCard from "@/components/card/layout-card";
 export default function DataDisdikDoItm() {
   const { data: apiData, isLoading: isLoadingApiData } = useDisdikDoItmData();
   const lastGet = apiData?.last_get ?? "";
@@ -270,14 +272,18 @@ export default function DataDisdikDoItm() {
         }
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (
               <div className="max-h-full space-y-3">
                 <div className="grid grid-cols-1 lg:grid-cols-7 gap-3">
                   <div className="grid-cols-1 lg:col-span-5">
-                    <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
+                    <LayoutCard
+                      className="relative bg-card rounded-lg shadow-sm p-3 border"
+                      ratioDesktop={0.5}
+                      ratioMobile={0.38}
+                    >
                       <ShineBorder
                         shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
@@ -285,7 +291,7 @@ export default function DataDisdikDoItm() {
                         DO • Chart
                       </h3>
 
-                      <div className="h-[220px]">
+                      <div className="flex-1 min-h-0">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart
                             data={doChartData}
@@ -327,11 +333,15 @@ export default function DataDisdikDoItm() {
                           </BarChart>
                         </ResponsiveContainer>
                       </div>
-                    </div>
+                    </LayoutCard>
                   </div>
 
                   <div className="grid-cols-1 lg:col-span-2">
-                    <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
+                    <LayoutCard
+                      className="relative bg-card rounded-lg shadow-sm p-3 border"
+                      ratioDesktop={0.5}
+                      ratioMobile={0.38}
+                    >
                       <ShineBorder
                         shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
@@ -339,7 +349,7 @@ export default function DataDisdikDoItm() {
                         LTM • Chart
                       </h3>
                       {ltmChartData.length > 0 && (
-                        <div className="h-[180px]">
+                        <div className="flex-1 min-h-0">
                           <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                               <Pie
@@ -401,7 +411,7 @@ export default function DataDisdikDoItm() {
                           ))}
                         </div>
                       )}
-                    </div>
+                    </LayoutCard>
                   </div>
                 </div>
               </div>

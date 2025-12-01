@@ -12,6 +12,7 @@ import { Info, Tags } from "lucide-react";
 import { getGradientStyleByKey } from "@/components/patern-collor";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import LoadingContent from "../loading-content";
 
 export default function DataEresponKelurahan() {
   const { data: kelurahanData, isLoading: isLoadingKelurahanData } =
@@ -31,7 +32,7 @@ export default function DataEresponKelurahan() {
         }
       >
         {isLoadingKelurahanData ? (
-          <LoadingSkeleton rows={1} cols={5} />
+          <LoadingContent />
         ) : (
           (() => {
             const list = Array.isArray(kelurahanData?.data)

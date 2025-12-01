@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +16,7 @@ import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
 import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
 import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 
-const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER) || 4000;
+// Speed dikontrol oleh komponen slide masing-masing
 
 type Props = { fullScreen?: boolean; topGap?: number; bottomGap?: number };
 
@@ -26,6 +25,8 @@ export default function GlobSlider({
   topGap = 12,
   bottomGap = 12,
 }: Props) {
+  const setSizes = useLayoutStore((s) => s.setSizes);
+  const sectionRef = React.useRef<HTMLDivElement>(null);
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
@@ -36,6 +37,69 @@ export default function GlobSlider({
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  React.useEffect(() => {
+    const updateViewport = () => {
+      setSizes({
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+      });
+    };
+    const updateNavFooter = () => {
+      const navEl = document.querySelector(
+        '[data-role="navbar"]'
+      ) as HTMLElement | null;
+      const footEl = document.querySelector(
+        '[data-role="footer"]'
+      ) as HTMLElement | null;
+      if (navEl)
+        setSizes({
+          navbar: {
+            width: navEl.offsetWidth,
+            height: navEl.offsetHeight,
+          },
+        });
+      if (footEl)
+        setSizes({
+          footer: {
+            width: footEl.offsetWidth,
+            height: footEl.offsetHeight,
+          },
+        });
+    };
+    const updateSection = () => {
+      const el = sectionRef.current;
+      if (el)
+        setSizes({
+          section: { width: el.offsetWidth, height: el.offsetHeight },
+        });
+    };
+    const handleResize = () => {
+      updateViewport();
+      updateNavFooter();
+      updateSection();
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    const ro = new ResizeObserver(() => updateSection());
+    if (sectionRef.current) ro.observe(sectionRef.current);
+    const roNav = new ResizeObserver(() => updateNavFooter());
+    const navEl = document.querySelector(
+      '[data-role="navbar"]'
+    ) as HTMLElement | null;
+    const footEl = document.querySelector(
+      '[data-role="footer"]'
+    ) as HTMLElement | null;
+    if (navEl) roNav.observe(navEl);
+    if (footEl) roNav.observe(footEl);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      ro.disconnect();
+      roNav.disconnect();
+    };
+  }, [setSizes]);
 
   const [snaps, setSnaps] = React.useState<number[]>([]);
   const [selected, setSelected] = React.useState(0);
@@ -60,11 +124,7 @@ export default function GlobSlider({
     if (!pausedRef.current) api?.scrollNext();
   }, [api]);
 
-  const images = [
-    { src: "/assets/profile-bg.jpg", alt: "Profil" },
-    { src: "/assets/poster.png", alt: "Poster" },
-    { src: "/assets/p1.png", alt: "Infografis" },
-  ];
+  //
 
   const sectionSize = useLayoutStore((s) => s.section);
   const viewportSize = useLayoutStore((s) => s.viewport);
@@ -112,7 +172,7 @@ export default function GlobSlider({
       <div
         className={
           (fullScreen ? "absolute left-0 right-0" : "relative w-full h-full") +
-          " px-4 md:px-6 py-3 md:py-4"
+          " px-4 md:px-6 py-3 md:py-4 "
         }
         style={
           fullScreen
@@ -122,6 +182,7 @@ export default function GlobSlider({
               }
             : undefined
         }
+        ref={sectionRef}
       >
         <Carousel
           className="w-full h-full py-2"

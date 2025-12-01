@@ -3,7 +3,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card mt-4">
+    <footer data-role="footer" className="border-t border-border bg-card mt-4">
       <div className="mx-auto max-w-7xl px-4 py-1 sm:px-6 lg:px-8">
         <div className="text-center">
           {/* Info Dinas */}
