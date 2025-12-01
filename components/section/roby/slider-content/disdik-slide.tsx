@@ -72,40 +72,40 @@ export default function DisdikSlide({ onDone, fullSize, active }: Props) {
   return (
     <>
       <CardComponent className="p-0 shadow-lg w-full h-full">
-        <Carousel
-          className="w-full h-full"
-          opts={{ loop: true, align: "start" }}
-          setApi={setChartApi}
-          onMouseEnter={() => active && setChartPaused(true)}
-          onMouseLeave={() => active && setChartPaused(false)}
-          onTouchStart={() => active && setChartPaused(true)}
-          onTouchEnd={() => active && setChartPaused(false)}
-        >
-          <CarouselContent>
-            <CarouselItem>
-              <DataDisdikDoItm />
-            </CarouselItem>
-            <CarouselItem>
-              <DataDisdikKebutuhanGuru />
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-
-        {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2 mb-3">
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-2 w-2 rounded-full transition-colors",
-                idx === chartSelectedIndex
-                  ? "bg-primary"
-                  : "bg-muted-foreground/30"
-              )}
-            />
-          ))}
+        <div className="flex h-full flex-col">
+          <Carousel
+            className="w-full flex-1 min-h-0"
+            opts={{ loop: true, align: "start" }}
+            setApi={setChartApi}
+            onMouseEnter={() => active && setChartPaused(true)}
+            onMouseLeave={() => active && setChartPaused(false)}
+            onTouchStart={() => active && setChartPaused(true)}
+            onTouchEnd={() => active && setChartPaused(false)}
+          >
+            <CarouselContent className="h-full">
+              <CarouselItem>
+                <DataDisdikDoItm />
+              </CarouselItem>
+              <CarouselItem>
+                <DataDisdikKebutuhanGuru />
+              </CarouselItem>
+            </CarouselContent>
+          </Carousel>
+          <div className="mt-3 flex justify-center gap-2 mb-3">
+            {chartScrollSnaps.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Ke slide ${idx + 1}`}
+                onClick={() => chartApi?.scrollTo(idx)}
+                className={cn(
+                  "h-2 w-2 rounded-full transition-colors",
+                  idx === chartSelectedIndex
+                    ? "bg-primary"
+                    : "bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
         </div>
       </CardComponent>
     </>

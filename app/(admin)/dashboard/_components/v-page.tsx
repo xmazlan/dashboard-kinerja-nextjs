@@ -31,6 +31,7 @@ import PageContainer from "@/components/dashboard/page-container";
 import { useLayoutStore } from "@/hooks/use-layout";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import React from "react";
+import ViewportInfo from "@/components/section/viewport-info";
 
 export default function Dashboard() {
   const { status } = useSession();
@@ -40,10 +41,6 @@ export default function Dashboard() {
   const setViewMode = useDashboardStore((s) => s.setViewMode);
   const topGap = useDashboardStore((s) => s.topGap);
   const bottomGap = useDashboardStore((s) => s.bottomGap);
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const recomputeLayout = React.useCallback(() => {
     const vw = window.innerWidth;
@@ -106,13 +103,10 @@ export default function Dashboard() {
       <PageContainer>
         <main className="h-full overflow-hidden">
           <section className="h-full overflow-hidden">
-            {/* <ViewportInfo /> */}
-            {viewMode === "slide" &&
-              (mounted ? (
-                <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
-              ) : (
-                <div suppressHydrationWarning className="w-full h-full" />
-              ))}
+            <ViewportInfo />
+            {viewMode === "slide" && (
+              <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
+            )}
           </section>
         </main>
       </PageContainer>

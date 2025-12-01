@@ -211,8 +211,8 @@ export default function GlobSlider({
               onClick={() => api?.scrollTo(idx)}
               className={
                 idx === selected
-                  ? "h-2 w-8 rounded-full bg-white"
-                  : "h-2 w-2 rounded-full bg-white/50 hover:bg-white/75"
+                  ? "h-2 w-8 rounded-full bg-gray-800 dark:bg-white"
+                  : "h-2 w-2 rounded-full bg-gray-800/50 dark:bg-white/50 hover:bg-gray-800/75 dark:hover:bg-white/75"
               }
             />
           ))}

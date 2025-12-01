@@ -42,7 +42,7 @@ export const useStuntingSweeperBulananData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboardbulanan",
+    slug_url: "getDashboardBulanan",
   };
   return useQuery<any>({
     queryKey: [
@@ -77,7 +77,7 @@ export const useStuntingSweeperKecamatanData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboardkec",
+    slug_url: "getDashboardKec",
   };
   return useQuery<any>({
     queryKey: [
@@ -112,7 +112,7 @@ export const useStuntingSweeperKelurahanData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboardkel",
+    slug_url: "getDashboardKel",
   };
   return useQuery<any>({
     queryKey: [
@@ -147,7 +147,7 @@ export const useStuntingSweeperPuskesmasData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboardpuskesmas",
+    slug_url: "getDashboardPuskesmas",
   };
   return useQuery<any>({
     queryKey: [
@@ -182,7 +182,7 @@ export const useStuntingSweeperPosyanduData = () => {
   const { data: session } = useSession();
   const slug = {
     slug_aplikasi: "stunting-sweeper",
-    slug_url: "getdashboardposyandu",
+    slug_url: "getDashboardPosyandu",
   };
   return useQuery<any>({
     queryKey: [
