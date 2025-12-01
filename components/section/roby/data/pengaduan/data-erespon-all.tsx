@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import LoadingContent from "../loading-content";
 
 export default function DataEresponAll() {
   const { data: masterData, isLoading: isLoadingMasterData } =
@@ -34,7 +35,7 @@ export default function DataEresponAll() {
         }
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={1} cols={5} />
+          <LoadingContent />
         ) : (
           (() => {
             const list = Array.isArray(masterData?.data)

@@ -12,6 +12,8 @@ import DataStuntingKecamatan from "./data-stunting-kecamatan";
 import DataStuntingKelurahan from "./data-stunting-kelurahan";
 import DataStuntingPuskesmas from "./data-stunting-puskesmas";
 import DataStuntingPosyandu from "./data-stunting-posyandu";
+import LoadingContent from "../loading-content";
+import LayoutCard from "@/components/card/layout-card";
 
 export default function DataStuntingSlide() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -72,55 +74,9 @@ export default function DataStuntingSlide() {
 
   return (
     <div className="w-full h-full">
-      {/* <CardComponent
-        className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Penangan Stunting"
-        description={
-          <>
-            Last update: {apiData?.last_get ?? ""}
-            <br />
-            <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
-          
-          </>
-        }
-        action={
-          <ModalDetail
-            title="Detail Layanan Penangan Stunting"
-            description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
-            contentModal={
-              <Tabs defaultValue="bulan" className="flex flex-col gap-3">
-                <TabsList>
-                  <TabsTrigger value="bulan">Bulan</TabsTrigger>
-                  <TabsTrigger value="puskesmas">Puskesmas</TabsTrigger>
-                  <TabsTrigger value="posyandu">Posyandu</TabsTrigger>
-                  <TabsTrigger value="kecamatan">Kecamatan</TabsTrigger>
-                  <TabsTrigger value="kelurahan">Kelurahan</TabsTrigger>
-                </TabsList>
-                <div className="h-[60vh] overflow-y-auto rounded-md border">
-                  <TabsContent value="bulan" className="p-3">
-                    <DataStuntingBulan />
-                  </TabsContent>
-                  <TabsContent value="puskesmas" className="p-3">
-                    <DataStuntingPuskesmas />
-                  </TabsContent>
-                  <TabsContent value="posyandu" className="p-3">
-                    <DataStuntingPosyandu />
-                  </TabsContent>
-                  <TabsContent value="kecamatan" className="p-3">
-                    <DataStuntingKecamatan />
-                  </TabsContent>
-                  <TabsContent value="kelurahan" className="p-3">
-                    <DataStuntingKelurahan />
-                  </TabsContent>
-                </div>
-              </Tabs>
-            }
-          />
-        }
-      > */}
       <CardComponent className="p-0  border-none shadow-none w-full h-full">
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (
@@ -271,46 +227,50 @@ export default function DataStuntingSlide() {
                       colorMap: colorMapBBTB,
                     },
                   ].map((section) => (
-                    <div
+                    <LayoutCard
                       key={section.key}
-                      className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-2 flex flex-col gap-2"
+                      className="relative bg-card rounded-lg shadow-sm p-2 border"
+                      ratioDesktop={0.5}
+                      ratioMobile={0.38}
                     >
-                      <ShineBorder
-                        shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                      />
-                      <div className="flex items-center justify-between">
-                        <div className="text-xs font-semibold">
-                          {section.key}{" "}
-                          <p className="text-[10px] md:text-[11px] opacity-80 italic">
-                            {section.keyLabel}
-                          </p>
-                        </div>
-                        <div className="text-xs font-bold tabular-nums">
-                          {section.sum.toLocaleString("id-ID")}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        {section.entries.map((e) => (
-                          <div
-                            key={e.label}
-                            className={cn(
-                              "rounded-lg p-2 border flex items-center justify-between text-white",
-                              getPatternByKey(e.label)
-                            )}
-                          >
-                            <div
-                              className="text-[12px] font-medium truncate"
-                              title={e.label}
-                            >
-                              {e.label}
-                            </div>
-                            <div className="text-[12px] font-mono font-semibold tabular-nums">
-                              {e.value.toLocaleString("id-ID")}
-                            </div>
+                      <div className="flex h-full flex-col">
+                        <ShineBorder
+                          shineColor={["#2563eb", "#1e40af", "#FE6500"]}
+                        />
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs font-semibold">
+                            {section.key}{" "}
+                            <p className="text-[10px] md:text-[11px] opacity-80 italic">
+                              {section.keyLabel}
+                            </p>
                           </div>
-                        ))}
+                          <div className="text-xs font-bold tabular-nums">
+                            {section.sum.toLocaleString("id-ID")}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-h-0 grid grid-cols-2 gap-2">
+                          {section.entries.map((e) => (
+                            <div
+                              key={e.label}
+                              className={cn(
+                                "rounded-lg p-2 border flex items-center justify-between text-white",
+                                getPatternByKey(e.label)
+                              )}
+                            >
+                              <div
+                                className="text-[12px] font-medium truncate"
+                                title={e.label}
+                              >
+                                {e.label}
+                              </div>
+                              <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                {e.value.toLocaleString("id-ID")}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    </LayoutCard>
                   ))}
                 </div>
               </div>

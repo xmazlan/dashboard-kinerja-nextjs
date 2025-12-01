@@ -13,6 +13,8 @@ import {
   IconListDetails,
 } from "@tabler/icons-react";
 import { ShineBorder } from "@/components/magicui/shine-border";
+import LoadingContent from "../loading-content";
+import LayoutCard from "@/components/card/layout-card";
 
 export default function SectionCapilIkd() {
   const { data: dataRespon, isLoading: isLoadingData } = useCapilIkdData();
@@ -34,36 +36,7 @@ export default function SectionCapilIkd() {
       })()}
     >
       {isLoadingData ? (
-        <div className="h-full flex flex-col space-y-3">
-          <div>
-            <Skeleton className="h-5 w-32 mb-2" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-md p-3 bg-card border shadow-sm flex items-center justify-between"
-                >
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-6 w-16" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <Skeleton className="h-5 w-32 mb-2" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-md p-3 bg-card border shadow-sm flex items-center justify-between"
-                >
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-6 w-16" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <LoadingContent />
       ) : (
         (() => {
           const layanan = Array.isArray(dataRespon?.data?.layanan)
@@ -94,81 +67,91 @@ export default function SectionCapilIkd() {
             0
           );
           return (
-            <div className="h-full w-full grid grid-cols-1 md:grid-cols-5 gap-3">
-              <div className="md:col-span-3">
-                <div className="relative rounded-xl bg-card border p-4 shadow-sm">
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-                  <div className="flex items-center gap-2 mb-2">
-                    <IconListDetails className="h-4 w-4 text-muted-foreground" />
-                    <h3 className="text-sm font-semibold text-foreground">
-                      Layanan
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {layanan.map((it, idx) => (
-                      <div
-                        key={idx}
-                        className={cn(
-                          "rounded-md p-3 text-white shadow-sm ring-1 ring-white/10 flex items-center justify-between transition hover:shadow-md hover:brightness-105",
-                          getPatternByKey(it.nama) || NEUTRAL_PATTERN
-                        )}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <IconId className="h-4 w-4 text-white opacity-90 shrink-0" />
-                          <div
-                            className="text-[11px] font-medium truncate"
-                            title={it.nama}
-                          >
-                            {it.nama}
+            <div className="h-full w-full grid grid-cols-1 gap-3">
+              <div>
+                <LayoutCard
+                  className="h-full overflow-hidden rounded-xl bg-card border p-4 shadow-sm"
+                  ratioDesktop={0.7}
+                  ratioMobile={0.5}
+                >
+                  <div className="flex h-full flex-col">
+                    <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-7 gap-3">
+                      <div className="md:col-span-4 flex min-h-0 flex-col">
+                        <div className="flex items-center gap-2 mb-2">
+                          <IconListDetails className="h-4 w-4 text-muted-foreground" />
+                          <h3 className="text-sm font-semibold text-foreground">
+                            Layanan
+                          </h3>
+                        </div>
+                        <div className="flex-1 min-h-0 overflow-y-auto">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {layanan.map((it, idx) => (
+                              <div
+                                key={idx}
+                                className={cn(
+                                  "rounded-md p-4 text-white shadow-sm ring-1 ring-white/10 flex items-center justify-between transition hover:shadow-md hover:brightness-105",
+                                  getPatternByKey(it.nama) || NEUTRAL_PATTERN
+                                )}
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <IconId className="h-4 w-4 text-white opacity-90 shrink-0" />
+                                  <div
+                                    className="text-[11px] font-medium truncate"
+                                    title={it.nama}
+                                  >
+                                    {it.nama}
+                                  </div>
+                                </div>
+                                <div className="text-lg md:text-xl font-bold tabular-nums">
+                                  <span suppressHydrationWarning>
+                                    {Number(it.jumlah).toLocaleString("id-ID")}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                        <div className="text-lg md:text-xl font-bold tabular-nums">
-                          <span suppressHydrationWarning>
-                            {Number(it.jumlah).toLocaleString("id-ID")}
-                          </span>
-                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
 
-              <div className="md:col-span-2">
-                <div className="relative rounded-xl bg-card border p-4 shadow-sm h-full">
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-                  <div className="flex items-center gap-2 mb-2">
-                    <IconListDetails className="h-4 w-4 text-muted-foreground" />
-                    <h3 className="text-sm font-semibold text-foreground">
-                      Blanko
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {blanko.map((it, idx) => (
-                      <div
-                        key={idx}
-                        className={cn(
-                          "rounded-md p-3 text-white shadow-sm ring-1 ring-white/10 flex items-center justify-between transition hover:shadow-md hover:brightness-105",
-                          getPatternByKey(it.nama) || NEUTRAL_PATTERN
-                        )}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <IconCertificate className="h-4 w-4 text-white opacity-90 shrink-0" />
-                          <div
-                            className="text-[11px] font-medium truncate"
-                            title={it.nama}
-                          >
-                            {it.nama}
+                      <div className="md:col-span-3 flex min-h-0 flex-col">
+                        <div className="flex items-center gap-2 mb-2">
+                          <IconListDetails className="h-4 w-4 text-muted-foreground" />
+                          <h4 className="text-sm font-semibold text-foreground">
+                            Blanko
+                          </h4>
+                        </div>
+                        <div className="flex-1 min-h-0">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-1">
+                            {blanko.map((it, idx) => (
+                              <div
+                                key={idx}
+                                className={cn(
+                                  "rounded-md p-4 text-white shadow-sm ring-1 ring-white/10 flex items-center justify-between transition hover:shadow-md hover:brightness-105",
+                                  getPatternByKey(it.nama) || NEUTRAL_PATTERN
+                                )}
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <IconCertificate className="h-4 w-4 text-white opacity-90 shrink-0" />
+                                  <div
+                                    className="text-[11px] font-medium truncate"
+                                    title={it.nama}
+                                  >
+                                    {it.nama}
+                                  </div>
+                                </div>
+                                <div className="text-lg md:text-xl font-bold tabular-nums">
+                                  <span suppressHydrationWarning>
+                                    {Number(it.jumlah).toLocaleString("id-ID")}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                        <div className="text-lg md:text-xl font-bold tabular-nums">
-                          <span suppressHydrationWarning>
-                            {Number(it.jumlah).toLocaleString("id-ID")}
-                          </span>
-                        </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
+                </LayoutCard>
               </div>
             </div>
           );

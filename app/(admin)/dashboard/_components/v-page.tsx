@@ -20,6 +20,7 @@ import PageContainer from "@/components/dashboard/page-container";
 import { useLayoutStore } from "@/hooks/use-layout";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import React from "react";
+import ViewportInfo from "@/components/section/viewport-info";
 
 export default function Dashboard() {
   const { status } = useSession();
@@ -95,7 +96,8 @@ export default function Dashboard() {
       <PageContainer>
         <main className="h-full overflow-hidden">
           <section className="h-full overflow-hidden">
-            {/* <ViewportInfo /> */}
+            <ViewportInfo />
+
             {viewMode === "slide" &&
               (mounted ? (
                 <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />

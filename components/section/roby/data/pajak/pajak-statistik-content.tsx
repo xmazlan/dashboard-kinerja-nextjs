@@ -17,6 +17,9 @@ import {
 } from "recharts";
 import { getGradientStyleByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
+import LayoutCard from "@/components/card/layout-card";
+import { MorphingSquare } from "@/components/molecule-ui/morphing-square";
+import LoadingContent from "../loading-content";
 
 type TriwulanItem = { tw: string | number; target: number; total: number };
 type PieItem = { Jenis: string; Target: number };
@@ -52,43 +55,85 @@ export default function PajakStatistikContent(props: Props) {
     defaultLabelFormatter,
   } = props;
 
+  const [vp, setVp] = React.useState<"xs" | "sm" | "md" | "lg" | "xl">("md");
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const pieRef = React.useRef<HTMLDivElement>(null);
+  const barRef = React.useRef<HTMLDivElement>(null);
+  const [pieH, setPieH] = React.useState<number>(280);
+  const [barH, setBarH] = React.useState<number>(360);
+  const [pieRadius, setPieRadius] = React.useState<number>(90);
+  const clamp = (n: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, n));
+  const isMobile = vp === "xs" || vp === "sm";
+  const pieMargin = isMobile
+    ? { top: 6, right: 6, bottom: 8, left: 6 }
+    : { top: 8, right: 8, bottom: 12, left: 8 };
+  const barMargin = isMobile
+    ? { top: 6, right: 6, bottom: 14, left: 6 }
+    : { top: 8, right: 8, bottom: 16, left: 8 };
+  React.useEffect(() => {
+    const compute = (w: number) =>
+      w < 640
+        ? "xs"
+        : w < 768
+        ? "sm"
+        : w < 1024
+        ? "md"
+        : w < 1280
+        ? "lg"
+        : "xl";
+    const update = () => setVp(compute(window.innerWidth));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  React.useEffect(() => {
+    const updatePie = () => {
+      const w = pieRef.current?.offsetWidth || window.innerWidth;
+      const rootH = rootRef.current?.offsetHeight || window.innerHeight;
+      const factor = vp === "xs" || vp === "sm" ? 0.35 : 0.5;
+      const maxH = clamp(Math.round(rootH * factor), 180, 520);
+      const wH = clamp(Math.round(w * 0.68), 180, 460);
+      const h = Math.min(wH, maxH);
+      setPieH(h);
+      const minDim = Math.min(w, h);
+      setPieRadius(clamp(Math.round(minDim * 0.42), 70, 120));
+    };
+    const updateBar = () => {
+      const w = barRef.current?.offsetWidth || window.innerWidth;
+      const rootH = rootRef.current?.offsetHeight || window.innerHeight;
+      const factor = vp === "xs" || vp === "sm" ? 0.35 : 0.5;
+      const maxH = clamp(Math.round(rootH * factor), 220, 540);
+      const wH = clamp(Math.round(w * 0.7), 260, 520);
+      setBarH(Math.min(wH, maxH));
+    };
+    const po = new ResizeObserver(updatePie);
+    const bo = new ResizeObserver(updateBar);
+    if (pieRef.current) po.observe(pieRef.current);
+    if (barRef.current) bo.observe(barRef.current);
+    updatePie();
+    updateBar();
+    return () => {
+      po.disconnect();
+      bo.disconnect();
+    };
+  }, [vp]);
+
   return (
     <CardComponent className="shadow-none border-none">
       <div className="">
-        <div className="mx-auto w-full ps-4 pe-4 space-y-2 sm:space-y-3">
+        <div
+          ref={rootRef}
+          className="mx-auto w-full ps-4 pe-4 space-y-2 sm:space-y-3 py-4 h-full min-h-0 "
+        >
           {isLoading ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-3">
-                <div className="order-1 grid grid-cols-1 sm:grid-cols-2 md:col-span-4 lg:col-span-3 xl:col-span-4 gap-2">
-                  <div className="bg-card rounded-lg p-3 border">
-                    <Skeleton className="h-4 w-24 mb-2" />
-                    <Skeleton className="h-5 w-36 mb-1.5" />
-                    <Skeleton className="h-3 w-28" />
-                  </div>
-                  <div className="bg-card rounded-lg p-3 border">
-                    <Skeleton className="h-4 w-24 mb-2" />
-                    <Skeleton className="h-5 w-36 mb-1.5" />
-                    <Skeleton className="h-3 w-28" />
-                  </div>
-                </div>
-                <div className="order-2 bg-card rounded-lg p-3 border md:col-span-4 lg:col-span-4 xl:col-span-4">
-                  <Skeleton className="h-5 w-35 mb-2" />
-                  <Skeleton className="h-[140px] sm:h-[160px] md:h-[200px] xl:h-[240px] w-full" />
-                  <div className="mt-2 space-y-1">
-                    <Skeleton className="h-3 w-2/3" />
-                    <Skeleton className="h-3 w-1/2" />
-                  </div>
-                </div>
-                <div className="order-3 bg-card rounded-lg p-3 border md:col-span-4 lg:col-span-5 xl:col-span-4">
-                  <Skeleton className="h-5 w-64 mb-2" />
-                  <Skeleton className="h-[180px] sm:h-[220px] md:h-[260px] xl:h-[300px] w-full" />
-                </div>
-              </div>
+              <LoadingContent />
             </>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3">
-                <div className="order-1 grid grid-cols-1 sm:grid-cols- md:col-span-4 lg:col-span-3 xl:col-span-4 gap-2">
+              <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div
                     className="rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
@@ -133,145 +178,178 @@ export default function PajakStatistikContent(props: Props) {
                     </div>
                   </div>
                 </div>
-
-                <div className="order-2 relative bg-card rounded-lg shadow-lg md:col-span-4 lg:col-span-4 xl:col-span-4 p-3 border overflow-hidden">
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-
-                  <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
-                    Distribusi Target
-                  </h3>
-                  {Array.isArray(pieData) && pieData.length > 0 && (
-                    <div className="h-[200px] sm:h-[240px] md:h-[300px] xl:h-[360px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={pieData}
-                            dataKey="Target"
-                            nameKey="Jenis"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={90}
-                          >
-                            {pieData.map((_, i) => {
-                              const palette = ["#3b82f6", "#f59e0b"];
-                              return (
-                                <Cell
-                                  key={i}
-                                  fill={palette[i % palette.length]}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 ">
+                  <LayoutCard
+                    className="relative bg-card rounded-lg shadow-lg p-3 border"
+                    ratioDesktop={0.5}
+                    ratioMobile={0.38}
+                  >
+                    <div className="flex h-full flex-col">
+                      <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
+                        Distribusi Target
+                      </h3>
+                      {Array.isArray(pieData) && pieData.length > 0 && (
+                        <div ref={pieRef} className="flex-1 min-h-0">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart margin={pieMargin}>
+                              <Pie
+                                data={pieData}
+                                dataKey="Target"
+                                nameKey="Jenis"
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={pieRadius}
+                              >
+                                {pieData.map((_, i) => {
+                                  const palette = ["#3b82f6", "#f59e0b"];
+                                  return (
+                                    <Cell
+                                      key={i}
+                                      fill={palette[i % palette.length]}
+                                    />
+                                  );
+                                })}
+                              </Pie>
+                              <Tooltip
+                                formatter={defaultTooltipFormatter}
+                                labelFormatter={defaultLabelFormatter}
+                                contentStyle={{
+                                  backgroundColor: isDark
+                                    ? "#0f172a"
+                                    : "#ffffff",
+                                  borderColor: isDark ? "#1f2937" : "#e5e7eb",
+                                }}
+                                itemStyle={{
+                                  color: isDark ? "#e5e7eb" : "#334155",
+                                }}
+                                labelStyle={{
+                                  color: isDark ? "#e5e7eb" : "#334155",
+                                }}
+                              />
+                              {vp !== "xs" && (
+                                <Legend
+                                  verticalAlign="bottom"
+                                  align="center"
+                                  wrapperStyle={{
+                                    fontSize: "11px",
+                                    paddingTop: "12px",
+                                    color: isDark ? "#e5e7eb" : "#334155",
+                                  }}
                                 />
-                              );
-                            })}
-                          </Pie>
-                          <Tooltip
-                            formatter={defaultTooltipFormatter}
-                            labelFormatter={defaultLabelFormatter}
-                            contentStyle={{
-                              backgroundColor: isDark ? "#0f172a" : "#ffffff",
-                              borderColor: isDark ? "#1f2937" : "#e5e7eb",
-                            }}
-                            itemStyle={{
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                            labelStyle={{
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                          />
-                          <Legend
-                            wrapperStyle={{
-                              fontSize: "11px",
-                              paddingTop: "12px",
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                  {Array.isArray(pieData) && pieData.length > 0 && (
-                    <div className="mt-2 space-y-1">
-                      {pieData.map((it, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between text-[11px] text-muted-foreground"
-                        >
-                          <span className="truncate">{it.Jenis}</span>
-                          <span className="font-mono">
-                            {(() => {
-                              const val = Number(it.Target || 0);
-                              const total = Number(pieTotal || 0);
-                              const pct = total > 0 ? (val / total) * 100 : 0;
-                              return `${formatCurrency(val)} (${pct.toFixed(
-                                2
-                              )} %)`;
-                            })()}
-                          </span>
+                              )}
+                            </PieChart>
+                          </ResponsiveContainer>
                         </div>
-                      ))}
+                      )}
+                      {Array.isArray(pieData) && pieData.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          {pieData.map((it, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between text-[11px] text-muted-foreground"
+                            >
+                              <span className="truncate">{it.Jenis}</span>
+                              <span className="font-mono">
+                                {(() => {
+                                  const val = Number(it.Target || 0);
+                                  const total = Number(pieTotal || 0);
+                                  const pct =
+                                    total > 0 ? (val / total) * 100 : 0;
+                                  return `${formatCurrency(val)} (${pct.toFixed(
+                                    2
+                                  )} %)`;
+                                })()}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </LayoutCard>
 
-                <div className="order-3 relative bg-card rounded-lg shadow-lg p-3 border md:col-span-4 lg:col-span-5 xl:col-span-4 overflow-hidden">
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-
-                  <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
-                    Perbandingan Target vs Realisasi per Triwulan
-                  </h3>
-                  {Array.isArray(triwulanData) && triwulanData.length > 0 && (
-                    <div className="h-[260px] sm:h-[320px] md:h-[380px] xl:h-[420px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={triwulanData}>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            vertical={false}
-                            stroke={isDark ? "#1f2937" : "#e5e7eb"}
-                          />
-                          <XAxis
-                            dataKey="tw"
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{
-                              fontSize: 10,
-                              fill: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                          />
-                          <Tooltip
-                            formatter={defaultTooltipFormatter}
-                            labelFormatter={defaultLabelFormatter}
-                            contentStyle={{
-                              backgroundColor: isDark ? "#0f172a" : "#ffffff",
-                              borderColor: isDark ? "#1f2937" : "#e5e7eb",
-                            }}
-                            itemStyle={{
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                            labelStyle={{
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                          />
-                          <Legend
-                            wrapperStyle={{
-                              fontSize: "11px",
-                              paddingTop: "12px",
-                              color: isDark ? "#e5e7eb" : "#334155",
-                            }}
-                          />
-                          <Bar
-                            dataKey="target"
-                            fill="#f59e0b"
-                            radius={[8, 8, 0, 0]}
-                            name="Target"
-                          />
-                          <Bar
-                            dataKey="total"
-                            fill="#3b82f6"
-                            radius={[8, 8, 0, 0]}
-                            name="Realisasi"
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
+                  <LayoutCard
+                    className="relative bg-card rounded-lg shadow-lg p-3 border"
+                    ratioDesktop={0.5}
+                    ratioMobile={0.38}
+                  >
+                    <div className="flex h-full flex-col">
+                      <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
+                        Perbandingan Target vs Realisasi per Triwulan
+                      </h3>
+                      {Array.isArray(triwulanData) &&
+                        triwulanData.length > 0 && (
+                          <div ref={barRef} className="flex-1 min-h-0">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart
+                                data={triwulanData}
+                                margin={barMargin}
+                                barCategoryGap={isMobile ? "25%" : "12%"}
+                                barGap={isMobile ? 2 : 4}
+                                maxBarSize={isMobile ? 28 : 36}
+                              >
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  vertical={false}
+                                  stroke={isDark ? "#1f2937" : "#e5e7eb"}
+                                />
+                                <XAxis
+                                  dataKey="tw"
+                                  tickLine={false}
+                                  axisLine={false}
+                                  interval={0}
+                                  tickMargin={isMobile ? 8 : 4}
+                                  angle={isMobile ? -30 : 0}
+                                  textAnchor={isMobile ? "end" : "middle"}
+                                  tick={{
+                                    fontSize: isMobile ? 10 : 12,
+                                    fill: isDark ? "#e5e7eb" : "#334155",
+                                  }}
+                                />
+                                <Tooltip
+                                  formatter={defaultTooltipFormatter}
+                                  labelFormatter={defaultLabelFormatter}
+                                  contentStyle={{
+                                    backgroundColor: isDark
+                                      ? "#0f172a"
+                                      : "#ffffff",
+                                    borderColor: isDark ? "#1f2937" : "#e5e7eb",
+                                  }}
+                                  itemStyle={{
+                                    color: isDark ? "#e5e7eb" : "#334155",
+                                  }}
+                                  labelStyle={{
+                                    color: isDark ? "#e5e7eb" : "#334155",
+                                  }}
+                                />
+                                {vp !== "xs" && (
+                                  <Legend
+                                    verticalAlign="bottom"
+                                    align="center"
+                                    wrapperStyle={{
+                                      fontSize: "11px",
+                                      paddingTop: "12px",
+                                      color: isDark ? "#e5e7eb" : "#334155",
+                                    }}
+                                  />
+                                )}
+                                <Bar
+                                  dataKey="target"
+                                  fill="#f59e0b"
+                                  radius={[8, 8, 0, 0]}
+                                  name="Target"
+                                />
+                                <Bar
+                                  dataKey="total"
+                                  fill="#3b82f6"
+                                  radius={[8, 8, 0, 0]}
+                                  name="Realisasi"
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        )}
                     </div>
-                  )}
+                  </LayoutCard>
                 </div>
               </div>
             </>

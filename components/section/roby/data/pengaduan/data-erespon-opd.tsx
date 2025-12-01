@@ -6,6 +6,7 @@ import { usePengaduanEresponOpdData } from "@/hooks/query/use-pengaduan-erespon"
 import LoadingSkeleton from "@/components/loading-skeleton";
 import { Info, Tags } from "lucide-react";
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
+import LoadingContent from "../loading-content";
 
 export default function DataEresponOpd() {
   const { data: opdData, isLoading: isLoadingOpdData } =
@@ -25,7 +26,7 @@ export default function DataEresponOpd() {
         }
       >
         {isLoadingOpdData ? (
-          <LoadingSkeleton rows={1} cols={5} />
+          <LoadingContent />
         ) : (
           (() => {
             const list = Array.isArray(opdData?.data) ? opdData?.data : [];

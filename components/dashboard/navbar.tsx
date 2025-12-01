@@ -50,12 +50,32 @@ export function Navbar() {
     return () => document.removeEventListener("fullscreenchange", handleChange);
   }, []);
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = async () => {
     try {
+      const el = document.documentElement as HTMLElement & {
+        webkitRequestFullscreen?: () => Promise<void> | void;
+        msRequestFullscreen?: () => Promise<void> | void;
+      };
+      const doc = document as Document & {
+        webkitExitFullscreen?: () => Promise<void> | void;
+        msExitFullscreen?: () => Promise<void> | void;
+      };
       if (!document.fullscreenElement) {
-        void document.documentElement.requestFullscreen();
+        if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        } else if (el.msRequestFullscreen) {
+          el.msRequestFullscreen();
+        }
       } else {
-        void document.exitFullscreen();
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (doc.webkitExitFullscreen) {
+          doc.webkitExitFullscreen();
+        } else if (doc.msExitFullscreen) {
+          doc.msExitFullscreen();
+        }
       }
     } catch {}
   };
@@ -74,7 +94,10 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border overflow-hidden bg-transparent backdrop-blur supports-backdrop-filter:bg-background/10">
+    <nav
+      data-role="navbar"
+      className="sticky top-0 z-50 border-b border-border overflow-hidden bg-transparent backdrop-blur supports-backdrop-filter:bg-background/10"
+    >
       <div className="absolute inset-0 -z-10 pointer-events-none bg-animated-gradient" />
       <div className="absolute inset-0 -z-10 pointer-events-none bg-animated-grid opacity-15 mix-blend-overlay" />
       <motion.svg

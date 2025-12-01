@@ -35,9 +35,15 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
+import LoadingContent from "../data/loading-content";
+import LayoutCard from "@/components/card/layout-card";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
-export default function DataTpidPasarSlide({ onDone, fullSize, active }: Props) {
+export default function DataTpidPasarSlide({
+  onDone,
+  fullSize,
+  active,
+}: Props) {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidPasarData();
   const [query, setQuery] = React.useState("");
@@ -157,7 +163,7 @@ export default function DataTpidPasarSlide({ onDone, fullSize, active }: Props) 
         })()}
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={1} cols={5} />
+          <LoadingContent />
         ) : (
           (() => {
             interface TpidCommodity {
@@ -233,115 +239,118 @@ export default function DataTpidPasarSlide({ onDone, fullSize, active }: Props) 
                           // className="md:basis-1/2"
                           className=""
                         >
-                          <div
-                            className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3 flex flex-col gap-2 h-full"
-                            title={`${mkt.nama_pasar} — ${mkt.address}`}
+                          <LayoutCard
+                            className=""
+                            ratioDesktop={0.5}
+                            ratioMobile={0.38}
                           >
-                            <ShineBorder
-                              shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                            />
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0">
-                                <div className="text-[12px] md:text-sm font-semibold truncate">
-                                  {mkt.nama_pasar}
+                            <div
+                              className="flex h-full flex-col gap-2"
+                              title={`${mkt.nama_pasar} — ${mkt.address}`}
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="min-w-0">
+                                  <div className="text-[12px] md:text-sm font-semibold truncate">
+                                    {mkt.nama_pasar}
+                                  </div>
+                                  <div className="text-[10px] opacity-70 truncate">
+                                    {mkt.address}
+                                  </div>
                                 </div>
-                                <div className="text-[10px] opacity-70 truncate">
-                                  {mkt.address}
-                                </div>
+                                <Badge className="shrink-0" variant="secondary">
+                                  {mkt.items.length} komoditas
+                                </Badge>
                               </div>
-                              <Badge className="shrink-0" variant="secondary">
-                                {mkt.items.length} komoditas
-                              </Badge>
-                            </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
-                              {head.map((it) => (
-                                <div
-                                  key={it.key}
-                                  className={cn(
-                                    "rounded-md p-2 border flex items-center justify-between gap-2 text-white",
-                                    getPatternByKey(it.komoditas)
-                                  )}
-                                >
-                                  <div className="flex items-center gap-2 min-w-0">
-                                    <OptimizeImage
-                                      src={it.img}
-                                      alt={it.komoditas}
-                                      width={32}
-                                      height={32}
-                                      containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
-                                      imgClassName="rounded-sm object-cover w-full h-full"
-                                    />
-                                    <div className="min-w-0">
-                                      <div className="text-[12px] font-medium truncate">
-                                        {it.komoditas}
-                                      </div>
-                                      <div className="text-[10px] opacity-70 truncate">
-                                        {it.satuan}
+                              <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
+                                {head.map((it) => (
+                                  <div
+                                    key={it.key}
+                                    className={cn(
+                                      "rounded-md p-2 border flex items-center justify-between gap-2 text-white",
+                                      getPatternByKey(it.komoditas)
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-2 min-w-0">
+                                      <OptimizeImage
+                                        src={it.img}
+                                        alt={it.komoditas}
+                                        width={32}
+                                        height={32}
+                                        containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                        imgClassName="rounded-sm object-cover w-full h-full"
+                                      />
+                                      <div className="min-w-0">
+                                        <div className="text-[12px] font-medium truncate">
+                                          {it.komoditas}
+                                        </div>
+                                        <div className="text-[10px] opacity-70 truncate">
+                                          {it.satuan}
+                                        </div>
                                       </div>
                                     </div>
+                                    <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                      {it.harga.toLocaleString("id-ID")}
+                                    </div>
                                   </div>
-                                  <div className="text-[12px] font-mono font-semibold tabular-nums">
-                                    {it.harga.toLocaleString("id-ID")}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                              </div>
 
-                            {tail.length > 0 && (
-                              <Collapsible
-                                open={expandedAll}
-                                onOpenChange={setExpandedAll}
-                              >
-                                <CollapsibleTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="mt-2"
-                                  >
-                                    {expandedAll
-                                      ? "Tutup komoditas"
-                                      : `Lihat semua komoditas (${tail.length} lagi)`}
-                                  </Button>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
-                                    {tail.map((it) => (
-                                      <div
-                                        key={it.key}
-                                        className={cn(
-                                          "rounded-md p-2 border flex items-center justify-between gap-2 text-white",
-                                          getPatternByKey(it.komoditas)
-                                        )}
-                                      >
-                                        <div className="flex items-center gap-2 min-w-0">
-                                          <OptimizeImage
-                                            src={it.img}
-                                            alt={it.komoditas}
-                                            width={32}
-                                            height={32}
-                                            containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
-                                            imgClassName="rounded-sm object-cover w-full h-full"
-                                          />
-                                          <div className="min-w-0">
-                                            <div className="text-[12px] font-medium truncate">
-                                              {it.komoditas}
-                                            </div>
-                                            <div className="text-[10px] opacity-70 truncate">
-                                              {it.satuan}
+                              {tail.length > 0 && (
+                                <Collapsible
+                                  open={expandedAll}
+                                  onOpenChange={setExpandedAll}
+                                >
+                                  <CollapsibleTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="mt-2"
+                                    >
+                                      {expandedAll
+                                        ? "Tutup komoditas"
+                                        : `Lihat semua komoditas (${tail.length} lagi)`}
+                                    </Button>
+                                  </CollapsibleTrigger>
+                                  <CollapsibleContent>
+                                    <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
+                                      {tail.map((it) => (
+                                        <div
+                                          key={it.key}
+                                          className={cn(
+                                            "rounded-md p-2 border flex items-center justify-between gap-2 text-white",
+                                            getPatternByKey(it.komoditas)
+                                          )}
+                                        >
+                                          <div className="flex items-center gap-2 min-w-0">
+                                            <OptimizeImage
+                                              src={it.img}
+                                              alt={it.komoditas}
+                                              width={32}
+                                              height={32}
+                                              containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                              imgClassName="rounded-sm object-cover w-full h-full"
+                                            />
+                                            <div className="min-w-0">
+                                              <div className="text-[12px] font-medium truncate">
+                                                {it.komoditas}
+                                              </div>
+                                              <div className="text-[10px] opacity-70 truncate">
+                                                {it.satuan}
+                                              </div>
                                             </div>
                                           </div>
+                                          <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                            {it.harga.toLocaleString("id-ID")}
+                                          </div>
                                         </div>
-                                        <div className="text-[12px] font-mono font-semibold tabular-nums">
-                                          {it.harga.toLocaleString("id-ID")}
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </CollapsibleContent>
-                              </Collapsible>
-                            )}
-                          </div>
+                                      ))}
+                                    </div>
+                                  </CollapsibleContent>
+                                </Collapsible>
+                              )}
+                            </div>
+                          </LayoutCard>
                         </CarouselItem>
                       );
                     })}

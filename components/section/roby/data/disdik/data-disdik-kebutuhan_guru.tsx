@@ -29,6 +29,8 @@ import {
   LabelList,
 } from "recharts";
 import { ModalDetail } from "@/components/modal/detail-modal";
+import LoadingContent from "../loading-content";
+import LayoutCard from "@/components/card/layout-card";
 export default function DataDisdikKebutuhanGuru() {
   const { data: apiData, isLoading: isLoadingApiData } =
     useDisdikKebutuhanGuruData();
@@ -81,17 +83,21 @@ export default function DataDisdikKebutuhanGuru() {
         })()}
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (
               <div className="grid grid-cols-1 gap-3">
-                <div className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3">
+                <LayoutCard
+                  className="relative bg-card rounded-lg shadow-sm p-3 border"
+                  ratioDesktop={0.5}
+                  ratioMobile={0.38}
+                >
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
                   <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
                     Kebutuhan Guru
                   </h3>
-                  <div className="h-[220px]">
+                  <div className="flex-1 min-h-0">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={barData}
@@ -148,7 +154,7 @@ export default function DataDisdikKebutuhanGuru() {
                       ))}
                     </div>
                   )} */}
-                </div>
+                </LayoutCard>
               </div>
             );
           })()
