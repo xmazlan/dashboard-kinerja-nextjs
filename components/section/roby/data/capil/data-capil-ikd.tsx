@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +19,7 @@ export default function SectionCapilIkd() {
 
   return (
     <CardComponent
-      className="shadow-none border-none p-0 w-full"
+      className="gap-1 border-none shadow-none w-full h-full"
       title="Layanan Capil"
       description={(() => {
         const periode = String(dataRespon?.data?.Periode || "-");
@@ -33,7 +34,7 @@ export default function SectionCapilIkd() {
       })()}
     >
       {isLoadingData ? (
-        <div className="space-y-3">
+        <div className="h-full flex flex-col space-y-3">
           <div>
             <Skeleton className="h-5 w-32 mb-2" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -93,7 +94,7 @@ export default function SectionCapilIkd() {
             0
           );
           return (
-            <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div className="h-full w-full grid grid-cols-1 md:grid-cols-5 gap-3">
               <div className="md:col-span-3">
                 <div className="relative rounded-xl bg-card border p-4 shadow-sm">
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
@@ -133,7 +134,7 @@ export default function SectionCapilIkd() {
               </div>
 
               <div className="md:col-span-2">
-                <div className="relative rounded-xl bg-card border p-4 shadow-sm">
+                <div className="relative rounded-xl bg-card border p-4 shadow-sm h-full">
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
                   <div className="flex items-center gap-2 mb-2">
                     <IconListDetails className="h-4 w-4 text-muted-foreground" />

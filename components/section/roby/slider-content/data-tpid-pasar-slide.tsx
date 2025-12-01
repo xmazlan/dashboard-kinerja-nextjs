@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import CardComponent from "@/components/card/card-component";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,8 @@ import {
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function DataTpidPasarSlide() {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+export default function DataTpidPasarSlide({ onDone, fullSize, active }: Props) {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidPasarData();
   const [query, setQuery] = React.useState("");
@@ -49,28 +51,46 @@ export default function DataTpidPasarSlide() {
   }, [paused]);
 
   React.useEffect(() => {
-    if (!api) return;
+    if (!api || !active) return;
     const id = setInterval(() => {
       if (!pausedRef.current) {
         api.scrollNext();
       }
     }, SPEED_LIDER);
     return () => clearInterval(id);
-  }, [api]);
+  }, [api, active]);
 
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
+  const prevRef = React.useRef(0);
   React.useEffect(() => {
     if (!api) return;
-    setScrollSnaps(api.scrollSnapList());
-    const onSelect = () => setSelectedIndex(api.selectedScrollSnap());
+    const snaps = api.scrollSnapList();
+    setScrollSnaps(snaps);
+    const last = Math.max(0, snaps.length - 1);
+    const onSelect = () => {
+      const cur = api.selectedScrollSnap();
+      setSelectedIndex(cur);
+      if (active && snaps.length > 1 && prevRef.current === last && cur === 0) {
+        onDone?.();
+      }
+      prevRef.current = cur;
+    };
     api.on("select", onSelect);
     onSelect();
     return () => {
       api.off("select", onSelect);
     };
-  }, [api]);
+  }, [api, active, onDone]);
+  React.useEffect(() => {
+    if (!api) return;
+    const snaps = api.scrollSnapList();
+    if (active && snaps.length <= 1) {
+      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      return () => clearTimeout(id);
+    }
+  }, [api, active, onDone]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -195,13 +215,13 @@ export default function DataTpidPasarSlide() {
             return (
               <div className="h-full flex flex-col gap-3">
                 <Carousel
-                  className="w-full"
+                  className="w-full h-full"
                   opts={{ loop: true, align: "start" }}
                   setApi={setApi}
-                  onMouseEnter={() => setPaused(true)}
-                  onMouseLeave={() => setPaused(false)}
-                  onTouchStart={() => setPaused(true)}
-                  onTouchEnd={() => setPaused(false)}
+                  onMouseEnter={() => active && setPaused(true)}
+                  onMouseLeave={() => active && setPaused(false)}
+                  onTouchStart={() => active && setPaused(true)}
+                  onTouchEnd={() => active && setPaused(false)}
                 >
                   <CarouselContent className="items-stretch">
                     {filtered.map((mkt, idx) => {

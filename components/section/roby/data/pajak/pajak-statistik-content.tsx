@@ -55,11 +55,11 @@ export default function PajakStatistikContent(props: Props) {
   return (
     <CardComponent className="shadow-none border-none">
       <div className="">
-        <div className=" mx-auto space-y-1">
+        <div className="mx-auto w-full ps-4 pe-4 space-y-2 sm:space-y-3">
           {isLoading ? (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
-                <div className="grid grid-cols-1 lg:col-span-1 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 md:gap-3">
+                <div className="order-1 grid grid-cols-1 sm:grid-cols-2 md:col-span-4 lg:col-span-3 xl:col-span-4 gap-2">
                   <div className="bg-card rounded-lg p-3 border">
                     <Skeleton className="h-4 w-24 mb-2" />
                     <Skeleton className="h-5 w-36 mb-1.5" />
@@ -71,40 +71,40 @@ export default function PajakStatistikContent(props: Props) {
                     <Skeleton className="h-3 w-28" />
                   </div>
                 </div>
-                <div className="bg-card rounded-lg p-3 border lg:col-span-1">
+                <div className="order-2 bg-card rounded-lg p-3 border md:col-span-4 lg:col-span-4 xl:col-span-4">
                   <Skeleton className="h-5 w-35 mb-2" />
-                  <Skeleton className="h-[160px] w-full" />
+                  <Skeleton className="h-[140px] sm:h-[160px] md:h-[200px] xl:h-[240px] w-full" />
                   <div className="mt-2 space-y-1">
                     <Skeleton className="h-3 w-2/3" />
                     <Skeleton className="h-3 w-1/2" />
                   </div>
                 </div>
-                <div className="bg-card rounded-lg p-3 border lg:col-span-3">
+                <div className="order-3 bg-card rounded-lg p-3 border md:col-span-4 lg:col-span-5 xl:col-span-4">
                   <Skeleton className="h-5 w-64 mb-2" />
-                  <Skeleton className="h-[200px] w-full" />
+                  <Skeleton className="h-[180px] sm:h-[220px] md:h-[260px] xl:h-[300px] w-full" />
                 </div>
               </div>
             </>
           ) : (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-8 gap-2">
-                <div className="grid grid-cols-1 lg:col-span-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-3">
+                <div className="order-1 grid grid-cols-1 sm:grid-cols- md:col-span-4 lg:col-span-3 xl:col-span-4 gap-2">
                   <div
                     className="rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white/90">
+                      <span className="text-xs sm:text-sm font-bold text-white/90">
                         Total Target
                       </span>
                       <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
                         <TrendingUp className="w-4 h-4 text-muted-foreground" />
                       </div>
                     </div>
-                    <div className="text-md font-bold text-white mb-1">
+                    <div className="text-md sm:text-lg font-bold text-white mb-1">
                       {formatCurrency(totalTarget)}
                     </div>
-                    <div className="text-[11px] text-white/80">
+                    <div className="text-[11px] sm:text-xs text-white/80">
                       Target tahun {tahun}
                     </div>
                   </div>
@@ -114,7 +114,7 @@ export default function PajakStatistikContent(props: Props) {
                     style={getGradientStyleByKey("pajak-realisasi")}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white/90">
+                      <span className="text-xs sm:text-sm font-bold text-white/90">
                         Total Realisasi
                       </span>
                       <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
@@ -125,23 +125,23 @@ export default function PajakStatistikContent(props: Props) {
                         )}
                       </div>
                     </div>
-                    <div className="text-md font-bold text-white mb-1">
+                    <div className="text-md sm:text-lg font-bold text-white mb-1">
                       {formatCurrency(totalRealisasi)}
                     </div>
-                    <div className="text-[11px] text-white/80">
+                    <div className="text-[11px] sm:text-xs text-white/80">
                       Realisasi tahun {tahun}
                     </div>
                   </div>
                 </div>
 
-                <div className="relative bg-card rounded-lg shadow-lg lg:col-span-3 p-3 border">
+                <div className="order-2 relative bg-card rounded-lg shadow-lg md:col-span-4 lg:col-span-4 xl:col-span-4 p-3 border overflow-hidden">
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
 
-                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                  <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
                     Distribusi Target
                   </h3>
                   {Array.isArray(pieData) && pieData.length > 0 && (
-                    <div className="h-[180px]">
+                    <div className="h-[200px] sm:h-[240px] md:h-[300px] xl:h-[360px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
@@ -150,7 +150,7 @@ export default function PajakStatistikContent(props: Props) {
                             nameKey="Jenis"
                             cx="50%"
                             cy="50%"
-                            outerRadius={70}
+                            outerRadius={90}
                           >
                             {pieData.map((_, i) => {
                               const palette = ["#3b82f6", "#f59e0b"];
@@ -211,14 +211,14 @@ export default function PajakStatistikContent(props: Props) {
                   )}
                 </div>
 
-                <div className="relative bg-card rounded-lg shadow-lg p-3 border lg:col-span-3">
+                <div className="order-3 relative bg-card rounded-lg shadow-lg p-3 border md:col-span-4 lg:col-span-5 xl:col-span-4 overflow-hidden">
                   <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
 
-                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                  <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
                     Perbandingan Target vs Realisasi per Triwulan
                   </h3>
                   {Array.isArray(triwulanData) && triwulanData.length > 0 && (
-                    <div className="h-[220px]">
+                    <div className="h-[260px] sm:h-[320px] md:h-[380px] xl:h-[420px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={triwulanData}>
                           <CartesianGrid

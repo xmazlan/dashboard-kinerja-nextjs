@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,12 @@ import CardComponent from "@/components/card/card-component";
 
 import SectionCapilIkd from "../data/capil/data-capil-ikd";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-export default function SectionCapilDataSlide() {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+export default function SectionCapilDataSlide({
+  onDone,
+  fullSize,
+  active,
+}: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -25,63 +31,81 @@ export default function SectionCapilDataSlide() {
 
   // Autoplay setiap 4 detik, berhenti saat hover/touch (CHART)
   React.useEffect(() => {
-    if (!chartApi) return;
+    if (!chartApi || !active) return;
     const id = setInterval(() => {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
     }, SPEED_LIDER);
     return () => clearInterval(id);
-  }, [chartApi]);
+  }, [chartApi, active]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
 
+  const prevRef = React.useRef(0);
   React.useEffect(() => {
     if (!chartApi) return;
-    setChartScrollSnaps(chartApi.scrollSnapList());
-    const onSelect = () => setChartSelectedIndex(chartApi.selectedScrollSnap());
+    const snaps = chartApi.scrollSnapList();
+    setChartScrollSnaps(snaps);
+    const last = Math.max(0, snaps.length - 1);
+    const onSelect = () => {
+      const cur = chartApi.selectedScrollSnap();
+      setChartSelectedIndex(cur);
+      if (active && snaps.length > 1 && prevRef.current === last && cur === 0) {
+        onDone?.();
+      }
+      prevRef.current = cur;
+    };
     chartApi.on("select", onSelect);
     onSelect();
     return () => {
       chartApi.off("select", onSelect);
     };
-  }, [chartApi]);
+  }, [chartApi, active, onDone]);
+  React.useEffect(() => {
+    if (!chartApi) return;
+    const snaps = chartApi.scrollSnapList();
+    if (active && snaps.length <= 1) {
+      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      return () => clearTimeout(id);
+    }
+  }, [chartApi, active, onDone]);
 
   return (
     <>
-      <CardComponent className="p-2  shadow-lg">
-        <Carousel
-          className="w-full"
-          opts={{ loop: true, align: "start" }}
-          setApi={setChartApi}
-          onMouseEnter={() => setChartPaused(true)}
-          onMouseLeave={() => setChartPaused(false)}
-          onTouchStart={() => setChartPaused(true)}
-          onTouchEnd={() => setChartPaused(false)}
-        >
-          <CarouselContent>
-            <CarouselItem>
-              <SectionCapilIkd />
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
-
-        {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2 mb-3">
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-2 w-2 rounded-full transition-colors",
-                idx === chartSelectedIndex
-                  ? "bg-primary"
-                  : "bg-muted-foreground/30"
-              )}
-            />
-          ))}
+      <CardComponent className="p-0 shadow-lg w-full h-full">
+        <div className="flex h-full flex-col">
+          <Carousel
+            className="w-full flex-1 min-h-0"
+            opts={{ loop: true, align: "start" }}
+            setApi={setChartApi}
+            onMouseEnter={() => active && setChartPaused(true)}
+            onMouseLeave={() => active && setChartPaused(false)}
+            onTouchStart={() => active && setChartPaused(true)}
+            onTouchEnd={() => active && setChartPaused(false)}
+          >
+            <CarouselContent className="h-full">
+              <CarouselItem>
+                <SectionCapilIkd />
+              </CarouselItem>
+            </CarouselContent>
+          </Carousel>
+          <div className="mt-3 flex justify-center gap-2 mb-3">
+            {chartScrollSnaps.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Ke slide ${idx + 1}`}
+                onClick={() => chartApi?.scrollTo(idx)}
+                className={cn(
+                  "h-2 w-2 rounded-full transition-colors",
+                  idx === chartSelectedIndex
+                    ? "bg-primary"
+                    : "bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
         </div>
       </CardComponent>
     </>

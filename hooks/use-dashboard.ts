@@ -23,11 +23,11 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   topGap:
     (typeof window !== "undefined" &&
       Number(window.localStorage.getItem("dashboardTopGap"))) ||
-    16,
+    0,
   bottomGap:
     (typeof window !== "undefined" &&
       Number(window.localStorage.getItem("dashboardBottomGap"))) ||
-    16,
+    0,
   speed:
     (typeof window !== "undefined" &&
       Number(window.localStorage.getItem("dashboardSpeed"))) ||

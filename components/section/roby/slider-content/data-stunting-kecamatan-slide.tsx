@@ -176,8 +176,8 @@ export default function DataStuntingKecamatanSlide() {
         ) : (
           (() => {
             const pages = Array.from(
-              { length: Math.ceil(itemsFiltered.length / 3) },
-              (_, i) => itemsFiltered.slice(i * 3, i * 3 + 3)
+              { length: Math.ceil(itemsFiltered.length / 5) },
+              (_, i) => itemsFiltered.slice(i * 5, i * 5 + 5)
             );
             return (
               <div className="h-full flex flex-col space-y-3">
@@ -196,7 +196,7 @@ export default function DataStuntingKecamatanSlide() {
                     </CarouselItem>
                     {pages.map((group, pidx) => (
                       <CarouselItem key={`page-${pidx}`}>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
                           {group.map((it, idx) => (
                             <div
                               key={`${it.nama}-${idx}`}

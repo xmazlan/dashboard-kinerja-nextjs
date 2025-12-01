@@ -33,7 +33,7 @@ export default function Layout({
           style={{ top: topOffset, bottom: bottomOffset }}
         >
           <div className="relative w-full h-full overflow-auto">
-            <div className="w-full h-full space-y-4 py-3">
+            <div className="w-full h-full space-y-4 py-4">
               {sectionOne}
               {sectionTwo}
               {sectionTree}
