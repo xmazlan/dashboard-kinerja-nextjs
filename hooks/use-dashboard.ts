@@ -9,10 +9,12 @@ type DashboardState = {
   topGap: number;
   bottomGap: number;
   speed: number;
+  childSpeed: number;
   setViewMode: (m: ViewMode) => void;
   setTopGap: (n: number) => void;
   setBottomGap: (n: number) => void;
   setSpeed: (n: number) => void;
+  setChildSpeed: (n: number) => void;
 };
 
 export const useDashboardStore = create<DashboardState>((set) => ({
@@ -33,6 +35,11 @@ export const useDashboardStore = create<DashboardState>((set) => ({
       Number(window.localStorage.getItem("dashboardSpeed"))) ||
     Number(process.env.NEXT_PUBLIC_SPEED_LIDER) ||
     4000,
+  childSpeed:
+    (typeof window !== "undefined" &&
+      Number(window.localStorage.getItem("dashboardChildSpeed"))) ||
+    Number(process.env.NEXT_PUBLIC_SPEED_CHILD) ||
+    4000,
   setViewMode: (m) => {
     set({ viewMode: m });
     if (typeof window !== "undefined")
@@ -52,5 +59,10 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     set({ speed: n });
     if (typeof window !== "undefined")
       window.localStorage.setItem("dashboardSpeed", String(n));
+  },
+  setChildSpeed: (n) => {
+    set({ childSpeed: n });
+    if (typeof window !== "undefined")
+      window.localStorage.setItem("dashboardChildSpeed", String(n));
   },
 }));

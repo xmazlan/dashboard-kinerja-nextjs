@@ -84,7 +84,7 @@ export default function SectionCapilIkd() {
                           </h3>
                         </div>
                         <div className="flex-1 min-h-0 overflow-y-auto">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {layanan.map((it, idx) => (
                               <div
                                 key={idx}
@@ -121,7 +121,7 @@ export default function SectionCapilIkd() {
                           </h4>
                         </div>
                         <div className="flex-1 min-h-0">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-1">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {blanko.map((it, idx) => (
                               <div
                                 key={idx}

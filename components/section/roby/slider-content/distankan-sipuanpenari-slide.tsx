@@ -6,6 +6,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
+import { useDashboardStore } from "@/hooks/use-dashboard";
 
 import { toast } from "sonner";
 import {
@@ -45,21 +46,23 @@ export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
   }, [chartPaused]);
 
-  // Autoplay setiap 4 detik, berhenti saat hover/touch (CHART)
+  // Autoplay sesuai pengaturan, berhenti saat hover/touch (CHART)
   React.useEffect(() => {
     if (!chartApi || !active) return;
     const id = setInterval(() => {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
-    }, SPEED_LIDER);
+    }, speed);
     return () => clearInterval(id);
-  }, [chartApi, active]);
+  }, [chartApi, active, speed]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
@@ -88,10 +91,10 @@ export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
     if (!chartApi) return;
     const snaps = chartApi.scrollSnapList();
     if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      const id = setTimeout(() => onDone?.(), speed);
       return () => clearTimeout(id);
     }
-  }, [chartApi, active, onDone]);
+  }, [chartApi, active, onDone, speed]);
 
   // State & kontrol untuk Carousel NON-CHART (Contoh Carousel)
   const [contentApi, setContentApi] = React.useState<CarouselApi | null>(null);
@@ -102,16 +105,16 @@ export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
     contentPausedRef.current = contentPaused;
   }, [contentPaused]);
 
-  // Autoplay setiap 4 detik, berhenti saat hover/touch (NON-CHART)
+  // Autoplay konten tambahan, berhenti saat hover/touch (NON-CHART)
   React.useEffect(() => {
     if (!contentApi) return;
     const id = setInterval(() => {
       if (!contentPausedRef.current) {
         contentApi.scrollNext();
       }
-    }, 4000);
+    }, childSpeed);
     return () => clearInterval(id);
-  }, [contentApi]);
+  }, [contentApi, childSpeed]);
 
   // Year state
   const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -400,12 +403,14 @@ export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
                 aria-label={`Ke slide ${idx + 1}`}
                 onClick={() => chartApi?.scrollTo(idx)}
                 className={cn(
-                  "h-2 w-2 rounded-full transition-colors",
+                  "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                   idx === chartSelectedIndex
-                    ? "bg-primary"
-                    : "bg-muted-foreground/30"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-transparent text-foreground/70 border-border hover:text-foreground"
                 )}
-              />
+              >
+                {idx + 1}
+              </button>
             ))}
           </div>
         </div>

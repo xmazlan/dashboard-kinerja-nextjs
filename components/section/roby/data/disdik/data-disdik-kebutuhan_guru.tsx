@@ -89,9 +89,6 @@ export default function DataDisdikKebutuhanGuru() {
                     ratioMobile={0.38}
                   >
                     <div className="flex h-full flex-col">
-                      <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                        Kebutuhan Guru
-                      </h3>
                       <div className="flex-1 min-h-0 overflow-hidden">
                         {(() => {
                           const maxVal = Math.max(

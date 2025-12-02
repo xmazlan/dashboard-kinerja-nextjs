@@ -145,8 +145,8 @@ export default function DataBpkadRfk() {
             );
 
             return (
-              <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
-                <div className="grid grid-cols-1 lg:col-span-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 lg:col-span-2 gap-4">
                   <div
                     className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
@@ -206,9 +206,6 @@ export default function DataBpkadRfk() {
                   ratioMobile={0.38}
                 >
                   <div className="flex h-full flex-col">
-                    <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                      Proporsi Keuangan vs Fisik
-                    </h3>
                     {pieData.length > 0 && (
                       <div className="flex-1 min-h-0 h-[clamp(240px,42vh,480px)]">
                         <BarChart

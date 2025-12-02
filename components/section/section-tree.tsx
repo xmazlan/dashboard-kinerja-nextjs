@@ -7,6 +7,7 @@ import SectionContainer from "./section-container";
 import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
 import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
+import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
 
 export default function SectionTree() {
   return (
@@ -16,7 +17,8 @@ export default function SectionTree() {
           <KominfoEresponSlide />
         </div>
         <div className="col-span-full ">
-          <DataTpidPasarSlide />
+          {/* <DataTpidPasarSlide /> */}
+          <SectionTpidKomoditiSlide />
         </div>
         <div className="col-span-full ">
           <SipuanPenariSlide />

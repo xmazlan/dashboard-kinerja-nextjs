@@ -6,12 +6,12 @@ import { barChartOptions } from "@/lib/apex-chart-options";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
-import SkeletonList from "@/components/skeleton/SkeletonList";
 import BarChart from "@/components/apexchart/bar-chart";
 import TableMonthly from "./table-monthly";
 import TableDistrictly from "./table-districtly";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import LoadingContent from "../roby/data/loading-content";
 
 interface Props {
   year: number | string;
@@ -156,7 +156,7 @@ export default function ChartPertanianOrnamental({ year, chartData }: Props) {
           />
         </div>
       ) : (
-        <SkeletonList />
+        <LoadingContent />
       )}
     </CardComponent>
   );

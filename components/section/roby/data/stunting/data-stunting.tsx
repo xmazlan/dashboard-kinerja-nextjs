@@ -12,6 +12,7 @@ import DataStuntingKecamatan from "./data-stunting-kecamatan";
 import DataStuntingKelurahan from "./data-stunting-kelurahan";
 import DataStuntingPuskesmas from "./data-stunting-puskesmas";
 import DataStuntingPosyandu from "./data-stunting-posyandu";
+import LoadingContent from "../loading-content";
 
 export default function DataStuntingData() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -118,7 +119,7 @@ export default function DataStuntingData() {
         }
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (

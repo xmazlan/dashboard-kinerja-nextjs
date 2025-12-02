@@ -30,7 +30,9 @@ import {
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useDashboardStore } from "@/hooks/use-dashboard";
 import KecamatanGroupGrid from "../data/stunting/kecamatan-group-grid";
+import LoadingContent from "../data/loading-content";
 
 export default function DataStuntingKecamatanSlide() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -42,15 +44,16 @@ export default function DataStuntingKecamatanSlide() {
   React.useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+  const speed = useDashboardStore((s) => s.speed);
   React.useEffect(() => {
     if (!api) return;
     const id = setInterval(() => {
       if (!pausedRef.current) {
         api.scrollNext();
       }
-    }, 4000);
+    }, speed);
     return () => clearInterval(id);
-  }, [api]);
+  }, [api, speed]);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   React.useEffect(() => {
@@ -173,7 +176,7 @@ export default function DataStuntingKecamatanSlide() {
         }
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             const pages = Array.from(
@@ -201,6 +204,8 @@ export default function DataStuntingKecamatanSlide() {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
+                  {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
+                  <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
                 </Carousel>
                 <div className="mt-3 flex justify-center gap-2">
                   {scrollSnaps.map((_, idx) => (
@@ -209,12 +214,14 @@ export default function DataStuntingKecamatanSlide() {
                       aria-label={`Ke slide ${idx + 1}`}
                       onClick={() => api?.scrollTo(idx)}
                       className={cn(
-                        "h-2 w-2 rounded-full transition-colors",
+                        "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                         idx === selectedIndex
-                          ? "bg-primary"
-                          : "bg-muted-foreground/30"
+                          ? "bg-primary text-white border-primary"
+                          : "bg-transparent text-foreground/70 border-border hover:text-foreground"
                       )}
-                    />
+                    >
+                      {idx + 1}
+                    </button>
                   ))}
                 </div>
               </div>

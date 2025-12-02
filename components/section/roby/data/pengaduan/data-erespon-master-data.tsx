@@ -25,6 +25,25 @@ import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespo
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 
+const DashboardTile = ({ label, value, Icon, pattern }: any) => (
+  <div
+    className={`${pattern} rounded-md p-3 sm:p-4 text-white shadow-sm ring-1 ring-white/10 transition`}
+  >
+    <div className="flex items-center justify-between gap-2 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-white/20 dark:bg-white/10 flex items-center justify-center shrink-0">
+          <Icon className="w-5 h-5" />
+        </div>
+        <div className="text-[12px] sm:text-sm font-semibold uppercase opacity-90 truncate">
+          {label}
+        </div>
+      </div>
+      <div className="text-xl sm:text-2xl font-bold tabular-nums text-right">
+        {Number(value).toLocaleString("id-ID")}
+      </div>
+    </div>
+  </div>
+);
 export default function DataEresponMasterData() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     usePengaduanEresponMasterData();
@@ -38,7 +57,7 @@ export default function DataEresponMasterData() {
           <>
             Last update: {masterData?.last_get ?? ""}
             <br />
-            <span className="italic text-xs">(Sumber : E-Respone)</span>
+            <span className="italic text-xs">(Sumber : E-Respon)</span>
           </>
         }
         action={
@@ -140,71 +159,56 @@ export default function DataEresponMasterData() {
             ];
 
             return (
-              <div className="h-full flex flex-col space-y-3">
-                {/* Baris ringkas (4 tile) */}
+              <div className="h-full w-full">
                 <LayoutCard
                   className="bg-transparent p-0"
-                  ratioDesktop={0.5}
-                  ratioMobile={0.38}
+                  ratioDesktop={0.42}
+                  ratioMobile={0.32}
                 >
-                  <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    {summaryTiles.map((t, idx) => (
-                      <div
-                        key={idx}
-                        className={cn(
-                          "rounded-md p-4 text-white flex items-center justify-between h-full shadow-sm ring-1 ring-white/10 transition hover:shadow-md hover:brightness-105",
-                          Number(t.value || 0) > 0
-                            ? getPatternByKey(t.label)
-                            : NEUTRAL_PATTERN
-                        )}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
-                            <t.Icon className="w-5 h-5" />
-                          </div>
-                          <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
-                            {t.label}
-                          </div>
-                        </div>
-                        <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
-                          {t.value.toLocaleString("id-ID")}
+                  <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {/* Kiri: Master */}
+                    <div className="flex min-h-0 flex-col">
+                      <div className="p-3 sm:p-4">
+                        <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-3">
+                          Ringkasan Pengajuan
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-3">
+                          {summaryTiles.map((tile, idx) => (
+                            <DashboardTile
+                              key={idx}
+                              {...tile}
+                              pattern={
+                                Number(tile.value || 0) > 0
+                                  ? getPatternByKey(tile.label)
+                                  : NEUTRAL_PATTERN
+                              }
+                            />
+                          ))}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </LayoutCard>
+                    </div>
 
-                <LayoutCard
-                  className="bg-transparent p-0"
-                  ratioDesktop={0.5}
-                  ratioMobile={0.38}
-                >
-                  <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
-                    {statusTiles.map((c, idx) => (
-                      <div
-                        key={idx}
-                        className={cn(
-                          "rounded-md p-4 text-white h-full shadow-sm ring-1 ring-white/10 transition hover:shadow-md hover:brightness-105",
-                          Number(c.value || 0) > 0
-                            ? getPatternByKey(c.label)
-                            : NEUTRAL_PATTERN
-                        )}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
-                              <c.Icon className="w-5 h-5" />
-                            </div>
-                            <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
-                              {c.label}
-                            </div>
-                          </div>
-                          <div className="text-xl md:text-2xl font-bold tabular-nums text-right">
-                            {c.value.toLocaleString("id-ID")}
-                          </div>
+                    {/* Kanan: Aduan */}
+                    <div className="flex min-h-0 flex-col">
+                      <div className="p-3 sm:p-4">
+                        <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-3">
+                          Status Detail
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                          {statusTiles.map((tile, idx) => (
+                            <DashboardTile
+                              key={idx}
+                              {...tile}
+                              pattern={
+                                Number(tile.value || 0) > 0
+                                  ? getPatternByKey(tile.label)
+                                  : NEUTRAL_PATTERN
+                              }
+                            />
+                          ))}
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </LayoutCard>
               </div>

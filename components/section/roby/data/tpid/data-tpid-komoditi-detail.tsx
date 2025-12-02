@@ -7,6 +7,7 @@ import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
 import { useTpidKomoditiData } from "@/hooks/query/use-tpid";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import OptimizeImage from "@/components/optimize-image";
+import LoadingContent from "../loading-content";
 
 export default function DataTpidKomoditiDetail() {
   const { data: masterData, isLoading: isLoadingMasterData } =
@@ -32,7 +33,7 @@ export default function DataTpidKomoditiDetail() {
         }
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             const items: Array<any> = (masterData?.data ?? []) as any[];

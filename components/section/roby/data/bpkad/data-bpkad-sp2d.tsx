@@ -148,15 +148,16 @@ export default function DataBpkadSp2d() {
                 legend: { show: true },
                 tooltip: {
                   y: {
-                    formatter: (val: number) => `${formatCurrency(Number(val))}`,
+                    formatter: (val: number) =>
+                      `${formatCurrency(Number(val))}`,
                   },
                 },
               }
             );
 
             return (
-              <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
-                <div className="grid grid-cols-1 lg:col-span-2 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 lg:col-span-2 gap-4">
                   <div
                     className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
@@ -208,12 +209,14 @@ export default function DataBpkadSp2d() {
                   ratioMobile={0.38}
                 >
                   <div className="flex h-full flex-col">
-                    <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                      Proporsi Realisasi vs Pagu
-                    </h3>
                     {pieData.length > 0 && (
                       <div className="flex-1 min-h-0 h-[clamp(240px,42vh,480px)]">
-                        <BarChart options={pieOptions} series={pieSeries} type="pie" height="100%" />
+                        <BarChart
+                          options={pieOptions}
+                          series={pieSeries}
+                          type="pie"
+                          height="100%"
+                        />
                       </div>
                     )}
                     {pieData.length > 0 && (
