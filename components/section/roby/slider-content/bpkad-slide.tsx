@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
+import { useDashboardStore } from "@/hooks/use-dashboard";
 
 import DataBpkadSp2d from "../data/bpkad/data-bpkad-sp2d";
 import DataBpkadRfk from "../data/bpkad/data-bpkad-rfk";
-const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
 export default function SectionBpkadDataSlide({
   onDone,
@@ -25,21 +25,22 @@ export default function SectionBpkadDataSlide({
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const speed = useDashboardStore((s) => s.speed);
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
   }, [chartPaused]);
 
-  // Autoplay setiap 4 detik, berhenti saat hover/touch (CHART)
+  // Autoplay sesuai pengaturan, berhenti saat hover/touch (CHART)
   React.useEffect(() => {
     if (!chartApi || !active) return;
     const id = setInterval(() => {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
-    }, SPEED_LIDER);
+    }, speed);
     return () => clearInterval(id);
-  }, [chartApi, active]);
+  }, [chartApi, active, speed]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
@@ -68,10 +69,10 @@ export default function SectionBpkadDataSlide({
     if (!chartApi) return;
     const snaps = chartApi.scrollSnapList();
     if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      const id = setTimeout(() => onDone?.(), speed);
       return () => clearTimeout(id);
     }
-  }, [chartApi, active, onDone]);
+  }, [chartApi, active, onDone, speed]);
 
   return (
     <>
@@ -94,6 +95,8 @@ export default function SectionBpkadDataSlide({
                 <DataBpkadRfk />
               </CarouselItem>
             </CarouselContent>
+            {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
+            <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
           </Carousel>
           <div className="mt-3 flex justify-center gap-2 mb-3">
             {chartScrollSnaps.map((_, idx) => (
@@ -102,12 +105,14 @@ export default function SectionBpkadDataSlide({
                 aria-label={`Ke slide ${idx + 1}`}
                 onClick={() => chartApi?.scrollTo(idx)}
                 className={cn(
-                  "h-2 w-2 rounded-full transition-colors",
+                  "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                   idx === chartSelectedIndex
-                    ? "bg-primary"
-                    : "bg-muted-foreground/30"
+                    ? "bg-primary text-white border-primary"
+                    : "bg-transparent text-foreground/70 border-border hover:text-foreground"
                 )}
-              />
+              >
+                {idx + 1}
+              </button>
             ))}
           </div>
         </div>

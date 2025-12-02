@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/input-group";
 import { Search } from "lucide-react";
 import OptimizeImage from "@/components/optimize-image";
+import LoadingContent from "../loading-content";
 
 export default function DataTpidPasar() {
   const { data: masterData, isLoading: isLoadingMasterData } =
@@ -72,7 +73,7 @@ export default function DataTpidPasar() {
         })()}
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={1} cols={5} />
+          <LoadingContent />
         ) : (
           (() => {
             interface TpidCommodity {

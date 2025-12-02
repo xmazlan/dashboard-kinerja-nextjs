@@ -5,6 +5,7 @@ import LoadingSkeleton from "@/components/loading-skeleton";
 import { useStuntingSweeperPuskesmasData } from "@/hooks/query/use-stuntingsweeper";
 import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
+import LoadingContent from "../loading-content";
 
 export default function DataStuntingPuskesmas() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -51,7 +52,7 @@ export default function DataStuntingPuskesmas() {
         }
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (

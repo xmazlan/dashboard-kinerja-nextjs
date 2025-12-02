@@ -111,16 +111,13 @@ export default function DataOrtalRb() {
               <CardComponent className="shadow-none border-none">
                 <div className="max-h-full space-y-3">
                   <div className="w-full">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <LayoutCard
                         className="relative bg-card rounded-lg shadow-lg p-3 border"
                         ratioDesktop={0.5}
                         ratioMobile={0.38}
                       >
                         <div className="flex h-full flex-col">
-                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                            RB
-                          </h3>
                           <div className="flex-1 min-h-0 overflow-hidden">
                             <BarChart
                               options={options}

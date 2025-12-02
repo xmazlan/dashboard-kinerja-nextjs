@@ -6,7 +6,7 @@ import { barChartOptions } from "@/lib/apex-chart-options";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
-import SkeletonList from "@/components/skeleton/SkeletonList";
+import LoadingContent from "../roby/data/loading-content";
 import BarChart from "@/components/apexchart/bar-chart";
 import TableVaccination from "./table-vaccination";
 import { ModalDetail } from "@/components/modal/detail-modal";
@@ -125,7 +125,7 @@ export default function ChartPeternakanVaccination({ year, chartData }: Props) {
           />
         </div>
       ) : (
-        <SkeletonList />
+        <LoadingContent />
       )}
     </CardComponent>
   );

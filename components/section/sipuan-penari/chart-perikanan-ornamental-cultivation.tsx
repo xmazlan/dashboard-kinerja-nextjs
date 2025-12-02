@@ -6,7 +6,7 @@ import { barChartOptions } from "@/lib/apex-chart-options";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
-import SkeletonList from "@/components/skeleton/SkeletonList";
+import LoadingContent from "../roby/data/loading-content";
 import BarChart from "@/components/apexchart/bar-chart";
 import TableMonthly from "./table-monthly";
 import TableDistrictly from "./table-districtly";
@@ -148,7 +148,7 @@ export default function ChartPerikananOrnamentalCultivation({
           />
         </div>
       ) : (
-        <SkeletonList />
+        <LoadingContent />
       )}
     </CardComponent>
   );

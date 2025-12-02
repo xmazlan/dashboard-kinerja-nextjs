@@ -28,25 +28,24 @@ export default function KecamatanGroupGrid({
 }) {
   return (
     <LayoutCard
-      ratioDesktop={0.5}
-      ratioMobile={0.38}
+      ratioDesktop={0.68}
+      ratioMobile={0.54}
       className="bg-transparent p-0"
     >
       <div className="flex h-full flex-col">
-        <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+        <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5  space-y-4 gap-4">
           {group.map((it, idx) => (
             <div
               key={`${it.nama}-${idx}`}
               className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-2 flex flex-col gap-2 h-full"
             >
-              <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
               <div className="flex items-center justify-between">
                 <div className="text-xs font-semibold">{it.nama}</div>
                 <div className="text-xs font-bold tabular-nums">
                   {toNum(it.totalBalita).toLocaleString("id-ID")}
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 gap-4">
                 {[
                   { label: "Gizi Buruk", value: toNum(it.gizi_buruk) },
                   { label: "Gizi Kurang", value: toNum(it.gizi_kurang) },
@@ -59,17 +58,17 @@ export default function KecamatanGroupGrid({
                   <div
                     key={e.label}
                     className={cn(
-                      "rounded-lg p-2 border flex items-center justify-between text-white",
+                      "rounded-lg p-3 border flex items-center justify-between text-white",
                       getPatternByKey(e.label)
                     )}
                   >
                     <div
-                      className="text-[12px] font-medium truncate"
+                      className="text-xs font-semibold truncate"
                       title={e.label}
                     >
                       {e.label}
                     </div>
-                    <div className="text-[12px] font-mono font-semibold tabular-nums">
+                    <div className="text-xs font-mono font-semibold tabular-nums">
                       {e.value.toLocaleString("id-ID")}
                     </div>
                   </div>

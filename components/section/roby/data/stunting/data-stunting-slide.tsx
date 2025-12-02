@@ -1,17 +1,8 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
-import LoadingSkeleton from "@/components/loading-skeleton";
 import { useStuntingSweeperData } from "@/hooks/query/use-stuntingsweeper";
 import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
-import { ModalDetail } from "@/components/modal/detail-modal";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import DataStuntingBulan from "./data-stunting-bulan";
-import DataStuntingKecamatan from "./data-stunting-kecamatan";
-import DataStuntingKelurahan from "./data-stunting-kelurahan";
-import DataStuntingPuskesmas from "./data-stunting-puskesmas";
-import DataStuntingPosyandu from "./data-stunting-posyandu";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 
@@ -81,7 +72,7 @@ export default function DataStuntingSlide() {
           (() => {
             return (
               <div className="h-full flex flex-col space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 h-full flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 h-full flex-1">
                   <div
                     className={cn(
                       "rounded-lg p-4 text-white h-full shadow-sm ring-1 ring-white/10 transition hover:shadow-md hover:brightness-105",
@@ -203,7 +194,7 @@ export default function DataStuntingSlide() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 h-full flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-full flex-1">
                   {[
                     {
                       key: "BBU",
@@ -234,9 +225,6 @@ export default function DataStuntingSlide() {
                       ratioMobile={0.38}
                     >
                       <div className="flex h-full flex-col">
-                        <ShineBorder
-                          shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                        />
                         <div className="flex items-center justify-between">
                           <div className="text-xs font-semibold">
                             {section.key}{" "}
@@ -248,7 +236,7 @@ export default function DataStuntingSlide() {
                             {section.sum.toLocaleString("id-ID")}
                           </div>
                         </div>
-                        <div className="flex-1 min-h-0 grid grid-cols-2 gap-2">
+                        <div className="flex-1 min-h-0 grid grid-cols-2 gap-4">
                           {section.entries.map((e) => (
                             <div
                               key={e.label}
@@ -258,12 +246,12 @@ export default function DataStuntingSlide() {
                               )}
                             >
                               <div
-                                className="text-[12px] font-medium truncate"
+                                className="text-xs font-semibold truncate"
                                 title={e.label}
                               >
                                 {e.label}
                               </div>
-                              <div className="text-[12px] font-mono font-semibold tabular-nums">
+                              <div className="text-xs font-mono font-semibold tabular-nums">
                                 {e.value.toLocaleString("id-ID")}
                               </div>
                             </div>

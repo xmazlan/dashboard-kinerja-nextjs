@@ -6,7 +6,7 @@ import { barChartOptions } from "@/lib/apex-chart-options";
 import type { ResponseDataStatistic } from "@/types/sipuan-penari";
 // Components
 import CardComponent from "@/components/card/card-component";
-import SkeletonList from "@/components/skeleton/SkeletonList";
+import LoadingContent from "../roby/data/loading-content";
 import BarChart from "@/components/apexchart/bar-chart";
 import TableMonthly from "./table-monthly";
 import TableDistrictly from "./table-districtly";
@@ -141,10 +141,15 @@ export default function ChartPerikananUPIFisheryProduct({
     >
       {chartData.isLoaded ? (
         <div className="flex-1 min-h-0 h-[clamp(260px,40vh,520px)] sm:h-[clamp(300px,45vh,560px)] md:h-[clamp(340px,50vh,600px)]">
-          <BarChart options={options} series={series} type="bar" height="100%" />
+          <BarChart
+            options={options}
+            series={series}
+            type="bar"
+            height="100%"
+          />
         </div>
       ) : (
-        <SkeletonList />
+        <LoadingContent />
       )}
     </CardComponent>
   );

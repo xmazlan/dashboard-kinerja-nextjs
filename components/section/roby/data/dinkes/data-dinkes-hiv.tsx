@@ -48,7 +48,9 @@ export default function DataDinkesHiv() {
         categories,
         labels: { rotate: -30, style: { fontSize: "11px" } },
       },
-      yaxis: { max: maxVal + 5 },
+      yaxis: { min: 0, max: Math.max(0, maxVal + 5) },
+      dataLabels: { enabled: true },
+      markers: { size: 3 },
       chart: { toolbar: { show: false } },
       tooltip: {
         y: {
@@ -102,48 +104,42 @@ export default function DataDinkesHiv() {
           (() => {
             return (
               <CardComponent className="shadow-none border-none">
-                <div className="max-h-full space-y-3">
+                <div className="max-h-full space-y-4">
                   <div className="w-full">
                     <div className="grid grid-cols-1 gap-2 md:gap-3">
-                      <div className="relative bg-card rounded-lg shadow-lg p-3 border">
-                        <div className="flex h-full flex-col">
-                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                            Detail Pasien HIV
-                          </h3>
-                          <div className="flex-1 min-h-0 overflow-auto">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                              {points.map((p, idx) => (
-                                <div
-                                  key={idx}
-                                  className="rounded-md border bg-card p-2 flex flex-col gap-1"
-                                >
-                                  <div className="text-xs font-semibold line-clamp-1">
-                                    {p.label}
-                                  </div>
-                                  <div className="text-lg font-bold tabular-nums">
-                                    {p.value.toLocaleString("id-ID", {
-                                      minimumFractionDigits: 0,
-                                      maximumFractionDigits: 0,
-                                    })}
-                                  </div>
-                                  <div className="text-[10px] opacity-70">
-                                    Tahun: {p.year || "-"}
-                                  </div>
-                                </div>
-                              ))}
-                              <div className="rounded-md border bg-card p-2 flex flex-col gap-1 ">
-                                <div className="text-xs font-semibold">
-                                  Total Pasien
+                      <div className="flex h-full flex-col">
+                        <div className="flex-1 min-h-0 overflow-auto">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {points.map((p, idx) => (
+                              <div
+                                key={idx}
+                                className="rounded-md border bg-card p-2 flex flex-col gap-1"
+                              >
+                                <div className="text-xs font-semibold line-clamp-1">
+                                  {p.label}
                                 </div>
                                 <div className="text-lg font-bold tabular-nums">
-                                  {points
-                                    .reduce(
-                                      (acc, it) =>
-                                        acc + (Number(it.value) || 0),
-                                      0
-                                    )
-                                    .toLocaleString("id-ID")}
+                                  {p.value.toLocaleString("id-ID", {
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  })}
                                 </div>
+                                <div className="text-[10px] opacity-70">
+                                  Tahun: {p.year || "-"}
+                                </div>
+                              </div>
+                            ))}
+                            <div className="rounded-md border bg-card p-2 flex flex-col gap-1 ">
+                              <div className="text-xs font-semibold">
+                                Total Pasien
+                              </div>
+                              <div className="text-lg font-bold tabular-nums">
+                                {points
+                                  .reduce(
+                                    (acc, it) => acc + (Number(it.value) || 0),
+                                    0
+                                  )
+                                  .toLocaleString("id-ID")}
                               </div>
                             </div>
                           </div>

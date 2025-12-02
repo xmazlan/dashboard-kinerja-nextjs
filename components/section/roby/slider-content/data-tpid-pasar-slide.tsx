@@ -37,7 +37,7 @@ import {
 import { Search } from "lucide-react";
 import LoadingContent from "../data/loading-content";
 import LayoutCard from "@/components/card/layout-card";
-const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
+import { useDashboardStore } from "@/hooks/use-dashboard";
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
 export default function DataTpidPasarSlide({
   onDone,
@@ -51,6 +51,7 @@ export default function DataTpidPasarSlide({
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
   const [expandedAll, setExpandedAll] = React.useState(false);
+  const speed = useDashboardStore((s) => s.speed);
 
   React.useEffect(() => {
     pausedRef.current = paused;
@@ -62,9 +63,9 @@ export default function DataTpidPasarSlide({
       if (!pausedRef.current) {
         api.scrollNext();
       }
-    }, SPEED_LIDER);
+    }, speed);
     return () => clearInterval(id);
-  }, [api, active]);
+  }, [api, active, speed]);
 
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -93,10 +94,10 @@ export default function DataTpidPasarSlide({
     if (!api) return;
     const snaps = api.scrollSnapList();
     if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), SPEED_LIDER);
+      const id = setTimeout(() => onDone?.(), speed);
       return () => clearTimeout(id);
     }
-  }, [api, active, onDone]);
+  }, [api, active, onDone, speed]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -355,6 +356,8 @@ export default function DataTpidPasarSlide({
                       );
                     })}
                   </CarouselContent>
+                  {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
+                  <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
                 </Carousel>
                 <div className="mt-3 flex justify-center gap-2">
                   {scrollSnaps.map((_, idx) => (
@@ -363,12 +366,14 @@ export default function DataTpidPasarSlide({
                       aria-label={`Ke slide ${idx + 1}`}
                       onClick={() => api?.scrollTo(idx)}
                       className={cn(
-                        "h-2 w-2 rounded-full transition-colors",
+                        "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                         idx === selectedIndex
-                          ? "bg-primary"
-                          : "bg-muted-foreground/30"
+                          ? "bg-primary text-white border-primary"
+                          : "bg-transparent text-foreground/70 border-border hover:text-foreground"
                       )}
-                    />
+                    >
+                      {idx + 1}
+                    </button>
                   ))}
                 </div>
               </div>

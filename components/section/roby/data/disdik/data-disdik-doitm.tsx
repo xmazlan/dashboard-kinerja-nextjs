@@ -397,14 +397,10 @@ export default function DataDisdikDoItm() {
                     <div className="grid-cols-1">
                       <LayoutCard
                         className="relative bg-card rounded-lg shadow-lg p-3 border"
-                        ratioDesktop={0.5}
-                        ratioMobile={0.38}
+                        ratioDesktop={0.6}
+                        ratioMobile={0.4}
                       >
                         <div className="flex h-full flex-col">
-                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                            DO • Chart
-                          </h3>
-
                           <div
                             ref={doRef}
                             className="flex-1 min-h-0 overflow-hidden"
@@ -423,13 +419,10 @@ export default function DataDisdikDoItm() {
                     <div className="grid-cols-1">
                       <LayoutCard
                         className="relative bg-card rounded-lg shadow-lg p-3 border"
-                        ratioDesktop={0.5}
-                        ratioMobile={0.38}
+                        ratioDesktop={0.6}
+                        ratioMobile={0.4}
                       >
                         <div className="flex h-full flex-col">
-                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                            LTM • Chart
-                          </h3>
                           {ltmChartData.length > 0 && (
                             <div
                               ref={ltmRef}

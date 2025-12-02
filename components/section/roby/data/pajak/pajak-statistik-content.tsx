@@ -202,18 +202,15 @@ export default function PajakStatistikContent(props: Props) {
   return (
     <CardComponent className="shadow-none border-none">
       <div className="">
-        <div
-          ref={rootRef}
-          className="mx-auto w-full ps-4 pe-4 space-y-2 sm:space-y-3 py-4 h-full min-h-0 "
-        >
+        <div ref={rootRef} className="mx-auto w-full  h-full min-h-0 ">
           {isLoading ? (
             <>
               <LoadingContent />
             </>
           ) : (
             <>
-              <div className="space-y-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div
                     className="rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
@@ -265,9 +262,6 @@ export default function PajakStatistikContent(props: Props) {
                     ratioMobile={0.38}
                   >
                     <div className="flex h-full flex-col">
-                      <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
-                        Distribusi Target
-                      </h3>
                       {Array.isArray(pieData) && pieData.length > 0 && (
                         <div
                           ref={pieRef}
@@ -315,9 +309,6 @@ export default function PajakStatistikContent(props: Props) {
                     ratioMobile={0.38}
                   >
                     <div className="flex h-full flex-col">
-                      <h3 className="text-xs sm:text-sm font-semibold text-foreground mb-2 pb-1 border-b">
-                        Perbandingan Target vs Realisasi per Triwulan
-                      </h3>
                       {Array.isArray(triwulanData) &&
                         triwulanData.length > 0 && (
                           <div

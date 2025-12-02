@@ -39,9 +39,11 @@ export function Navbar() {
   const topGap = useDashboardStore((s) => s.topGap);
   const bottomGap = useDashboardStore((s) => s.bottomGap);
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
   const setTopGap = useDashboardStore((s) => s.setTopGap);
   const setBottomGap = useDashboardStore((s) => s.setBottomGap);
   const setSpeed = useDashboardStore((s) => s.setSpeed);
+  const setChildSpeed = useDashboardStore((s) => s.setChildSpeed);
   useEffect(() => {
     const handleChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
@@ -243,6 +245,20 @@ export function Navbar() {
                       {speed} ms
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium">
+                      Kecepatan Slide Anak (ms)
+                    </div>
+                    <Slider
+                      value={[childSpeed]}
+                      min={1000}
+                      max={10000}
+                      onValueChange={(v) => setChildSpeed(v[0] ?? childSpeed)}
+                    />
+                    <div className="text-xs text-muted-foreground">
+                      {childSpeed} ms
+                    </div>
+                  </div>
                 </div>
                 <SheetFooter>
                   <Button
@@ -253,6 +269,9 @@ export function Navbar() {
                       setBottomGap(16);
                       setSpeed(
                         Number(process.env.NEXT_PUBLIC_SPEED_LIDER) || 4000
+                      );
+                      setChildSpeed(
+                        Number(process.env.NEXT_PUBLIC_SPEED_CHILD) || 4000
                       );
                     }}
                   >

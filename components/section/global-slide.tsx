@@ -17,6 +17,7 @@ import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
 import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 import SectionDinkesDataSlide from "./roby/slider-content/dinkes-slide";
 import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
+import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
 
 // Speed dikontrol oleh komponen slide masing-masing
 
@@ -174,7 +175,7 @@ export default function GlobSlider({
       <div
         className={
           (fullScreen ? "absolute left-0 right-0" : "relative w-full h-full") +
-          " px-4 md:px-6 py-3 md:py-4 "
+          " px-4 md:px-9 py-3 md:py-4 "
         }
         style={
           fullScreen
@@ -200,6 +201,11 @@ export default function GlobSlider({
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionPajakDataSlide
+                    key={
+                      mounted && selected === 0
+                        ? `active-0-${selected}`
+                        : `idle-0`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 0}
@@ -211,6 +217,11 @@ export default function GlobSlider({
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionBpkadDataSlide
+                    key={
+                      mounted && selected === 1
+                        ? `active-1-${selected}`
+                        : `idle-1`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 1}
@@ -222,6 +233,11 @@ export default function GlobSlider({
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionOrtalDataSlide
+                    key={
+                      mounted && selected === 2
+                        ? `active-2-${selected}`
+                        : `idle-2`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 2}
@@ -233,28 +249,11 @@ export default function GlobSlider({
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionDinkesDataSlide
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 2}
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DisdikSlide
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 2}
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DataTpidPasarSlide
+                    key={
+                      mounted && selected === 3
+                        ? `active-3-${selected}`
+                        : `idle-3`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 3}
@@ -265,7 +264,12 @@ export default function GlobSlider({
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionCapilDataSlide
+                  <DisdikSlide
+                    key={
+                      mounted && selected === 4
+                        ? `active-4-${selected}`
+                        : `idle-4`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 4}
@@ -275,8 +279,13 @@ export default function GlobSlider({
             </CarouselItem>
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
-                  <SipuanPenariSlide
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionTpidKomoditiSlide
+                    key={
+                      mounted && selected === 5
+                        ? `active-5-${selected}`
+                        : `idle-5`
+                    }
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 5}
@@ -284,9 +293,41 @@ export default function GlobSlider({
                 </div>
               </div>
             </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionCapilDataSlide
+                    key={
+                      mounted && selected === 6
+                        ? `active-6-${selected}`
+                        : `idle-6`
+                    }
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 6}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
+                  <SipuanPenariSlide
+                    key={
+                      mounted && selected === 7
+                        ? `active-7-${selected}`
+                        : `idle-7`
+                    }
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 7}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex left-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
-          <CarouselNext className="hidden md:flex right-3 top-1/2 -translate-y-1/2 z-30 bg-black/40 hover:bg-black/60 text-white" />
+          <CarouselPrevious className="fixed left-1 md:left-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
+          <CarouselNext className="fixed right-1 md:right-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
         </Carousel>
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {snaps.map((_, idx) => (

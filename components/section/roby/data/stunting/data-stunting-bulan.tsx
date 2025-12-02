@@ -5,6 +5,7 @@ import LoadingSkeleton from "@/components/loading-skeleton";
 import { useStuntingSweeperBulananData } from "@/hooks/query/use-stuntingsweeper";
 import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
+import LoadingContent from "../loading-content";
 
 export default function DataStuntingBulan() {
   const { data: apiData, isLoading: isLoadingApiData } =
@@ -54,7 +55,7 @@ export default function DataStuntingBulan() {
         }
       >
         {isLoadingApiData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             return (

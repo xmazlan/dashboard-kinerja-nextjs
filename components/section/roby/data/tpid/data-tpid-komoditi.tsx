@@ -12,6 +12,7 @@ import DataTpidPasar from "./data-tpid-pasar";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import Image from "next/image";
 import OptimizeImage from "@/components/optimize-image";
+import LoadingContent from "../loading-content";
 export default function DataTpidKomoditi() {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidKomoditiData();
@@ -58,7 +59,7 @@ export default function DataTpidKomoditi() {
         }
       >
         {isLoadingMasterData ? (
-          <LoadingSkeleton rows={2} cols={4} />
+          <LoadingContent />
         ) : (
           (() => {
             const items: Array<any> = (masterData?.data ?? []) as any[];
