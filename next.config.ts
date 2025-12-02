@@ -95,7 +95,8 @@ const nextConfig: NextConfig = {
               `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
               `style-src 'self' 'unsafe-inline'`,
               // Izinkan gambar dari localhost:8000 saat development
-              `img-src 'self' blob: data: https:${isDev ? " http://localhost:8000 http://localhost:*" : ""
+              `img-src 'self' blob: data: https:${
+                isDev ? " http://localhost:8000 http://localhost:*" : ""
               }`,
               "media-src 'self' blob: data: https://cctv.pekanbaru.go.id https://superapp.pekanbaru.go.id https://cdr.sakti112.id",
               "font-src 'self' data:",
@@ -103,6 +104,8 @@ const nextConfig: NextConfig = {
               [
                 "connect-src 'self' https: wss: ws:",
                 // API Pemkot Pekanbaru
+                "https://core-api.bapenda.pekanbaru.go.id",
+                "https://dashboard-kinerja-api.pekanbaru.go.id",
                 "https://dashboard-kinerja.pekanbaru.go.id",
                 "https://apidashboard.pekanbaru.go.id",
                 "https://superapp-api.pekanbaru.go.id",
