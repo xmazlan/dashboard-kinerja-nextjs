@@ -4,25 +4,65 @@ import { ApexOptions } from "apexcharts";
 
 const colors = [
   // palette1
-  "#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0",
+  "#008FFB",
+  "#00E396",
+  "#FEB019",
+  "#FF4560",
+  "#775DD0",
   // palette2
-  "#3f51b5", "#03a9f4", "#4caf50", "#f9ce1d", "#FF9800",
+  "#3f51b5",
+  "#03a9f4",
+  "#4caf50",
+  "#f9ce1d",
+  "#FF9800",
   // palette3
-  "#33b2df", "#546E7A", "#d4526e", "#13d8aa", "#A5978B",
+  "#33b2df",
+  "#546E7A",
+  "#d4526e",
+  "#13d8aa",
+  "#A5978B",
   // palette4
-  "#4ecdc4", "#c7f464", "#81D4FA", "#546E7A", "#fd6a6a",
+  "#4ecdc4",
+  "#c7f464",
+  "#81D4FA",
+  "#546E7A",
+  "#fd6a6a",
   // palette5
-  "#2b908f", "#f9a3a4", "#90ee7e", "#fa4443", "#69d2e7",
+  "#2b908f",
+  "#f9a3a4",
+  "#90ee7e",
+  "#fa4443",
+  "#69d2e7",
   // palette6
-  "#449DD1", "#F86624", "#EA3546", "#662E9B", "#C5D86D",
+  "#449DD1",
+  "#F86624",
+  "#EA3546",
+  "#662E9B",
+  "#C5D86D",
   // palette7
-  "#D7263D", "#1B998B", "#2E294E", "#F46036", "#E2C044",
+  "#D7263D",
+  "#1B998B",
+  "#2E294E",
+  "#F46036",
+  "#E2C044",
   // palette8
-  "#662E9B", "#F86624", "#F9C80E", "#EA3546", "#43BCCD",
+  "#662E9B",
+  "#F86624",
+  "#F9C80E",
+  "#EA3546",
+  "#43BCCD",
   // palette9
-  "#5C4742", "#A5978B", "#8D5B4C", "#5A2A27", "#C4BBAF",
+  "#5C4742",
+  "#A5978B",
+  "#8D5B4C",
+  "#5A2A27",
+  "#C4BBAF",
   // palette10
-  "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2",
+  "#A300D6",
+  "#7D02EB",
+  "#5653FE",
+  "#2983FF",
+  "#00B1F2",
 ];
 // const colors = [
 //   '#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0',
@@ -32,7 +72,11 @@ const colors = [
 //   '#66C3FF', '#66EFC5', '#FFF580', '#FFA9AD', '#B3A4FF',
 // ];
 
-export const barChartOptions = (isDark: boolean, title: string, subTitle: string | null): ApexOptions => ({
+export const barChartOptions = (
+  isDark: boolean,
+  title: string,
+  subTitle: string | null
+): ApexOptions => ({
   chart: {
     type: "bar",
     background: "transparent",
@@ -42,7 +86,7 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
       // top: 18,
       // left: 7,
       blur: 10,
-      opacity: 0.5
+      opacity: 0.5,
     },
     zoom: { enabled: false },
     toolbar: {
@@ -67,20 +111,20 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
   colors: colors,
   title: {
     text: title,
-    align: 'left',
+    align: "left",
     floating: false,
   },
   subtitle: {
     ...(subTitle ? { text: subTitle } : {}),
-    align: 'left',
+    align: "left",
     floating: false,
     offsetY: 20,
   },
   legend: {
     show: true,
     offsetY: 2,
-    position: 'bottom',
-    horizontalAlign: 'center',
+    position: "bottom",
+    horizontalAlign: "center",
     floating: false,
   },
   dataLabels: {
@@ -95,7 +139,7 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     distributed: true,
     background: {
       enabled: true,
-      foreColor: '#000',
+      foreColor: "#000",
       // backgroundColor: 'inherit',
       borderRadius: 5,
       // padding: 10,
@@ -115,11 +159,11 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
     bar: {
       horizontal: false,
       distributed: true,
-      columnWidth: '75%',
+      columnWidth: "75%",
       borderRadius: 3,
-      borderRadiusApplication: 'end',
+      borderRadiusApplication: "end",
       dataLabels: {
-        position: 'top',
+        position: "top",
       },
     },
     line: {
@@ -143,14 +187,14 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
   // },
   stroke: {
     curve: "smooth",
-    width: 2
+    width: 2,
   },
   xaxis: {
     // categories: categories,
     // title: {
     //   text: 'Komoditi',
     // },
-    tickPlacement: 'between',
+    tickPlacement: "between",
     labels: {
       show: true,
       rotate: -45,
@@ -173,10 +217,207 @@ export const barChartOptions = (isDark: boolean, title: string, subTitle: string
       //   });
       // }
       formatter: (val: number) =>
-        new Intl.NumberFormat('id-ID', {
+        new Intl.NumberFormat("id-ID", {
           maximumFractionDigits: 0,
         }).format(val),
-    }
+    },
+  },
+  fill: { opacity: 1 },
+});
+
+export const pieChartOptions = (
+  isDark: boolean,
+  title: string,
+  subTitle: string | null
+): ApexOptions => ({
+  chart: {
+    type: "pie",
+    background: "transparent",
+    dropShadow: {
+      blur: 10,
+      opacity: 0.5,
+    },
+    zoom: { enabled: false },
+    toolbar: {
+      show: true,
+      export: {
+        svg: { filename: `${title} ${subTitle}` },
+        png: { filename: `${title} ${subTitle}` },
+        csv: { filename: `${title} ${subTitle}` },
+      },
+    },
+  },
+  theme: {
+    mode: isDark ? "dark" : "light",
+  },
+  colors: colors,
+  title: {
+    text: title,
+    align: "left",
+    floating: false,
+  },
+  subtitle: {
+    ...(subTitle ? { text: subTitle } : {}),
+    align: "left",
+    floating: false,
+    offsetY: 20,
+  },
+  legend: {
+    show: true,
+    offsetY: 2,
+    position: "bottom",
+    horizontalAlign: "center",
+    floating: false,
+  },
+  dataLabels: {
+    enabled: true,
+    offsetY: -10,
+    distributed: true,
+    background: {
+      enabled: true,
+      foreColor: "#000",
+      borderRadius: 5,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      distributed: true,
+      columnWidth: "75%",
+      borderRadius: 3,
+      borderRadiusApplication: "end",
+      dataLabels: {
+        position: "top",
+      },
+    },
+    line: {
+      isSlopeChart: false,
+    },
+  },
+  stroke: {
+    curve: "smooth",
+    width: 2,
+  },
+  xaxis: {
+    tickPlacement: "between",
+    labels: {
+      show: true,
+      rotate: -45,
+      trim: true,
+      hideOverlappingLabels: false,
+      maxHeight: 100,
+    },
+  },
+  yaxis: {
+    labels: {
+      formatter: (val: number) =>
+        new Intl.NumberFormat("id-ID", {
+          maximumFractionDigits: 0,
+        }).format(val),
+    },
+  },
+  fill: { opacity: 1 },
+});
+export const donutSemiChartOptions = (
+  isDark: boolean,
+  title: string,
+  subTitle: string | null
+): ApexOptions => ({
+  chart: {
+    type: "donut",
+    background: "transparent",
+    dropShadow: {
+      blur: 10,
+      opacity: 0.5,
+    },
+    zoom: { enabled: false },
+    toolbar: {
+      show: true,
+      export: {
+        svg: { filename: `${title} ${subTitle}` },
+        png: { filename: `${title} ${subTitle}` },
+        csv: { filename: `${title} ${subTitle}` },
+      },
+    },
+  },
+  theme: {
+    mode: isDark ? "dark" : "light",
+  },
+  colors: colors,
+  title: {
+    text: title,
+    align: "left",
+    floating: false,
+  },
+  subtitle: {
+    ...(subTitle ? { text: subTitle } : {}),
+    align: "left",
+    floating: false,
+    offsetY: 20,
+  },
+  legend: {
+    show: true,
+    offsetY: 2,
+    position: "bottom",
+    horizontalAlign: "center",
+    floating: false,
+  },
+  dataLabels: {
+    enabled: true,
+    offsetY: -10,
+    distributed: true,
+    background: {
+      enabled: true,
+      foreColor: "#000",
+      borderRadius: 5,
+    },
+  },
+  plotOptions: {
+    pie: {
+      startAngle: -90,
+      endAngle: 90,
+      offsetY: 10,
+    },
+  },
+  grid: {
+    padding: {
+      bottom: -100,
+    },
+  },
+  responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200,
+        },
+        legend: {
+          position: "bottom",
+        },
+      },
+    },
+  ],
+  stroke: {
+    curve: "smooth",
+    width: 2,
+  },
+  xaxis: {
+    tickPlacement: "between",
+    labels: {
+      show: true,
+      rotate: -45,
+      trim: true,
+      hideOverlappingLabels: false,
+      maxHeight: 100,
+    },
+  },
+  yaxis: {
+    labels: {
+      formatter: (val: number) =>
+        new Intl.NumberFormat("id-ID", {
+          maximumFractionDigits: 0,
+        }).format(val),
+    },
   },
   fill: { opacity: 1 },
 });

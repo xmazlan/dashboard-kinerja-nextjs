@@ -2,6 +2,7 @@
 import SectionContainer from "./section-container";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
+import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
 
 export default function SectionOne() {
   return (
@@ -13,6 +14,9 @@ export default function SectionOne() {
           </div>
           <div className="col-span-full sm:col-span-1">
             <SectionBpkadDataSlide />
+          </div>
+          <div className="col-span-full sm:col-span-1">
+            <SectionOrtalDataSlide />
           </div>
         </div>
       </SectionContainer>

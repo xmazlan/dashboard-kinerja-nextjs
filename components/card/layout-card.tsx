@@ -36,7 +36,7 @@ export default function LayoutCard({
       className={cn("w-full min-h-0 rounded-lg", className)}
       style={{ height: target }}
     >
-      <div className="w-full h-full min-h-0">{children}</div>
+      <div className="w-full h-full min-h-0 overflow-hidden">{children}</div>
     </div>
   );
 }

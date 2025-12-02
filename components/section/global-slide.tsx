@@ -15,6 +15,8 @@ import DisdikSlide from "./roby/slider-content/disdik-slide";
 import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
 import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
 import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
+import SectionDinkesDataSlide from "./roby/slider-content/dinkes-slide";
+import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
 
 // Speed dikontrol oleh komponen slide masing-masing
 
@@ -212,6 +214,28 @@ export default function GlobSlider({
                     onDone={handleInnerDone}
                     fullSize
                     active={mounted && selected === 1}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionOrtalDataSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 2}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionDinkesDataSlide
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 2}
                   />
                 </div>
               </div>

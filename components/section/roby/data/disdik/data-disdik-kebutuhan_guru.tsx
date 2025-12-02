@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
@@ -14,24 +15,17 @@ import {
   TableCell,
   TableCaption,
 } from "@/components/ui/table";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-  LabelList,
-} from "recharts";
+import { useTheme } from "next-themes";
+import merge from "deepmerge";
+import { barChartOptions } from "@/lib/apex-chart-options";
+import BarChart from "@/components/apexchart/bar-chart";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 export default function DataDisdikKebutuhanGuru() {
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const isDark = currentTheme === "dark";
   const { data: apiData, isLoading: isLoadingApiData } =
     useDisdikKebutuhanGuruData();
   const lastGet = apiData?.last_get ?? "";
@@ -67,7 +61,7 @@ export default function DataDisdikKebutuhanGuru() {
   ];
 
   return (
-    <div className="w-full h-full">
+    <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Layanan Disdik Kebutuhan Guru"
@@ -87,54 +81,101 @@ export default function DataDisdikKebutuhanGuru() {
         ) : (
           (() => {
             return (
-              <div className="grid grid-cols-1 gap-3">
-                <LayoutCard
-                  className="relative bg-card rounded-lg shadow-sm p-3 border"
-                  ratioDesktop={0.5}
-                  ratioMobile={0.38}
-                >
-                  <ShineBorder shineColor={["#2563eb", "#1e40af", "#FE6500"]} />
-                  <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                    Kebutuhan Guru
-                  </h3>
-                  <div className="flex-1 min-h-0">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={barData}
-                        margin={{ top: 28, right: 16, bottom: 12, left: 0 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <YAxis hide domain={[0, "dataMax + 50"]} />
-                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                        <Tooltip
-                          formatter={(v: unknown) =>
-                            typeof v === "number"
-                              ? v.toLocaleString("id-ID")
-                              : String(v)
-                          }
-                        />
-                        <Legend />
-                        <Bar
-                          dataKey="value"
-                          name="Jumlah"
-                          fill="#2563eb"
-                          radius={[4, 4, 0, 0]}
-                        >
-                          <LabelList
-                            dataKey="value"
-                            position="top"
-                            offset={8}
-                            formatter={(v: unknown) =>
-                              typeof v === "number"
-                                ? v.toLocaleString("id-ID")
-                                : String(v)
+              <CardComponent className="shadow-none border-none">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <LayoutCard
+                    className="relative bg-card rounded-lg shadow-sm p-3 border"
+                    ratioDesktop={0.5}
+                    ratioMobile={0.38}
+                  >
+                    <div className="flex h-full flex-col">
+                      <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                        Kebutuhan Guru
+                      </h3>
+                      <div className="flex-1 min-h-0 overflow-hidden">
+                        {(() => {
+                          const maxVal = Math.max(
+                            0,
+                            ...barData.map((b) => b.value)
+                          );
+                          const options = merge(
+                            barChartOptions(
+                              Boolean(isDark),
+                              "Kebutuhan Guru",
+                              lastGet ? `Terakhir ${lastGet}` : null
+                            ),
+                            {
+                              xaxis: {
+                                categories: barData.map((b) => b.name),
+                                labels: {
+                                  rotate: -45,
+                                  style: { fontSize: "11px" },
+                                },
+                              },
+                              yaxis: { max: maxVal + 50 },
+                              tooltip: {
+                                y: {
+                                  formatter: (val: number) =>
+                                    val.toLocaleString("id-ID"),
+                                },
+                              },
+                              chart: { toolbar: { show: false } },
+                              responsive: [
+                                {
+                                  breakpoint: 640,
+                                  options: {
+                                    xaxis: {
+                                      labels: {
+                                        rotate: -60,
+                                        style: { fontSize: "10px" },
+                                      },
+                                    },
+                                    legend: { show: false },
+                                  },
+                                },
+                                {
+                                  breakpoint: 768,
+                                  options: {
+                                    xaxis: {
+                                      labels: {
+                                        rotate: -40,
+                                        style: { fontSize: "11px" },
+                                      },
+                                    },
+                                  },
+                                },
+                                {
+                                  breakpoint: 1024,
+                                  options: {
+                                    xaxis: {
+                                      labels: {
+                                        rotate: -30,
+                                        style: { fontSize: "12px" },
+                                      },
+                                    },
+                                  },
+                                },
+                              ],
                             }
-                          />
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                  {/* {barData.length > 0 && (
+                          );
+                          const series = [
+                            {
+                              name: "Jumlah",
+                              data: barData.map((b) => b.value),
+                            },
+                          ];
+                          return (
+                            <BarChart
+                              options={options}
+                              series={series}
+                              type="bar"
+                              height="100%"
+                            />
+                          );
+                        })()}
+                      </div>
+                    </div>
+                    {/* {barData.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-2">
                       {barData.map((it, idx) => (
                         <div
@@ -154,12 +195,54 @@ export default function DataDisdikKebutuhanGuru() {
                       ))}
                     </div>
                   )} */}
-                </LayoutCard>
-              </div>
+                  </LayoutCard>
+
+                  <LayoutCard
+                    className="relative bg-card rounded-lg shadow-sm p-3 border"
+                    ratioDesktop={0.5}
+                    ratioMobile={0.38}
+                  >
+                    <div className="flex h-full flex-col">
+                      <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                        Detail Kebutuhan Guru
+                      </h3>
+                      <div className="flex-1 min-h-0 overflow-auto">
+                        <Table>
+                          <TableCaption>
+                            Total: {sumTotal.toLocaleString("id-ID")}
+                          </TableCaption>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Tingkat</TableHead>
+                              <TableHead>Jumlah</TableHead>
+                              <TableHead>Tahun</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {items.map((it, idx) => (
+                              <TableRow key={idx}>
+                                <TableCell>
+                                  {String(it?.tingkat ?? "")}
+                                </TableCell>
+                                <TableCell>
+                                  {Number(it?.jumlah ?? 0).toLocaleString(
+                                    "id-ID"
+                                  )}
+                                </TableCell>
+                                <TableCell>{String(it?.tahun ?? "")}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </div>
+                  </LayoutCard>
+                </div>
+              </CardComponent>
             );
           })()
         )}
       </CardComponent>
-    </div>
+    </>
   );
 }
