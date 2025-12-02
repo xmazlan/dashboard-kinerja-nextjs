@@ -17,7 +17,13 @@ const aj = arcjet({
 
 // Arcjet middleware untuk semua requests
 async function arcjetMiddleware(request: NextRequest) {
-  const decision = await aj.protect(request);
+  const forwardedFor = request.headers.get("x-forwarded-for") || "";
+  const ip =
+    (forwardedFor.split(",")[0] || "").trim() ||
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    undefined;
+  const decision = await aj.protect(ip ? { ...(request as any), ip } : request);
 
   if (decision.isDenied()) {
     console.log("Arcjet blocked request:", decision.reason);
