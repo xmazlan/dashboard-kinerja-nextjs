@@ -8,21 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
-import {
   usePajakStatistikData,
   useJenisPajakData,
   useTahunPajakData,

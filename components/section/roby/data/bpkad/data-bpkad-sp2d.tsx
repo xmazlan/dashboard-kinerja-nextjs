@@ -6,14 +6,10 @@ import {
   getGradientStyleByKey,
 } from "@/components/patern-collor";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { useTheme } from "next-themes";
+import merge from "deepmerge";
+import { pieChartOptions } from "@/lib/apex-chart-options";
+import BarChart from "@/components/apexchart/bar-chart";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { ModalDetail } from "@/components/modal/detail-modal";
@@ -23,6 +19,9 @@ import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 
 export default function DataBpkadSp2d() {
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const isDark = currentTheme === "dark";
   const {
     data: apiData,
     isLoading: isLoadingMasterData,
@@ -136,6 +135,25 @@ export default function DataBpkadSp2d() {
             const periodeDisplay = String(rekap?.Periode ?? "-");
             const isAboveTarget = jumlahRealisasi >= jumlahPagu;
 
+            const pieLabels = pieData.map((d) => String(d.name));
+            const pieSeries = pieData.map((d) => Number(d.value || 0));
+            const pieOptions = merge(
+              pieChartOptions(
+                Boolean(isDark),
+                "Proporsi Realisasi vs Pagu",
+                `Periode ${periodeDisplay}`
+              ),
+              {
+                labels: pieLabels,
+                legend: { show: true },
+                tooltip: {
+                  y: {
+                    formatter: (val: number) => `${formatCurrency(Number(val))}`,
+                  },
+                },
+              }
+            );
+
             return (
               <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
                 <div className="grid grid-cols-1 lg:col-span-2 gap-2">
@@ -194,51 +212,8 @@ export default function DataBpkadSp2d() {
                       Proporsi Realisasi vs Pagu
                     </h3>
                     {pieData.length > 0 && (
-                      <div className="flex-1 min-h-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={pieData}
-                              dataKey="value"
-                              nameKey="name"
-                              cx="50%"
-                              cy="50%"
-                              outerRadius={70}
-                            >
-                              {pieData.map((_, i) => {
-                                const palette = [
-                                  "#3b82f6",
-                                  "#f59e0b",
-                                  "#10b981",
-                                  "#8b5cf6",
-                                  "#ef4444",
-                                  "#14b8a6",
-                                ];
-                                return (
-                                  <Cell
-                                    key={i}
-                                    fill={palette[i % palette.length]}
-                                  />
-                                );
-                              })}
-                            </Pie>
-                            <Tooltip
-                              contentStyle={{
-                                backgroundColor: "#ffffff",
-                                borderColor: "#e5e7eb",
-                              }}
-                              itemStyle={{ color: "#334155" }}
-                              labelStyle={{ color: "#334155" }}
-                            />
-                            <Legend
-                              wrapperStyle={{
-                                fontSize: "11px",
-                                paddingTop: "12px",
-                                color: "#334155",
-                              }}
-                            />
-                          </PieChart>
-                        </ResponsiveContainer>
+                      <div className="flex-1 min-h-0 h-[clamp(240px,42vh,480px)]">
+                        <BarChart options={pieOptions} series={pieSeries} type="pie" height="100%" />
                       </div>
                     )}
                     {pieData.length > 0 && (

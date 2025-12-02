@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
@@ -14,28 +15,30 @@ import {
   TableCell,
   TableCaption,
 } from "@/components/ui/table";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-  LabelList,
-} from "recharts";
+import { useTheme } from "next-themes";
+import merge from "deepmerge";
+import { barChartOptions, pieChartOptions } from "@/lib/apex-chart-options";
+import BarChart from "@/components/apexchart/bar-chart";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import DataDisdikKebutuhanGuru from "./data-disdik-kebutuhan_guru";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 export default function DataDisdikDoItm() {
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const isDark = currentTheme === "dark";
   const { data: apiData, isLoading: isLoadingApiData } = useDisdikDoItmData();
   const lastGet = apiData?.last_get ?? "";
   const [doAsc, setDoAsc] = React.useState(false);
   const [ltmAsc, setLtmAsc] = React.useState(false);
+  const [vp, setVp] = React.useState<"xs" | "sm" | "md" | "lg" | "xl">("md");
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const doRef = React.useRef<HTMLDivElement>(null);
+  const ltmRef = React.useRef<HTMLDivElement>(null);
+  const [doH, setDoH] = React.useState<number>(320);
+  const [ltmH, setLtmH] = React.useState<number>(320);
+  const clamp = (n: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, n));
   const doItems: Array<{
     nama?: string;
     nilai?: number | string;
@@ -95,26 +98,138 @@ export default function DataDisdikDoItm() {
     value: Number(it?.nilai ?? 0),
   }));
 
-  const AxisTick = (props: any) => {
-    const { x, y, payload } = props;
-    const label = String(payload?.payload?.name ?? payload?.value ?? "");
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text
-          transform="rotate(-45)"
-          textAnchor="end"
-          fontSize={10}
-          fill="#64748b"
-          dy={16}
-        >
-          {label}
-        </text>
-      </g>
-    );
-  };
+  React.useEffect(() => {
+    const compute = (w: number) =>
+      w < 640
+        ? "xs"
+        : w < 768
+        ? "sm"
+        : w < 1024
+        ? "md"
+        : w < 1280
+        ? "lg"
+        : "xl";
+    const update = () => setVp(compute(window.innerWidth));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  React.useEffect(() => {
+    const updateDo = () => {
+      const w = doRef.current?.offsetWidth || window.innerWidth;
+      const rootH = rootRef.current?.offsetHeight || window.innerHeight;
+      const factor = vp === "xs" || vp === "sm" ? 0.38 : 0.5;
+      const maxH = clamp(Math.round(rootH * factor), 240, 600);
+      const wH = clamp(Math.round(w * 0.7), 260, 560);
+      setDoH(Math.min(wH, maxH));
+    };
+    const updateLtm = () => {
+      const w = ltmRef.current?.offsetWidth || window.innerWidth;
+      const rootH = rootRef.current?.offsetHeight || window.innerHeight;
+      const factor = vp === "xs" || vp === "sm" ? 0.38 : 0.5;
+      const maxH = clamp(Math.round(rootH * factor), 240, 600);
+      const wH = clamp(Math.round(w * 0.68), 240, 540);
+      setLtmH(Math.min(wH, maxH));
+    };
+    const doObs = new ResizeObserver(updateDo);
+    const ltmObs = new ResizeObserver(updateLtm);
+    if (doRef.current) doObs.observe(doRef.current);
+    if (ltmRef.current) ltmObs.observe(ltmRef.current);
+    updateDo();
+    updateLtm();
+    return () => {
+      doObs.disconnect();
+      ltmObs.disconnect();
+    };
+  }, [vp]);
+
+  const doCategories = doChartData.map((d) => d.name);
+  const doSeries = doChartData.map((d) => d.value);
+  const doOptions = merge(
+    barChartOptions(
+      Boolean(isDark),
+      "DO • Chart",
+      lastGet ? `Terakhir ${lastGet}` : null
+    ),
+    {
+      xaxis: { labels: { rotate: -50 }, categories: doCategories },
+      tooltip: {
+        y: { formatter: (val: number) => val.toLocaleString("id-ID") },
+      },
+      plotOptions: { bar: { distributed: false } },
+      chart: { toolbar: { show: false } },
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            xaxis: { labels: { rotate: -60, style: { fontSize: "10px" } } },
+            legend: { show: false },
+            chart: { toolbar: { show: false } },
+            plotOptions: { bar: { columnWidth: "55%" } },
+          },
+        },
+        {
+          breakpoint: 768,
+          options: {
+            xaxis: { labels: { rotate: -40, style: { fontSize: "11px" } } },
+            plotOptions: { bar: { columnWidth: "65%" } },
+          },
+        },
+        {
+          breakpoint: 1024,
+          options: {
+            xaxis: { labels: { rotate: -30, style: { fontSize: "12px" } } },
+            plotOptions: { bar: { columnWidth: "60%" } },
+          },
+        },
+      ],
+    }
+  );
+
+  const ltmLabels = ltmChartData.map((d) => d.name);
+  const ltmSeries = ltmChartData.map((d) => d.value);
+  const ltmOptions = merge(
+    pieChartOptions(
+      Boolean(isDark),
+      "LTM • Chart",
+      lastGet ? `Terakhir ${lastGet}` : null
+    ),
+    {
+      labels: ltmLabels,
+      legend: { show: true },
+      tooltip: {
+        y: { formatter: (val: number) => val.toLocaleString("id-ID") },
+      },
+      chart: { toolbar: { show: false } },
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            legend: { show: false },
+            chart: { toolbar: { show: false } },
+            dataLabels: { style: { fontSize: "10px" } },
+          },
+        },
+        {
+          breakpoint: 768,
+          options: {
+            dataLabels: { style: { fontSize: "11px" } },
+          },
+        },
+        {
+          breakpoint: 1024,
+          options: {
+            legend: { position: "right" },
+            dataLabels: { style: { fontSize: "12px" } },
+          },
+        },
+      ],
+    }
+  );
 
   return (
-    <div className="w-full h-full">
+    <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Layanan Disdik DO dan LTM"
@@ -276,149 +391,83 @@ export default function DataDisdikDoItm() {
         ) : (
           (() => {
             return (
-              <div className="max-h-full space-y-3">
-                <div className="grid grid-cols-1 lg:grid-cols-7 gap-3">
-                  <div className="grid-cols-1 lg:col-span-5">
-                    <LayoutCard
-                      className="relative bg-card rounded-lg shadow-sm p-3 border"
-                      ratioDesktop={0.5}
-                      ratioMobile={0.38}
-                    >
-                      <ShineBorder
-                        shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                      />
-                      <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                        DO • Chart
-                      </h3>
+              <CardComponent className="shadow-none border-none">
+                <div ref={rootRef} className="max-h-full space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                    <div className="grid-cols-1">
+                      <LayoutCard
+                        className="relative bg-card rounded-lg shadow-lg p-3 border"
+                        ratioDesktop={0.5}
+                        ratioMobile={0.38}
+                      >
+                        <div className="flex h-full flex-col">
+                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                            DO • Chart
+                          </h3>
 
-                      <div className="flex-1 min-h-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart
-                            data={doChartData}
-                            margin={{ top: 8, right: 16, bottom: 50, left: 0 }}
+                          <div
+                            ref={doRef}
+                            className="flex-1 min-h-0 overflow-hidden"
                           >
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="#e5e7eb"
+                            <BarChart
+                              options={doOptions}
+                              series={[{ name: "Jumlah", data: doSeries }]}
+                              type="bar"
+                              height="100%"
                             />
-                            <XAxis
-                              dataKey="name"
-                              interval={0}
-                              tick={AxisTick}
-                            />
-                            <Tooltip
-                              formatter={(v: unknown) =>
-                                typeof v === "number"
-                                  ? v.toLocaleString("id-ID")
-                                  : String(v)
-                              }
-                            />
-                            {/* <Legend /> */}
-                            <Bar
-                              dataKey="value"
-                              name="Jumlah"
-                              fill="#2563eb"
-                              radius={[4, 4, 0, 0]}
-                            >
-                              <LabelList
-                                dataKey="value"
-                                position="top"
-                                formatter={(v: unknown) =>
-                                  typeof v === "number"
-                                    ? v.toLocaleString("id-ID")
-                                    : String(v)
-                                }
-                              />
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </LayoutCard>
-                  </div>
+                          </div>
+                        </div>
+                      </LayoutCard>
+                    </div>
 
-                  <div className="grid-cols-1 lg:col-span-2">
-                    <LayoutCard
-                      className="relative bg-card rounded-lg shadow-sm p-3 border"
-                      ratioDesktop={0.5}
-                      ratioMobile={0.38}
-                    >
-                      <ShineBorder
-                        shineColor={["#2563eb", "#1e40af", "#FE6500"]}
-                      />
-                      <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
-                        LTM • Chart
-                      </h3>
-                      {ltmChartData.length > 0 && (
-                        <div className="flex-1 min-h-0">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={ltmChartData}
-                                dataKey="value"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={70}
-                              >
-                                {ltmChartData.map((_, i) => {
-                                  const palette = [
-                                    "#3b82f6",
-                                    "#f59e0b",
-                                    "#10b981",
-                                    "#8b5cf6",
-                                    "#ef4444",
-                                    "#14b8a6",
-                                  ];
-                                  return (
-                                    <Cell
-                                      key={i}
-                                      fill={palette[i % palette.length]}
-                                    />
-                                  );
-                                })}
-                              </Pie>
-                              <Tooltip
-                                contentStyle={{
-                                  backgroundColor: "#ffffff",
-                                  borderColor: "#e5e7eb",
-                                }}
-                                itemStyle={{ color: "#334155" }}
-                                labelStyle={{ color: "#334155" }}
-                              />
-                              <Legend
-                                wrapperStyle={{
-                                  fontSize: "11px",
-                                  paddingTop: "12px",
-                                  color: "#334155",
-                                }}
-                              />
-                            </PieChart>
-                          </ResponsiveContainer>
-                        </div>
-                      )}
-                      {ltmChartData.length > 0 && (
-                        <div className="mt-1.5 space-y-1">
-                          {ltmChartData.map((it, idx) => (
+                    <div className="grid-cols-1">
+                      <LayoutCard
+                        className="relative bg-card rounded-lg shadow-lg p-3 border"
+                        ratioDesktop={0.5}
+                        ratioMobile={0.38}
+                      >
+                        <div className="flex h-full flex-col">
+                          <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">
+                            LTM • Chart
+                          </h3>
+                          {ltmChartData.length > 0 && (
                             <div
-                              key={idx}
-                              className="flex items-center justify-between text-[10px] text-muted-foreground"
+                              ref={ltmRef}
+                              className="flex-1 min-h-0 overflow-hidden"
                             >
-                              <span className="truncate">{it.name}</span>
-                              <span className="font-mono">
-                                {`${it.value.toLocaleString("id-ID")} `}
-                              </span>
+                              <BarChart
+                                options={ltmOptions}
+                                series={ltmSeries}
+                                type="pie"
+                                height="100%"
+                              />
                             </div>
-                          ))}
+                          )}
+                          {ltmChartData.length > 0 && (
+                            <div className="mt-1.5 space-y-1">
+                              {ltmChartData.map((it, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between text-[10px] text-muted-foreground"
+                                >
+                                  <span className="truncate">{it.name}</span>
+                                  <span className="font-mono">
+                                    {`${it.value.toLocaleString("id-ID")} `}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </LayoutCard>
+                      </LayoutCard>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </CardComponent>
             );
           })()
         )}
       </CardComponent>
-    </div>
+    </>
   );
 }

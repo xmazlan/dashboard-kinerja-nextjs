@@ -1,25 +1,18 @@
 "use client";
 import React from "react";
+import dynamic from "next/dynamic";
 import CardComponent from "@/components/card/card-component";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, TrendingDown } from "lucide-react";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  Bar,
-} from "recharts";
+import merge from "deepmerge";
+import { barChartOptions, pieChartOptions } from "@/lib/apex-chart-options";
 import { getGradientStyleByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import LayoutCard from "@/components/card/layout-card";
 import { MorphingSquare } from "@/components/molecule-ui/morphing-square";
 import LoadingContent from "../loading-content";
+
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 type TriwulanItem = { tw: string | number; target: number; total: number };
 type PieItem = { Jenis: string; Target: number };
@@ -119,6 +112,93 @@ export default function PajakStatistikContent(props: Props) {
     };
   }, [vp]);
 
+  const pieLabels = Array.isArray(pieData)
+    ? pieData.map((d) => String(d.Jenis))
+    : [];
+  const pieSeries = Array.isArray(pieData)
+    ? pieData.map((d) => Number(d.Target || 0))
+    : [];
+  const pieOptions = merge(
+    pieChartOptions(
+      isDark,
+      "Distribusi Target",
+      typeof tahun !== "undefined" ? `Tahun ${tahun}` : null
+    ),
+    {
+      labels: pieLabels,
+      legend: { show: vp !== "xs" },
+      tooltip: {
+        y: {
+          formatter: (val: number) => String(defaultTooltipFormatter(val)),
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            legend: { show: false },
+            chart: { toolbar: { show: false } },
+            dataLabels: { style: { fontSize: "10px" } },
+          },
+        },
+        {
+          breakpoint: 768,
+          options: {
+            dataLabels: { style: { fontSize: "11px" } },
+          },
+        },
+      ],
+    }
+  );
+
+  const triwulanCategories = Array.isArray(triwulanData)
+    ? triwulanData.map((d) => String(d.tw))
+    : [];
+  const seriesTarget = Array.isArray(triwulanData)
+    ? triwulanData.map((d) => Number(d.target || 0))
+    : [];
+  const seriesTotal = Array.isArray(triwulanData)
+    ? triwulanData.map((d) => Number(d.total || 0))
+    : [];
+  const barOptions = merge(
+    barChartOptions(
+      isDark,
+      "Perbandingan Target vs Realisasi per Triwulan",
+      typeof tahun !== "undefined" ? `Tahun ${tahun}` : null
+    ),
+    {
+      xaxis: { categories: triwulanCategories },
+      tooltip: {
+        y: {
+          formatter: (val: number) => String(defaultTooltipFormatter(val)),
+        },
+      },
+      plotOptions: {
+        bar: {
+          distributed: false,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            legend: { show: false },
+            chart: { toolbar: { show: false } },
+            xaxis: { labels: { rotate: -30, style: { fontSize: "10px" } } },
+            plotOptions: { bar: { columnWidth: "55%" } },
+          },
+        },
+        {
+          breakpoint: 768,
+          options: {
+            xaxis: { labels: { rotate: -20, style: { fontSize: "11px" } } },
+            plotOptions: { bar: { columnWidth: "65%" } },
+          },
+        },
+      ],
+    }
+  );
+
   return (
     <CardComponent className="shadow-none border-none">
       <div className="">
@@ -189,56 +269,18 @@ export default function PajakStatistikContent(props: Props) {
                         Distribusi Target
                       </h3>
                       {Array.isArray(pieData) && pieData.length > 0 && (
-                        <div ref={pieRef} className="flex-1 min-h-0">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart margin={pieMargin}>
-                              <Pie
-                                data={pieData}
-                                dataKey="Target"
-                                nameKey="Jenis"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={pieRadius}
-                              >
-                                {pieData.map((_, i) => {
-                                  const palette = ["#3b82f6", "#f59e0b"];
-                                  return (
-                                    <Cell
-                                      key={i}
-                                      fill={palette[i % palette.length]}
-                                    />
-                                  );
-                                })}
-                              </Pie>
-                              <Tooltip
-                                formatter={defaultTooltipFormatter}
-                                labelFormatter={defaultLabelFormatter}
-                                contentStyle={{
-                                  backgroundColor: isDark
-                                    ? "#0f172a"
-                                    : "#ffffff",
-                                  borderColor: isDark ? "#1f2937" : "#e5e7eb",
-                                }}
-                                itemStyle={{
-                                  color: isDark ? "#e5e7eb" : "#334155",
-                                }}
-                                labelStyle={{
-                                  color: isDark ? "#e5e7eb" : "#334155",
-                                }}
-                              />
-                              {vp !== "xs" && (
-                                <Legend
-                                  verticalAlign="bottom"
-                                  align="center"
-                                  wrapperStyle={{
-                                    fontSize: "11px",
-                                    paddingTop: "12px",
-                                    color: isDark ? "#e5e7eb" : "#334155",
-                                  }}
-                                />
-                              )}
-                            </PieChart>
-                          </ResponsiveContainer>
+                        <div
+                          ref={pieRef}
+                          className="flex-1 min-h-0 overflow-hidden"
+                          style={{ height: `${pieH + 64}px` }}
+                        >
+                          <ApexChart
+                            options={pieOptions}
+                            series={pieSeries}
+                            type="pie"
+                            width="100%"
+                            height="100%"
+                          />
                         </div>
                       )}
                       {Array.isArray(pieData) && pieData.length > 0 && (
@@ -278,74 +320,21 @@ export default function PajakStatistikContent(props: Props) {
                       </h3>
                       {Array.isArray(triwulanData) &&
                         triwulanData.length > 0 && (
-                          <div ref={barRef} className="flex-1 min-h-0">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <BarChart
-                                data={triwulanData}
-                                margin={barMargin}
-                                barCategoryGap={isMobile ? "25%" : "12%"}
-                                barGap={isMobile ? 2 : 4}
-                                maxBarSize={isMobile ? 28 : 36}
-                              >
-                                <CartesianGrid
-                                  strokeDasharray="3 3"
-                                  vertical={false}
-                                  stroke={isDark ? "#1f2937" : "#e5e7eb"}
-                                />
-                                <XAxis
-                                  dataKey="tw"
-                                  tickLine={false}
-                                  axisLine={false}
-                                  interval={0}
-                                  tickMargin={isMobile ? 8 : 4}
-                                  angle={isMobile ? -30 : 0}
-                                  textAnchor={isMobile ? "end" : "middle"}
-                                  tick={{
-                                    fontSize: isMobile ? 10 : 12,
-                                    fill: isDark ? "#e5e7eb" : "#334155",
-                                  }}
-                                />
-                                <Tooltip
-                                  formatter={defaultTooltipFormatter}
-                                  labelFormatter={defaultLabelFormatter}
-                                  contentStyle={{
-                                    backgroundColor: isDark
-                                      ? "#0f172a"
-                                      : "#ffffff",
-                                    borderColor: isDark ? "#1f2937" : "#e5e7eb",
-                                  }}
-                                  itemStyle={{
-                                    color: isDark ? "#e5e7eb" : "#334155",
-                                  }}
-                                  labelStyle={{
-                                    color: isDark ? "#e5e7eb" : "#334155",
-                                  }}
-                                />
-                                {vp !== "xs" && (
-                                  <Legend
-                                    verticalAlign="bottom"
-                                    align="center"
-                                    wrapperStyle={{
-                                      fontSize: "11px",
-                                      paddingTop: "12px",
-                                      color: isDark ? "#e5e7eb" : "#334155",
-                                    }}
-                                  />
-                                )}
-                                <Bar
-                                  dataKey="target"
-                                  fill="#f59e0b"
-                                  radius={[8, 8, 0, 0]}
-                                  name="Target"
-                                />
-                                <Bar
-                                  dataKey="total"
-                                  fill="#3b82f6"
-                                  radius={[8, 8, 0, 0]}
-                                  name="Realisasi"
-                                />
-                              </BarChart>
-                            </ResponsiveContainer>
+                          <div
+                            ref={barRef}
+                            className="flex-1 min-h-0 overflow-hidden"
+                            style={{ height: `${barH + 64}px` }}
+                          >
+                            <ApexChart
+                              options={barOptions}
+                              series={[
+                                { name: "Target", data: seriesTarget },
+                                { name: "Realisasi", data: seriesTotal },
+                              ]}
+                              type="bar"
+                              width="100%"
+                              height="100%"
+                            />
                           </div>
                         )}
                     </div>

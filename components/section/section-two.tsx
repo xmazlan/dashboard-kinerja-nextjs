@@ -3,6 +3,7 @@ import SectionContainer from "./section-container";
 import DataStuntingKecamatanSlide from "./roby/slider-content/data-stunting-kecamatan-slide";
 import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
 import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
+import SectionDinkesDataSlide from "./roby/slider-content/dinkes-slide";
 
 export default function SectionTwo() {
   return (
@@ -14,6 +15,9 @@ export default function SectionTwo() {
           </div>
           <div className="">
             <SectionCapilDataSlide />
+          </div>
+          <div className="">
+            <SectionDinkesDataSlide />
           </div>
         </div>
       </SectionContainer>
