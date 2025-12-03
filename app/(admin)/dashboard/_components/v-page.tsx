@@ -96,7 +96,7 @@ export default function Dashboard() {
       <PageContainer>
         <main className="h-full overflow-hidden">
           <section className="h-full overflow-hidden">
-            <ViewportInfo />
+            {/* <ViewportInfo /> */}
 
             {viewMode === "slide" &&
               (mounted ? (

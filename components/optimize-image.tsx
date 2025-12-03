@@ -100,7 +100,7 @@ export default function OptimizeImage({
             loaded ? "opacity-100" : "opacity-0",
             imgClassName
           )}
-          onLoadingComplete={handleLoadComplete}
+          onLoad={handleLoadComplete}
           onError={handleError}
         />
       ) : null}

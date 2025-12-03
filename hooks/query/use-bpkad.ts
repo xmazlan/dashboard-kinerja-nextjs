@@ -1,39 +1,54 @@
 import * as React from "react";
 import axios from "@/lib/axios";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Domain akan ditangkap otomatis oleh axios dari env/hostname,
 // sehingga parameter tidak wajib.
+interface BpkadSp2dRow {
+  Persentase?: number | string;
+  Realisasi_OPD?: number | string;
+  PaguAnggaran?: number | string;
+  OPD?: unknown;
+}
+interface BpkadSp2dResponse {
+  data?: {
+    Rekap_Kota?: {
+      Periode?: string;
+      Jumlah_Realisasi?: number | string;
+      Jumlah_Pagu?: number | string;
+      Persentase?: number | string;
+    };
+    data?: BpkadSp2dRow[];
+  };
+  last_get?: string;
+}
+
+interface BpkadRfkRow {
+  PER_UANG?: number | string;
+  PER_FISIK?: number | string;
+  OPD?: unknown;
+}
+interface BpkadRfkResponse {
+  data?: {
+    Rekap_Kota?: {
+      Tanggal?: string;
+      persen_keu?: number | string;
+      persen_fisik?: number | string;
+    };
+    data?: BpkadRfkRow[];
+  };
+  last_get?: string;
+}
+
 export const useBpkadSp2dData = () => {
   const { data: session } = useSession();
-  const queryClient = useQueryClient();
   const slug = {
     slug_aplikasi: "realisasi",
     slug_url: "realisasi",
   };
-  const CACHE_KEY = `bpkad-sp2d:${slug.slug_aplikasi}:${slug.slug_url}`;
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const raw = window.localStorage.getItem(CACHE_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        queryClient.setQueryData(
-          [
-            "data-bpkad-sp2d",
-            slug?.slug_aplikasi,
-            slug?.slug_url,
-            session?.data?.token,
-          ],
-          data
-        );
-      }
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryClient, session?.data?.token]);
-  return useQuery<any>({
+  return useQuery<BpkadSp2dResponse>({
     queryKey: [
       "data-bpkad-sp2d",
       slug?.slug_aplikasi,
@@ -51,13 +66,7 @@ export const useBpkadSp2dData = () => {
           },
         }
       );
-      const data = response.data;
-      if (typeof window !== "undefined") {
-        try {
-          window.localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-        } catch {}
-      }
-      return data;
+      return response.data;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: true,
@@ -77,7 +86,7 @@ export const useBpkadRfkData = (opts?: { tanggal?: string }) => {
   };
   const tanggal = opts?.tanggal?.trim();
   const qs = tanggal ? `?${new URLSearchParams({ Tanggal: tanggal }).toString()}` : "";
-  return useQuery<any>({
+  return useQuery<BpkadRfkResponse>({
     queryKey: [
       "data-bpkad-rfk",
       slug?.slug_aplikasi,

@@ -122,9 +122,7 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      type TokenRole = { user?: { role?: string }; role?: string } | null;
-      const tk = token as TokenRole;
-      const userRole = tk?.user?.role || tk?.role || "";
+      const userRole = (token as any)?.user?.role || (token as any)?.role || "";
 
       if (!["Super Admin", "super admin", "SuperAdmin"].includes(userRole)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang

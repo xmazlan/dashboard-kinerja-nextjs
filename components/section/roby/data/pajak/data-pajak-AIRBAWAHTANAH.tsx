@@ -48,7 +48,7 @@ export default function DataPajakAIRBAWAHTANAH() {
     Array.isArray(jenisResp?.data) ? jenisResp.data : [];
   const tahunOptions: Array<{ value: string | number; text: string | number }> =
     Array.isArray(tahunResp?.data) ? tahunResp.data : [];
-  const [jenispajak, setJenisPajak] = React.useState<string>("jgMZ");
+  const [jenispajak, setJenisPajak] = React.useState<string>("airbawahtanah");
   const bulan = usePajakFilterStore((s) => s.bulan);
   const tahun = usePajakFilterStore((s) => s.tahun);
   const setBulan = usePajakFilterStore((s) => s.setBulan);
@@ -65,7 +65,7 @@ export default function DataPajakAIRBAWAHTANAH() {
     bulan,
     tahun,
   });
-
+  const last = apiResp?.last_get ?? "";
   const dt = apiResp?.data ?? {};
   type TriwulanItem = { tw: string | number; target: number; total: number };
   // type TahunItem = { tahun: number; total: number };
@@ -150,9 +150,9 @@ export default function DataPajakAIRBAWAHTANAH() {
         title="Statistik Pajak AIRBAWAHTANAH"
         description={
           <>
-            <span className="italic text-xs">
-              (Sumber : Pajak Statistik AIRBAWAHTANAH)
-            </span>
+            Last update: <span suppressHydrationWarning>{last || "-"}</span>
+            <br />
+            <span className="italic text-xs">(Sumber : BPKAD)</span>
           </>
         }
         action={
