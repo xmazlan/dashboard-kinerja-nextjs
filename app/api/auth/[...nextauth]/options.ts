@@ -63,9 +63,10 @@ export const authOptions: AuthOptions = {
             throw new Error("Email and password are required");
           }
 
-          const signinUrl =
-            process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login";
-          const reqTimeout = Number(process.env.AUTH_TIMEOUT_MS ?? 0);
+          const base =
+            process.env.AUTH_BASE_URL || process.env.NEXT_PUBLIC_API_URL || "";
+          const signinUrl = "/api/v1/auth/login";
+          const reqTimeout = Number(process.env.AUTH_TIMEOUT_MS ?? 15000);
 
           const res = await axios.post(
             signinUrl,
@@ -74,10 +75,10 @@ export const authOptions: AuthOptions = {
               password: credentials.password,
             },
             {
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
+              baseURL: base,
               timeout: reqTimeout,
+              validateStatus: (s) => s >= 200 && s < 300,
             }
           );
 
@@ -102,18 +103,10 @@ export const authOptions: AuthOptions = {
               throw new Error(response?.message || "Authentication failed");
             }
           } else {
-            throw new Error("Received invalid response from server");
+            return null;
           }
         } catch (error: any) {
-          if (error.response?.data) {
-            // Handle Axios error response
-            const { message, errors } = error.response.data;
-            if (errors && Array.isArray(errors)) {
-              throw new Error(`[${errors.join(", ")}]`);
-            }
-            throw new Error(message || "Authentication failed");
-          }
-          throw error;
+          return null;
         }
       },
     }),
