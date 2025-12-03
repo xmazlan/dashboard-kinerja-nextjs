@@ -62,7 +62,17 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
       const ms = Date.now() - start;
       addLog(`Respons diterima dalam ${ms} ms`);
       if (result?.error) {
-        const msg = result.error;
+        const code = result.error;
+        const msg = (() => {
+          if (code === "CredentialsSignin")
+            return "Autentikasi gagal. Periksa kredensial atau coba lagi nanti.";
+          if (code === "Callback")
+            return "Layanan autentikasi lambat atau tidak merespons. Silakan coba lagi.";
+          if (code === "AccessDenied") return "Akses ditolak.";
+          if (code === "Configuration")
+            return "Konfigurasi autentikasi bermasalah.";
+          return code;
+        })();
         setError(msg);
         toast.error(msg);
         addLog(`Gagal: ${msg}`);
@@ -72,9 +82,19 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
       addLog("Login berhasil, melakukan redirect");
       router.push(result?.url || "/dashboard");
     } catch (err) {
-      setError("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
-      toast.error("Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.");
-      addLog("Kesalahan tidak diketahui saat login");
+      const ms = logs.findLast((l) => l.includes("Respons diterima"))
+        ? undefined
+        : undefined;
+      const raw = err as unknown as { message?: string };
+      const base = raw?.message || "Terjadi kesalahan jaringan.";
+      const isTimeout =
+        base.toLowerCase().includes("timeout") || base.includes("504");
+      const msg = isTimeout
+        ? "Permintaan login melebihi batas waktu. Silakan coba lagi nanti."
+        : base;
+      setError(msg);
+      toast.error(msg);
+      addLog(`Gagal: ${msg}`);
     } finally {
       setLoading(false);
       addLog("Selesai");
