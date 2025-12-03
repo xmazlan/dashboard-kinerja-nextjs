@@ -44,7 +44,7 @@ export default function DataStuntingBulan() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Penangan Stunting per Bulan"
+        title="Data Penangan Stunting per Bulan"
         description={
           <>
             Last update: {apiData?.last_get ?? ""}

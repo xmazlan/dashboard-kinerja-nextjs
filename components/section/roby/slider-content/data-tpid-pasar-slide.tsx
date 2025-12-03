@@ -139,7 +139,7 @@ export default function DataTpidPasarSlide({
                 </InputGroup>
                 <Badge variant="outline">Total pasar: {totalPasar}</Badge> */}
                 <ModalDetail
-                  title="Detail Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
+                  title="Detail Data Tim Pengendalian Inflasi Daerah (Komoditi)"
                   description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
                   contentModal={
                     <Tabs defaultValue="detail" className="flex flex-col gap-3">

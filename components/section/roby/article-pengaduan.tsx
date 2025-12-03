@@ -91,7 +91,7 @@ export default function ArticlePengaduan() {
     <>
       <CardComponent
         className="gap-1"
-        title="Layanan Kependudukan dan Pecatan Sipil"
+        title="Data Kependudukan dan Pecatan Sipil"
         description="11-04-2025"
       >
         <Carousel

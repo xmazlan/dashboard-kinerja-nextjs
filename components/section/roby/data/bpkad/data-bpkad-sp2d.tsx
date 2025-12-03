@@ -8,7 +8,7 @@ import {
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
 import { useTheme } from "next-themes";
 import merge from "deepmerge";
-import { pieChartOptions } from "@/lib/apex-chart-options";
+import { barChartOptions } from "@/lib/apex-chart-options";
 import BarChart from "@/components/apexchart/bar-chart";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import { TrendingUp, TrendingDown } from "lucide-react";
@@ -33,17 +33,17 @@ export default function DataBpkadSp2d() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan BPKAD SP2D"
+        title="Data BPKAD SP2D"
         description={(() => {
           const periode = String(masterData?.data?.Rekap_Kota?.Periode || "-");
           const last = String(masterData?.last_get || "");
           return (
             <>
-              Last update: <span suppressHydrationWarning>{last || "-"}</span>
-              <br />
-              Periode: <span suppressHydrationWarning>{periode || "-"}</span>
-              <br />
-              <span className="italic text-xs">(Sumber : BPKAD)</span>
+              <div className="flex justify-between items-center gap-2">
+                <span className="text-[11px]">Last update: {last || "-"}</span>
+                <span className="text-[11px]">Periode: {periode || "-"}</span>
+              </div>
+              <span className="italic text-[11px]">(Sumber : BPKAD)</span>
             </>
           );
         })()}
@@ -60,7 +60,7 @@ export default function DataBpkadSp2d() {
           return (
             <div className="w-full">
               <ModalDetail
-                title="Detail Layanan BPKAD SP2D"
+                title="Detail Data BPKAD SP2D"
                 description="Tabulasi dan visualisasi detail."
                 contentModal={
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 max-h-[65vh] overflow-y-auto space-y-2 pr-2">
@@ -136,16 +136,19 @@ export default function DataBpkadSp2d() {
             const isAboveTarget = jumlahRealisasi >= jumlahPagu;
 
             const pieLabels = pieData.map((d) => String(d.name));
-            const pieSeries = pieData.map((d) => Number(d.value || 0));
-            const pieOptions = merge(
-              pieChartOptions(
+            const barSeries = [
+              { name: "Nilai", data: pieData.map((d) => Number(d.value || 0)) },
+            ];
+            const barOptions = merge(
+              barChartOptions(
                 Boolean(isDark),
-                "Proporsi Realisasi vs Pagu",
+                "Perbandingan Realisasi vs Pagu",
                 `Periode ${periodeDisplay}`
               ),
               {
-                labels: pieLabels,
-                legend: { show: true },
+                xaxis: { categories: pieLabels },
+                legend: { show: false },
+                plotOptions: { bar: { distributed: true } },
                 tooltip: {
                   y: {
                     formatter: (val: number) =>
@@ -156,21 +159,21 @@ export default function DataBpkadSp2d() {
             );
 
             return (
-              <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-                <div className="grid grid-cols-1 lg:col-span-2 gap-4">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div
                     className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white/90">
+                      <span className="text-lg font-bold text-white/90">
                         Total Pagu
                       </span>
                       <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
                         <TrendingUp className="w-4 h-4 text-muted-foreground" />
                       </div>
                     </div>
-                    <div className="text-md font-bold text-white mb-1">
+                    <div className="text-lg font-bold text-white mb-1">
                       {formatCurrency(jumlahPagu)}
                     </div>
                     <div className="text-[11px] text-white/80">
@@ -183,7 +186,7 @@ export default function DataBpkadSp2d() {
                     style={getGradientStyleByKey("pajak-realisasi")}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white/90">
+                      <span className="text-lg font-bold text-white/90">
                         Total Realisasi
                       </span>
                       <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
@@ -194,7 +197,7 @@ export default function DataBpkadSp2d() {
                         )}
                       </div>
                     </div>
-                    <div className="text-md font-bold text-white mb-1">
+                    <div className="text-lg font-bold text-white mb-1">
                       {formatCurrency(jumlahRealisasi)}
                     </div>
                     <div className="text-[11px] text-white/80">
@@ -204,7 +207,7 @@ export default function DataBpkadSp2d() {
                 </div>
 
                 <LayoutCard
-                  className="relative bg-card rounded-lg shadow-lg p-2 border lg:col-span-4"
+                  className="relative bg-card rounded-lg shadow-lg p-2 border"
                   ratioDesktop={0.5}
                   ratioMobile={0.38}
                 >
@@ -212,9 +215,9 @@ export default function DataBpkadSp2d() {
                     {pieData.length > 0 && (
                       <div className="flex-1 min-h-0 h-[clamp(240px,42vh,480px)]">
                         <BarChart
-                          options={pieOptions}
-                          series={pieSeries}
-                          type="pie"
+                          options={barOptions}
+                          series={barSeries}
+                          type="bar"
                           height="100%"
                         />
                       </div>

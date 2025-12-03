@@ -7,6 +7,8 @@ import { barChartOptions } from "@/lib/apex-chart-options";
 import BarChart from "@/components/apexchart/bar-chart";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { cn } from "@/lib/utils";
+import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
 export default function DataDinkesHiv() {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
@@ -113,7 +115,10 @@ export default function DataDinkesHiv() {
                             {points.map((p, idx) => (
                               <div
                                 key={idx}
-                                className="rounded-md border bg-card p-2 flex flex-col gap-1"
+                                className={cn(
+                                  "rounded-md border p-2 flex flex-col gap-1 text-white",
+                                  getPatternByKey(p.label)
+                                )}
                               >
                                 <div className="text-xs font-semibold line-clamp-1">
                                   {p.label}
@@ -129,7 +134,12 @@ export default function DataDinkesHiv() {
                                 </div>
                               </div>
                             ))}
-                            <div className="rounded-md border bg-card p-2 flex flex-col gap-1 ">
+                            <div
+                              className={cn(
+                                "rounded-md border p-2 flex flex-col gap-1 text-white",
+                                NEUTRAL_PATTERN
+                              )}
+                            >
                               <div className="text-xs font-semibold">
                                 Total Pasien
                               </div>

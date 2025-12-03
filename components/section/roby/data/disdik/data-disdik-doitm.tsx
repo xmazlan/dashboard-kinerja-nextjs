@@ -232,7 +232,7 @@ export default function DataDisdikDoItm() {
     <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Disdik DO dan LTM"
+        title="Data Disdik DO dan LTM"
         description={(() => {
           const last = String(lastGet || "");
           return (

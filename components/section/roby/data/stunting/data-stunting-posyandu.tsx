@@ -41,7 +41,7 @@ export default function DataStuntingPosyandu() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Penangan Stunting per Posyandu"
+        title="Data Penangan Stunting per Posyandu"
         description={
           <>
             Last update: {apiData?.last_get ?? ""}

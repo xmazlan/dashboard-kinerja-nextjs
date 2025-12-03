@@ -67,7 +67,7 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
           if (code === "CredentialsSignin")
             return "Autentikasi gagal. Periksa kredensial atau coba lagi nanti.";
           if (code === "Callback")
-            return "Layanan autentikasi lambat atau tidak merespons. Silakan coba lagi.";
+            return "Data autentikasi lambat atau tidak merespons. Silakan coba lagi.";
           if (code === "AccessDenied") return "Akses ditolak.";
           if (code === "Configuration")
             return "Konfigurasi autentikasi bermasalah.";
@@ -90,7 +90,7 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
       const msg = isTimeout
         ? "Permintaan login melebihi batas waktu. Silakan coba lagi nanti."
         : isBadGateway
-        ? "Layanan gateway bermasalah (502). Silakan coba kembali beberapa saat lagi."
+        ? "Data gateway bermasalah (502). Silakan coba kembali beberapa saat lagi."
         : base;
       setError(msg);
       toast.error(msg);

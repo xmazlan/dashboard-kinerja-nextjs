@@ -28,8 +28,9 @@ export default function SectionCapilIkd() {
         const last = String(dataRespon?.last_get || "");
         return (
           <>
-            Last update: <span suppressHydrationWarning>{last || "-"}</span>
-            <br />
+            <div className="flex justify-between items-center gap-2">
+              <span className="text-xs">Last update: {last || "-"}</span>
+            </div>
             <span className="italic text-xs">(Sumber : IKD Capil)</span>
           </>
         );

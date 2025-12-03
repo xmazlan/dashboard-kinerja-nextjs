@@ -13,7 +13,7 @@ export default function DataCapil() {
     <>
       <CardComponent
         className="gap-1 border-none shadow-none"
-        title="Layanan Kependudukan dan Pecatan Sipil"
+        title="Data Kependudukan dan Pecatan Sipil"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}
@@ -35,7 +35,7 @@ export default function DataCapil() {
               bg: "bg-orange-600",
             },
             {
-              label: "Layanan IKM (OTP Gratis)",
+              label: "Data IKM (OTP Gratis)",
               value: 314,
               bg: "bg-green-700",
             },

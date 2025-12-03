@@ -89,6 +89,7 @@ export default function RootLayout({
                 <div
                   className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                   vaul-drawer-wrapper=""
+                  suppressHydrationWarning
                 >
                   {children}
                 </div>

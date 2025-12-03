@@ -33,7 +33,7 @@ export default function DataBpkad() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan BPKAD"
+        title="Data BPKAD"
         description={(() => {
           const periode = String(masterData?.data?.Rekap_Kota?.Periode || "-");
           const last = String(masterData?.last_get || "");
@@ -49,7 +49,7 @@ export default function DataBpkad() {
         })()}
         action={
           <ModalDetail
-            title="Detail Layanan BPKAD"
+            title="Detail Data BPKAD"
             description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
             contentModal={
               <Tabs defaultValue="all" className="flex flex-col gap-3">

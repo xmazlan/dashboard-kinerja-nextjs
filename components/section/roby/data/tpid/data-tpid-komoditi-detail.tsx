@@ -23,7 +23,7 @@ export default function DataTpidKomoditiDetail() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
+        title="Data Tim Pengendalian Inflasi Daerah (Komoditi)"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}

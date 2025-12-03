@@ -22,7 +22,7 @@ export default function DataEresponKelurahan() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan pengaduan masyarakat (Kelurahan)"
+        title="Data pengaduan masyarakat (Kelurahan)"
         description={
           <>
             Last update: {kelurahanData?.last_get ?? ""}

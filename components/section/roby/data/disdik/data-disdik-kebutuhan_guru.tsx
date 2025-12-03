@@ -64,7 +64,7 @@ export default function DataDisdikKebutuhanGuru() {
     <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Disdik Kebutuhan Guru"
+        title="Data Disdik Kebutuhan Guru"
         description={(() => {
           const last = String(lastGet || "");
           return (

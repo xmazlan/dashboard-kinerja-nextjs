@@ -4,15 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Domain akan ditangkap otomatis oleh axios dari env/hostname,
-// sehingga parameter tidak wajib.
-interface CapilIkdItem { nama?: string; jumlah?: number }
-interface CapilIkdResponse {
-  success: boolean;
-  data?: { Periode?: string; layanan?: CapilIkdItem[]; blanko?: CapilIkdItem[] };
-  last_get?: string;
-}
-
 export const useCapilIkdData = (tanggal?: string) => {
   const { data: session } = useSession();
   const slug = {
@@ -32,8 +23,8 @@ export const useCapilIkdData = (tanggal?: string) => {
     // Default ke tanggal terbaru (hari ini, format YYYY-MM-DD)
     return new Date().toISOString().slice(0, 10);
   })();
-  
-  return useQuery<CapilIkdResponse>({
+
+  return useQuery<any>({
     queryKey: [
       "data-capil-ikd",
       slug?.opd,

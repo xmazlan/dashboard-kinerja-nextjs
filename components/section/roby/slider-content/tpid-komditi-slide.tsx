@@ -124,7 +124,7 @@ export default function SectionTpidKomoditiSlide({
                 </InputGroup>
                 <Badge variant="outline">Total pasar: {totalPasar}</Badge> */}
                 <ModalDetail
-                  title="Detail Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
+                  title="Detail Data Tim Pengendalian Inflasi Daerah (Komoditi)"
                   description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
                   contentModal={
                     <Tabs defaultValue="detail" className="flex flex-col gap-3">
@@ -183,10 +183,13 @@ export default function SectionTpidKomoditiSlide({
                   onTouchStart={() => setChartPaused(true)}
                   onTouchEnd={() => setChartPaused(false)}
                 >
-                  <CarouselContent className="h-full items-stretch">
+                  <CarouselContent className="h-full ">
                     {pages.map((page, pidx) => (
-                      <CarouselItem key={`page-${pidx}`} className=" py-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      <CarouselItem
+                        key={`page-${pidx}`}
+                        className="h-full max-w-full flex items-center justify-center py-3"
+                      >
+                        <div className="grid w-full h-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                           {page.map((it) => {
                             const kg = it?.harga_per_satuan_komoditas?.KG ?? {};
                             const hargaRata = toNum(kg?.harga_rata_rata);
@@ -198,7 +201,7 @@ export default function SectionTpidKomoditiSlide({
                             return (
                               <div
                                 key={it.id}
-                                className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-3 flex flex-col gap-2"
+                                className="relative rounded-lg border bg-card text-card-foreground shadow-sm p-4 flex flex-col gap-2"
                               >
                                 <ShineBorder
                                   shineColor={["#2563eb", "#1e40af", "#FE6500"]}
@@ -208,13 +211,13 @@ export default function SectionTpidKomoditiSlide({
                                     <OptimizeImage
                                       src={imgSrc}
                                       alt={String(it?.nama_komoditas || "-")}
-                                      width={32}
-                                      height={32}
-                                      containerClassName="w-7 h-7 rounded-sm bg-muted overflow-hidden"
+                                      width={40}
+                                      height={40}
+                                      containerClassName="w-9 h-9 rounded-sm bg-muted overflow-hidden"
                                       imgClassName="rounded-sm object-cover w-full h-full"
                                     />
                                     <div>
-                                      <div className="text-[12px] md:text-sm font-semibold">
+                                      <div className="text-sm md:text-base font-semibold">
                                         {it.nama_komoditas}
                                       </div>
                                       <div className="text-[10px] opacity-70">
@@ -233,7 +236,7 @@ export default function SectionTpidKomoditiSlide({
                                     {status || "-"}
                                   </span>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                                   <div
                                     className={cn(
                                       "rounded-lg p-2 text-white",
@@ -243,7 +246,7 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Rata-rata
                                     </div>
-                                    <div className="text-sm font-bold tabular-nums">
+                                    <div className="text-base md:text-lg font-bold tabular-nums">
                                       {hargaRata.toLocaleString("id-ID")}
                                     </div>
                                   </div>
@@ -256,7 +259,7 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Termurah
                                     </div>
-                                    <div className="text-sm font-bold tabular-nums">
+                                    <div className="text-base md:text-lg font-bold tabular-nums">
                                       {hargaMurah.toLocaleString("id-ID")}
                                     </div>
                                     <div className="text-[10px] opacity-80">
@@ -272,7 +275,7 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Termahal
                                     </div>
-                                    <div className="text-sm font-bold tabular-nums">
+                                    <div className="text-base md:text-lg font-bold tabular-nums">
                                       {hargaMahal.toLocaleString("id-ID")}
                                     </div>
                                     <div className="text-[10px] opacity-80">
@@ -280,7 +283,7 @@ export default function SectionTpidKomoditiSlide({
                                     </div>
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div className="grid grid-cols-1  gap-2">
                                   {Object.entries(hargaPerPasar).map(
                                     ([pasar, harga]) => (
                                       <div
