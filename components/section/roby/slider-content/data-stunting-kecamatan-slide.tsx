@@ -100,7 +100,7 @@ export default function DataStuntingKecamatanSlide() {
     <>
       <CardComponent
         className="p-2  shadow-lg"
-        title="Layanan Penangan Stunting"
+        title="Data Penangan Stunting"
         description={
           <>
             Last update: {apiData?.last_get ?? ""}
@@ -140,7 +140,7 @@ export default function DataStuntingKecamatanSlide() {
                 Total kecamatan: {itemsFiltered.length}
               </Badge> */}
               <ModalDetail
-                title="Detail Layanan Penangan Stunting"
+                title="Detail Data Penangan Stunting"
                 description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
                 contentModal={
                   <Tabs defaultValue="bulan" className="flex flex-col gap-3">

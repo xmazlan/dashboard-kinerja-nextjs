@@ -69,7 +69,7 @@ const mockData = {
     { bulan: "Des", target: 92, realisasi: 85 },
   ],
   produktivitasUnit: [
-    { unit: "Pelayanan", realisasi: 88, target: 90 },
+    { unit: "PeData", realisasi: 88, target: 90 },
     { unit: "Administrasi", realisasi: 82, target: 85 },
     { unit: "Keuangan", realisasi: 91, target: 90 },
     { unit: "SDM", realisasi: 79, target: 85 },

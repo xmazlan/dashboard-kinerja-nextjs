@@ -200,7 +200,7 @@ export default function PajakStatistikContent(props: Props) {
   );
 
   return (
-    <CardComponent className="shadow-none border-none">
+    <CardComponent className="shadow-none border-none ">
       <div className="">
         <div ref={rootRef} className="mx-auto w-full  h-full min-h-0 ">
           {isLoading ? (

@@ -16,7 +16,7 @@ export default function DataEresponOpd() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan pengaduan masyarakat (OPD)"
+        title="Data pengaduan masyarakat (OPD)"
         description={
           <>
             Last update: {opdData?.last_get ?? ""}

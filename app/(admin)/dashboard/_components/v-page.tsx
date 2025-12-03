@@ -98,12 +98,14 @@ export default function Dashboard() {
           <section className="h-full overflow-hidden">
             {/* <ViewportInfo /> */}
 
-            {viewMode === "slide" &&
-              (mounted ? (
-                <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
-              ) : (
-                <div className="w-full h-full space-y-4"></div>
-              ))}
+            {mounted && viewMode === "slide" ? (
+              <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
+            ) : (
+              <div
+                className="w-full h-full space-y-4"
+                suppressHydrationWarning
+              ></div>
+            )}
           </section>
         </main>
       </PageContainer>

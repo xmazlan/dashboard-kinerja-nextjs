@@ -26,12 +26,12 @@ export default function DataOrtalIkm() {
   const items: Array<{
     tahun?: number | string;
     nilai_interval?: string | number;
-    mutu_pelayanan?: string;
+    mutu_peData?: string;
   }> = Array.isArray(apiData?.data)
     ? (apiData?.data as Array<{
         tahun?: number | string;
         nilai_interval?: string | number;
-        mutu_pelayanan?: string;
+        mutu_peData?: string;
       }>)
     : [];
 
@@ -41,7 +41,7 @@ export default function DataOrtalIkm() {
       typeof it?.nilai_interval === "string"
         ? Number(String(it.nilai_interval).replace(",", "."))
         : Number(it?.nilai_interval ?? 0),
-    grade: String(it?.mutu_pelayanan ?? ""),
+    grade: String(it?.mutu_peData ?? ""),
   }));
 
   const categories = points.map((p) => p.year);
@@ -147,7 +147,7 @@ export default function DataOrtalIkm() {
                                 <TableRow>
                                   <TableHead>Tahun</TableHead>
                                   <TableHead>Nilai Interval</TableHead>
-                                  <TableHead>Mutu Pelayanan</TableHead>
+                                  <TableHead>Mutu PeData</TableHead>
                                 </TableRow>
                               </TableHeader>
                               <TableBody>

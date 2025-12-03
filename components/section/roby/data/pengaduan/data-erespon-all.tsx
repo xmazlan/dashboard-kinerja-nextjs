@@ -25,7 +25,7 @@ export default function DataEresponAll() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan pengaduan masyarakat (All Data)"
+        title="Data pengaduan masyarakat (All Data)"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}

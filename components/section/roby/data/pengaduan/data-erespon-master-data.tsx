@@ -52,7 +52,7 @@ export default function DataEresponMasterData() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan pengaduan masyarakat (Master Data)"
+        title="Data pengaduan masyarakat (Master Data)"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}
@@ -62,7 +62,7 @@ export default function DataEresponMasterData() {
         }
         action={
           <ModalDetail
-            title="Detail Layanan Pengaduan Masyarakat"
+            title="Detail Data Pengaduan Masyarakat"
             description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
             contentModal={
               <Tabs defaultValue="all" className="flex flex-col gap-3">

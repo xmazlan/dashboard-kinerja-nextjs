@@ -27,7 +27,7 @@ export default function DataTpidKomoditi() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
+        title="Data Tim Pengendalian Inflasi Daerah (Komoditi)"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}
@@ -37,7 +37,7 @@ export default function DataTpidKomoditi() {
         }
         action={
           <ModalDetail
-            title="Detail Layanan Tim Pengendalian Inflasi Daerah (Komoditi)"
+            title="Detail Data Tim Pengendalian Inflasi Daerah (Komoditi)"
             description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
             contentModal={
               <Tabs defaultValue="detail" className="flex flex-col gap-3">

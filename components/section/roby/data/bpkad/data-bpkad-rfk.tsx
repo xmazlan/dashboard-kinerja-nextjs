@@ -13,7 +13,7 @@ import { useBpkadRfkData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import merge from "deepmerge";
-import { pieChartOptions } from "@/lib/apex-chart-options";
+import { barChartOptions } from "@/lib/apex-chart-options";
 import BarChart from "@/components/apexchart/bar-chart";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import { TrendingUp, TrendingDown } from "lucide-react";
@@ -38,17 +38,17 @@ export default function DataBpkadRfk() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan BPKAD (RFK)"
+        title="Data BPKAD (RFK)"
         description={(() => {
           const tanggal = String(masterData?.data?.Rekap_Kota?.Tanggal || "-");
           const last = String(masterData?.last_get || "");
           return (
             <>
-              Last update: <span suppressHydrationWarning>{last || "-"}</span>
-              <br />
-              Tanggal: <span suppressHydrationWarning>{tanggal || "-"}</span>
-              <br />
-              <span className="italic text-xs">(Sumber : BPKAD)</span>
+              <div className="flex justify-between items-center gap-2">
+                <span className="text-[11px]">Last update: {last || "-"}</span>
+                <span className="text-[11px]">Tanggal: {tanggal || "-"}</span>
+              </div>
+              <span className="italic text-[11px]">(Sumber : BPKAD)</span>
             </>
           );
         })()}
@@ -62,7 +62,7 @@ export default function DataBpkadRfk() {
             ? (masterData?.data?.data as Row[])
             : [];
           return (
-            <div className="w-full flex flex-col gap-2">
+            <div className="w-full flex  gap-2">
               <div className="flex items-center gap-2">
                 <Input
                   type="date"
@@ -72,8 +72,8 @@ export default function DataBpkadRfk() {
                 />
               </div>
               <ModalDetail
-                title="Detail Layanan BPKAD RFK"
-                description={`Detail layanan BPKAD RFK pada tanggal ${tanggal}`}
+                title="Detail Data BPKAD RFK"
+                description={`Detail Data BPKAD RFK pada tanggal ${tanggal}`}
                 contentModal={
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 max-h-[65vh] overflow-y-auto space-y-2 pr-2">
                     {list.map((row, idx) => {
@@ -126,16 +126,22 @@ export default function DataBpkadRfk() {
             const tanggalDisplay = String(rekap?.Tanggal ?? "-");
 
             const pieLabels = pieData.map((d) => String(d.name));
-            const pieSeries = pieData.map((d) => Number(d.value || 0));
-            const pieOptions = merge(
-              pieChartOptions(
+            const barSeries = [
+              {
+                name: "Persentase",
+                data: pieData.map((d) => Number(d.value || 0)),
+              },
+            ];
+            const barOptions = merge(
+              barChartOptions(
                 Boolean(isDark),
-                "Proporsi Keuangan vs Fisik",
+                "Perbandingan Keuangan vs Fisik",
                 `Tanggal ${tanggalDisplay}`
               ),
               {
-                labels: pieLabels,
-                legend: { show: true },
+                xaxis: { categories: pieLabels },
+                legend: { show: false },
+                plotOptions: { bar: { distributed: true } },
                 tooltip: {
                   y: {
                     formatter: (val: number) => `${Number(val).toFixed(2)}%`,
@@ -145,8 +151,8 @@ export default function DataBpkadRfk() {
             );
 
             return (
-              <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-                <div className="grid grid-cols-1 lg:col-span-2 gap-4">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div
                     className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
                     style={getGradientStyleByKey("pajak-target")}
@@ -201,7 +207,7 @@ export default function DataBpkadRfk() {
                 </div>
 
                 <LayoutCard
-                  className="relative bg-card rounded-lg shadow-lg p-2 border lg:col-span-4"
+                  className="relative bg-card rounded-lg shadow-lg p-2 border "
                   ratioDesktop={0.5}
                   ratioMobile={0.38}
                 >
@@ -209,9 +215,9 @@ export default function DataBpkadRfk() {
                     {pieData.length > 0 && (
                       <div className="flex-1 min-h-0 h-[clamp(240px,42vh,480px)]">
                         <BarChart
-                          options={pieOptions}
-                          series={pieSeries}
-                          type="pie"
+                          options={barOptions}
+                          series={barSeries}
+                          type="bar"
                           height="100%"
                         />
                       </div>

@@ -75,17 +75,17 @@ export default function DataStuntingData() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Layanan Penangan Stunting"
+        title="Data Penangan Stunting"
         description={
           <>
             Last update: {apiData?.last_get ?? ""}
             <br />
-            <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
+            <span className="italic text-md">(Sumber : Stunting Sweeper)</span>
           </>
         }
         action={
           <ModalDetail
-            title="Detail Layanan Penangan Stunting"
+            title="Detail Data Penangan Stunting"
             description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
             contentModal={
               <Tabs defaultValue="bulan" className="flex flex-col gap-3">
@@ -133,10 +133,10 @@ export default function DataStuntingData() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-md font-semibold uppercase opacity-90">
                           Total Balita
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-[10px] md:text-sm opacity-80">
                           Data Balita Terdata
                         </div>
                       </div>
@@ -153,10 +153,10 @@ export default function DataStuntingData() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-md font-semibold uppercase opacity-90">
                           BBU
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-[10px] md:text-sm opacity-80">
                           Berat Badan menurut Umur
                         </div>
                       </div>
@@ -173,7 +173,7 @@ export default function DataStuntingData() {
                         />
                       ))}
                     </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
+                    <div className="mt-1 text-[10px] md:text-sm opacity-80">
                       Dominan: {bbuSorted[0]?.label}{" "}
                       {percent(bbuSorted[0]?.value || 0, sumBBU)}%
                     </div> */}
@@ -186,10 +186,10 @@ export default function DataStuntingData() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-md font-semibold uppercase opacity-90">
                           TBU
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-[10px] md:text-sm opacity-80">
                           Tinggi Badan menurut Umur
                         </div>
                       </div>
@@ -206,7 +206,7 @@ export default function DataStuntingData() {
                         />
                       ))}
                     </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
+                    <div className="mt-1 text-[10px] md:text-sm opacity-80">
                       Dominan: {tbuNonStuntingSorted[0]?.label}{" "}
                       {percent(tbuNonStuntingSorted[0]?.value || 0, sumTBU)}%
                     </div> */}
@@ -219,10 +219,10 @@ export default function DataStuntingData() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-md font-semibold uppercase opacity-90">
                           BBTB
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-[10px] md:text-sm opacity-80">
                           Berat Badan menurut Tinggi Badan
                         </div>
                       </div>
@@ -239,7 +239,7 @@ export default function DataStuntingData() {
                         />
                       ))}
                     </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
+                    <div className="mt-1 text-[10px] md:text-sm opacity-80">
                       Dominan: {bbtbSorted[0]?.label}{" "}
                       {percent(bbtbSorted[0]?.value || 0, sumBBTB)}%
                     </div> */}
@@ -278,13 +278,13 @@ export default function DataStuntingData() {
                         shineColor={["#2563eb", "#1e40af", "#FE6500"]}
                       />
                       <div className="flex items-center justify-between">
-                        <div className="text-xs font-semibold">
+                        <div className="text-md font-semibold">
                           {section.key}{" "}
-                          <p className="text-[10px] md:text-[11px] opacity-80 italic">
+                          <p className="text-[10px] md:text-sm opacity-80 italic">
                             {section.keyLabel}
                           </p>
                         </div>
-                        <div className="text-xs font-bold tabular-nums">
+                        <div className="text-md font-bold tabular-nums">
                           {section.sum.toLocaleString("id-ID")}
                         </div>
                       </div>

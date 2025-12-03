@@ -326,8 +326,8 @@ export default function GlobSlider({
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className="fixed left-1 md:left-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
-          <CarouselNext className="fixed right-1 md:right-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
+          <CarouselPrevious className="fixed left-2 md:left-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
+          <CarouselNext className="fixed right-2 md:right-3 top-1/2 -translate-y-1/2 z-50 bg-black/40 hover:bg-black/60 text-white h-7 w-7 md:h-9 md:w-9" />
         </Carousel>
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {snaps.map((_, idx) => (
