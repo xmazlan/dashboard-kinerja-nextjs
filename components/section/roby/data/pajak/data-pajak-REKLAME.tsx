@@ -8,21 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
-import {
   usePajakStatistikData,
   useJenisPajakData,
   useTahunPajakData,
@@ -47,7 +32,7 @@ export default function DataPajakREKLAME() {
     Array.isArray(jenisResp?.data) ? jenisResp.data : [];
   const tahunOptions: Array<{ value: string | number; text: string | number }> =
     Array.isArray(tahunResp?.data) ? tahunResp.data : [];
-  const [jenispajak, setJenisPajak] = React.useState<string>("fuMg");
+  const [jenispajak, setJenisPajak] = React.useState<string>("reklame");
   const bulan = usePajakFilterStore((s) => s.bulan);
   const tahun = usePajakFilterStore((s) => s.tahun);
   const setBulan = usePajakFilterStore((s) => s.setBulan);
@@ -64,7 +49,7 @@ export default function DataPajakREKLAME() {
     bulan,
     tahun,
   });
-
+  const last = apiResp?.last_get ?? "";
   const dt = apiResp?.data ?? {};
   type TriwulanItem = { tw: string | number; target: number; total: number };
   // type TahunItem = { tahun: number; total: number };
@@ -149,9 +134,9 @@ export default function DataPajakREKLAME() {
         title="Statistik Pajak REKLAME"
         description={
           <>
-            <span className="italic text-xs">
-              (Sumber : Pajak Statistik REKLAME)
-            </span>
+            Last update: <span suppressHydrationWarning>{last || "-"}</span>
+            <br />
+            <span className="italic text-xs">(Sumber : BPKAD)</span>
           </>
         }
         action={
