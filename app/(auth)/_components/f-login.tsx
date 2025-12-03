@@ -82,15 +82,15 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
       addLog("Login berhasil, melakukan redirect");
       router.push(result?.url || "/dashboard");
     } catch (err) {
-      const ms = logs.findLast((l) => l.includes("Respons diterima"))
-        ? undefined
-        : undefined;
       const raw = err as unknown as { message?: string };
       const base = raw?.message || "Terjadi kesalahan jaringan.";
-      const isTimeout =
-        base.toLowerCase().includes("timeout") || base.includes("504");
+      const lc = base.toLowerCase();
+      const isTimeout = lc.includes("timeout") || lc.includes("504");
+      const isBadGateway = lc.includes("bad gateway") || lc.includes("502");
       const msg = isTimeout
         ? "Permintaan login melebihi batas waktu. Silakan coba lagi nanti."
+        : isBadGateway
+        ? "Layanan gateway bermasalah (502). Silakan coba kembali beberapa saat lagi."
         : base;
       setError(msg);
       toast.error(msg);
