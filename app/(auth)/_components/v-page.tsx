@@ -168,7 +168,7 @@ export default function Vlogin() {
       <div className="relative z-10 flex flex-1 flex-col lg:flex-row">
         {/* Left Section - Branding & Features with Carousel */}
         <motion.div
-          className="hidden lg:flex lg:w-1/2 p-8 flex-col justify-between text-white relative overflow-hidden"
+          className="hidden lg:flex lg:w-1/2 p-8 flex-col justify-between text-white relative overflow-hidden space-y-2"
           variants={slideInLeft}
           initial="hidden"
           animate="visible"
@@ -394,13 +394,13 @@ export default function Vlogin() {
         </motion.div>
       </div>
       {/* Global Footer */}
-      <footer className="relative z-10 w-full px-6 py-4 text-center text-sm text-white dark:text-white/70">
+      <footer className="relative z-10 w-full px-6 py-2 text-center text-sm text-white dark:text-white/70">
         <div className="flex flex-col items-center gap-2">
           <Image
             src="/assets/logo-pemko-kominfo.webp"
             alt="Logo Pemerintah Kota Pekanbaru"
-            width={120}
-            height={120}
+            width={110}
+            height={110}
             priority
             className="block mx-auto shrink-0 object-contain drop-shadow-sm mb-1"
           />

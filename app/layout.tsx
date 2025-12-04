@@ -87,7 +87,7 @@ export default function RootLayout({
             <QueryProvider>
               <NextAuthSessionProvider>
                 <div
-                  className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                  className={`force-4k ${geistSans.variable} ${geistMono.variable} antialiased`}
                   vaul-drawer-wrapper=""
                   suppressHydrationWarning
                 >

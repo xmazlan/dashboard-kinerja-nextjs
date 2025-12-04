@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Maximize, Minimize2, SlidersHorizontal } from "lucide-react";
+import {
+  LogOut,
+  Maximize,
+  Minimize2,
+  SlidersHorizontal,
+  LayoutDashboard,
+  FileSpreadsheet,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +36,8 @@ import {
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { useDashboardStore } from "@/hooks/use-dashboard";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 export function Navbar() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -44,6 +53,7 @@ export function Navbar() {
   const setBottomGap = useDashboardStore((s) => s.setBottomGap);
   const setSpeed = useDashboardStore((s) => s.setSpeed);
   const setChildSpeed = useDashboardStore((s) => s.setChildSpeed);
+  const pathname = usePathname();
   useEffect(() => {
     const handleChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
@@ -342,6 +352,30 @@ export function Navbar() {
         actionLabel={isLoggingOut ? "Keluar..." : "Keluar"}
         actionClassName="bg-blue-600 hover:bg-blue-700"
       />
+      {session?.data?.user?.role === "opd" && (
+        <div className="relative z-10 border-t border-border bg-background/50 backdrop-blur supports-backdrop-filter:bg-background/75">
+          <div className="px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-1 py-1">
+              <Link href="/overview" className="inline-block">
+                <Button
+                  size="sm"
+                  variant={pathname === "/overview" ? "default" : "outline"}
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 mr-1" /> Overview
+                </Button>
+              </Link>
+              <Link href="/form" className="inline-block">
+                <Button
+                  size="sm"
+                  variant={pathname === "/form" ? "default" : "outline"}
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Form
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
