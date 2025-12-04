@@ -24,7 +24,7 @@ async function arcjetMiddleware(request: NextRequest) {
     request.headers.get("cf-connecting-ip") ||
     undefined;
   const decision = await aj.protect(
-    ip ? (({ ...request, ip } as unknown) as NextRequest) : request
+    ip ? ({ ...request, ip } as unknown as NextRequest) : request
   );
 
   if (decision.isDenied()) {
@@ -80,9 +80,15 @@ export default async function middleware(req: NextRequest) {
         secret: process.env.NEXTAUTH_SECRET,
       });
       if (token && path === "/") {
-        const roleRaw = (token as unknown as { user?: { role?: string } })?.user?.role;
+        const roleRaw = (token as unknown as { user?: { role?: string } })?.user
+          ?.role;
         const role = typeof roleRaw === "string" ? roleRaw.toLowerCase() : "";
-        const target = role === "pimpinan" ? "/dashboard" : role === "admin" || role === "opd" ? "/admin" : "/dashboard";
+        const target =
+          role === "pimpinan"
+            ? "/dashboard"
+            : role === "opd"
+            ? "/overview"
+            : "/dashboard";
         return NextResponse.redirect(new URL(target, req.url));
       }
     } catch (error) {
@@ -105,12 +111,11 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      const userRole = (
+      const userRole =
         (token as unknown as { user?: { role?: string }; role?: string })?.user
           ?.role ??
         (token as unknown as { role?: string })?.role ??
-        ""
-      );
+        "";
 
       if (!["pimpinan"].includes(userRole)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang
@@ -122,7 +127,7 @@ export default async function middleware(req: NextRequest) {
     }
   }
   // Handle configuration routes dengan akses berdasarkan peran
-  if (path.startsWith("/admin")) {
+  if (path.startsWith("/overview")) {
     try {
       const token = await getToken({
         req: req,
@@ -135,12 +140,11 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      const userRole = (
+      const userRole =
         (token as unknown as { user?: { role?: string }; role?: string })?.user
           ?.role ??
         (token as unknown as { role?: string })?.role ??
-        ""
-      );
+        "";
 
       if (!["opd"].includes(userRole)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang

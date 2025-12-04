@@ -3,7 +3,7 @@ import React from "react";
 import FormKinerja from "@/components/admin/form-kinerja";
 import { Card } from "@/components/ui/card";
 
-export default function VPageAdmin() {
+export default function VPageFormKinerja() {
   return (
     <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 -z-10">

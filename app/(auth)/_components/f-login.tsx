@@ -83,7 +83,7 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
         session as unknown as { data?: { user?: { role?: string } } }
       )?.data?.user?.role;
       const role = typeof roleRaw === "string" ? roleRaw.toLowerCase() : "";
-      const target = role === "opd" ? "/admin" : result?.url || "/dashboard";
+      const target = role === "opd" ? "/overview" : result?.url || "/dashboard";
       toast.success("Login berhasil. Mengalihkan...");
       addLog(`Login berhasil, redirect ke ${target}`);
       router.push(target);
