@@ -78,9 +78,15 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
         addLog(`Gagal: ${msg}`);
         return;
       }
+      const session = await getSession();
+      const roleRaw = (
+        session as unknown as { data?: { user?: { role?: string } } }
+      )?.data?.user?.role;
+      const role = typeof roleRaw === "string" ? roleRaw.toLowerCase() : "";
+      const target = role === "opd" ? "/admin" : result?.url || "/dashboard";
       toast.success("Login berhasil. Mengalihkan...");
-      addLog("Login berhasil, melakukan redirect");
-      router.push(result?.url || "/dashboard");
+      addLog(`Login berhasil, redirect ke ${target}`);
+      router.push(target);
     } catch (err) {
       const raw = err as unknown as { message?: string };
       const base = raw?.message || "Terjadi kesalahan jaringan.";
@@ -182,7 +188,7 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
         </div>
 
         {/* Demo credentials hint + autofill */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg px-3 py-2.5">
+        {/* <div className="flex items-center justify-between text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg px-3 py-2.5">
           <div>
             <span className="font-semibold">Demo:</span>{" "}
             <span className="font-mono">{DEMO_EMAIL}</span> /{" "}
@@ -202,7 +208,7 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
           >
             Isi demo
           </Button>
-        </div>
+        </div> */}
 
         {/* <div className="flex items-center justify-between pt-1">
         <label className="flex items-center gap-2.5 cursor-pointer group">

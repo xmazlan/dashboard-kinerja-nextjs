@@ -1,4 +1,4 @@
-import { AuthOptions, User, Account, SessionStrategy } from "next-auth";
+import { AuthOptions, User, Account, SessionStrategy, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -14,6 +14,8 @@ declare module "next-auth" {
         name: string;
         email: string;
         role: string;
+        opd: string;
+        opd_slug: string;
       };
       token: string;
     };
@@ -25,6 +27,8 @@ declare module "next-auth" {
     email: string;
     role: string;
     accessToken: string;
+    opd: string;
+    opd_slug: string;
   }
 }
 
@@ -35,6 +39,8 @@ declare module "next-auth/jwt" {
       name: string;
       email: string;
       role: string;
+      opd: string;
+      opd_slug: string;
     };
   }
 }
@@ -87,10 +93,15 @@ export const authOptions: AuthOptions = {
 
             if (response?.success === true && response?.data) {
               const userData = response.data?.user || {};
-              const permissions = Array.isArray(response.data?.permissions)
-                ? response.data.permissions
-                : [];
-              const activity = response.data?.activity ?? null;
+
+              const toSlug = (s: unknown) =>
+                String(s || "")
+                  .trim()
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/^-+|-+$/g, "");
+              const opdName = userData.opd ?? userData.name ?? "";
+              const opdSlug = userData.opd_slug ?? toSlug(opdName);
 
               return {
                 id: String(userData.email || userData.name || "user"),
@@ -98,6 +109,8 @@ export const authOptions: AuthOptions = {
                 email: userData.email ?? "",
                 role: userData.role ?? "",
                 accessToken: response.data.token,
+                opd: String(opdName ?? ""),
+                opd_slug: String(opdSlug ?? ""),
               };
             } else {
               throw new Error(response?.message || "Authentication failed");
@@ -105,7 +118,7 @@ export const authOptions: AuthOptions = {
           } else {
             return null;
           }
-        } catch (error: any) {
+        } catch {
           return null;
         }
       },
@@ -116,11 +129,17 @@ export const authOptions: AuthOptions = {
       if (user) {
         const u = user as User;
         token.accessToken = u.accessToken;
-        token.user = { name: u.name, email: u.email, role: u.role };
+        token.user = {
+          name: u.name,
+          email: u.email,
+          role: u.role,
+          opd: u.opd,
+          opd_slug: u.opd_slug,
+        };
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       session.success = true;
       session.message = "Login berhasil.";
       session.data = {
@@ -128,26 +147,15 @@ export const authOptions: AuthOptions = {
           name: token.user?.name,
           email: token.user?.email,
           role: token.user?.role,
+          opd: token.user?.opd,
+          opd_slug: token.user?.opd_slug,
         },
         token: token.accessToken,
       };
       return session;
     },
-    async signIn({
-      user,
-      account,
-      profile,
-      email,
-      credentials,
-    }: {
-      user: User | AdapterUser;
-      account: Account | null;
-      profile?: any;
-      email?: { verificationRequest?: boolean };
-      credentials?: Record<string, any>;
-    }) {
-      if (user) return true;
-      else return false;
+    async signIn({ user }: { user: User | AdapterUser }) {
+      return !!user;
     },
     async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
       // CUSTOM

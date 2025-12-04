@@ -23,7 +23,7 @@ import React from "react";
 import ViewportInfo from "@/components/section/viewport-info";
 
 export default function Dashboard() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const isUnauthenticated = status === "unauthenticated";
   const setSizes = useLayoutStore((s) => s.setSizes);
   const viewMode = useDashboardStore((s) => s.viewMode);
@@ -34,7 +34,6 @@ export default function Dashboard() {
   React.useEffect(() => {
     setMounted(true);
   }, []);
-
   const recomputeLayout = React.useCallback(() => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -97,14 +96,25 @@ export default function Dashboard() {
         <main className="h-full overflow-hidden">
           <section className="h-full overflow-hidden">
             {/* <ViewportInfo /> */}
-
-            {mounted && viewMode === "slide" ? (
-              <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
+            {session?.data?.user?.role === "pimpinan" ? (
+              <>
+                {mounted && viewMode === "slide" ? (
+                  <GlobSlider
+                    fullScreen
+                    topGap={topGap}
+                    bottomGap={bottomGap}
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full space-y-4"
+                    suppressHydrationWarning
+                  ></div>
+                )}
+              </>
             ) : (
-              <div
-                className="w-full h-full space-y-4"
-                suppressHydrationWarning
-              ></div>
+              <>
+                <h1> Page OPD</h1>
+              </>
             )}
           </section>
         </main>

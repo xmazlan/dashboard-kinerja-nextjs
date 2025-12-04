@@ -152,134 +152,144 @@ export function Navbar() {
             <div className="hidden md:block">
               <DigitalClock variant="navbar" />
             </div>
+            {session?.data?.user?.role === "pimpinan" && (
+              <>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  aria-label={
+                    isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
+                  }
+                  onClick={toggleFullscreen}
+                  className="hover:bg-muted hidden sm:inline-flex"
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-5 h-5" />
+                  ) : (
+                    <Maximize className="w-5 h-5" />
+                  )}
+                </Button>
 
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={
-                isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
-              }
-              onClick={toggleFullscreen}
-              className="hover:bg-muted hidden sm:inline-flex"
-            >
-              {isFullscreen ? (
-                <Minimize2 className="w-5 h-5" />
-              ) : (
-                <Maximize className="w-5 h-5" />
-              )}
-            </Button>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label="Pengaturan Tampilan"
+                      className="hover:bg-muted"
+                    >
+                      <SlidersHorizontal className="w-5 h-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right">
+                    <SheetHeader>
+                      <SheetTitle>Pengaturan Tampilan</SheetTitle>
+                    </SheetHeader>
+                    <div className="px-4 space-y-4">
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">Mode</div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant={
+                              viewMode === "slide" ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => setViewMode("slide")}
+                          >
+                            Slide
+                          </Button>
+                          <Button
+                            variant={
+                              viewMode === "page" ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => setViewMode("page")}
+                          >
+                            Halaman
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">Jarak Atas</div>
+                        <Slider
+                          value={[topGap]}
+                          min={0}
+                          max={64}
+                          onValueChange={(v) => setTopGap(v[0] ?? topGap)}
+                        />
+                        <div className="text-xs text-muted-foreground">
+                          {topGap}px
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">Jarak Bawah</div>
+                        <Slider
+                          value={[bottomGap]}
+                          min={0}
+                          max={64}
+                          onValueChange={(v) => setBottomGap(v[0] ?? bottomGap)}
+                        />
+                        <div className="text-xs text-muted-foreground">
+                          {bottomGap}px
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">
+                          Kecepatan Slide (ms)
+                        </div>
+                        <Slider
+                          value={[speed]}
+                          min={1000}
+                          max={10000}
+                          onValueChange={(v) => setSpeed(v[0] ?? speed)}
+                        />
+                        <div className="text-xs text-muted-foreground">
+                          {speed} ms
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium">
+                          Kecepatan Slide Anak (ms)
+                        </div>
+                        <Slider
+                          value={[childSpeed]}
+                          min={1000}
+                          max={10000}
+                          onValueChange={(v) =>
+                            setChildSpeed(v[0] ?? childSpeed)
+                          }
+                        />
+                        <div className="text-xs text-muted-foreground">
+                          {childSpeed} ms
+                        </div>
+                      </div>
+                    </div>
+                    <SheetFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setViewMode("slide");
+                          setTopGap(16);
+                          setBottomGap(16);
+                          setSpeed(
+                            Number(process.env.NEXT_PUBLIC_SPEED_LIDER) || 4000
+                          );
+                          setChildSpeed(
+                            Number(process.env.NEXT_PUBLIC_SPEED_CHILD) || 4000
+                          );
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </SheetFooter>
+                  </SheetContent>
+                </Sheet>
+              </>
+            )}
 
             <div className="">
               <ThemeSwitcher />
             </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="Pengaturan Tampilan"
-                  className="hover:bg-muted"
-                >
-                  <SlidersHorizontal className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <SheetHeader>
-                  <SheetTitle>Pengaturan Tampilan</SheetTitle>
-                </SheetHeader>
-                <div className="px-4 space-y-4">
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Mode</div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant={viewMode === "slide" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("slide")}
-                      >
-                        Slide
-                      </Button>
-                      <Button
-                        variant={viewMode === "page" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("page")}
-                      >
-                        Halaman
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Jarak Atas</div>
-                    <Slider
-                      value={[topGap]}
-                      min={0}
-                      max={64}
-                      onValueChange={(v) => setTopGap(v[0] ?? topGap)}
-                    />
-                    <div className="text-xs text-muted-foreground">
-                      {topGap}px
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Jarak Bawah</div>
-                    <Slider
-                      value={[bottomGap]}
-                      min={0}
-                      max={64}
-                      onValueChange={(v) => setBottomGap(v[0] ?? bottomGap)}
-                    />
-                    <div className="text-xs text-muted-foreground">
-                      {bottomGap}px
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">
-                      Kecepatan Slide (ms)
-                    </div>
-                    <Slider
-                      value={[speed]}
-                      min={1000}
-                      max={10000}
-                      onValueChange={(v) => setSpeed(v[0] ?? speed)}
-                    />
-                    <div className="text-xs text-muted-foreground">
-                      {speed} ms
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">
-                      Kecepatan Slide Anak (ms)
-                    </div>
-                    <Slider
-                      value={[childSpeed]}
-                      min={1000}
-                      max={10000}
-                      onValueChange={(v) => setChildSpeed(v[0] ?? childSpeed)}
-                    />
-                    <div className="text-xs text-muted-foreground">
-                      {childSpeed} ms
-                    </div>
-                  </div>
-                </div>
-                <SheetFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setViewMode("slide");
-                      setTopGap(16);
-                      setBottomGap(16);
-                      setSpeed(
-                        Number(process.env.NEXT_PUBLIC_SPEED_LIDER) || 4000
-                      );
-                      setChildSpeed(
-                        Number(process.env.NEXT_PUBLIC_SPEED_CHILD) || 4000
-                      );
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </SheetFooter>
-              </SheetContent>
-            </Sheet>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-10 w-10 rounded-lg">
