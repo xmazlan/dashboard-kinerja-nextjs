@@ -23,7 +23,9 @@ async function arcjetMiddleware(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     request.headers.get("cf-connecting-ip") ||
     undefined;
-  const decision = await aj.protect(ip ? { ...(request as any), ip } : request);
+  const decision = await aj.protect(
+    ip ? (({ ...request, ip } as unknown) as NextRequest) : request
+  );
 
   if (decision.isDenied()) {
     console.log("Arcjet blocked request:", decision.reason);
@@ -71,16 +73,17 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Jika mengakses halaman login dan sudah login, larikan ke dashboard
   if (publicPages.some((page) => path.startsWith(page))) {
     try {
       const token = await getToken({
         req,
         secret: process.env.NEXTAUTH_SECRET,
       });
-      // Jika sudah login dan mencoba akses halaman login, arahkan ke dashboard
       if (token && path === "/") {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        const roleRaw = (token as unknown as { user?: { role?: string } })?.user?.role;
+        const role = typeof roleRaw === "string" ? roleRaw.toLowerCase() : "";
+        const target = role === "pimpinan" ? "/dashboard" : role === "admin" || role === "opd" ? "/admin" : "/dashboard";
+        return NextResponse.redirect(new URL(target, req.url));
       }
     } catch (error) {
       // jika error, biarkan lanjut ke login page
@@ -89,7 +92,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Handle configuration routes dengan akses berdasarkan peran
-  if (path.startsWith("/configuration")) {
+  if (path.startsWith("/dashboard")) {
     try {
       const token = await getToken({
         req: req,
@@ -102,11 +105,46 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      const userRole = (token as any)?.user?.role || (token as any)?.role || "";
+      const userRole = (
+        (token as unknown as { user?: { role?: string }; role?: string })?.user
+          ?.role ??
+        (token as unknown as { role?: string })?.role ??
+        ""
+      );
 
-      if (!["Super Admin", "super admin", "SuperAdmin"].includes(userRole)) {
+      if (!["pimpinan"].includes(userRole)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang
-        return NextResponse.redirect(new URL("//prohibited", req.url));
+        return NextResponse.redirect(new URL("/auth/prohibited", req.url));
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+  // Handle configuration routes dengan akses berdasarkan peran
+  if (path.startsWith("/admin")) {
+    try {
+      const token = await getToken({
+        req: req,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+
+      if (!token) {
+        // Jika tidak ada token, arahkan ke halaman login
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+
+      // Periksa peran pengguna
+      const userRole = (
+        (token as unknown as { user?: { role?: string }; role?: string })?.user
+          ?.role ??
+        (token as unknown as { role?: string })?.role ??
+        ""
+      );
+
+      if (!["opd"].includes(userRole)) {
+        // Jika rolenya tidak sesuai, arahkan ke halaman terlarang
+        return NextResponse.redirect(new URL("/auth/prohibited", req.url));
       }
     } catch (error) {
       console.error("Auth error:", error);
@@ -115,7 +153,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Handle rute terlindungi lainnya (dashboard, sso/profile, dll.)
-  const protectedPaths = ["/dashboard"];
+  const protectedPaths = ["/dashboard", "/admin", "/auth/prohibited"];
 
   if (protectedPaths.some((protectedPath) => path.startsWith(protectedPath))) {
     try {
