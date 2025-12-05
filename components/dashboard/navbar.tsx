@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
@@ -161,7 +161,9 @@ export function Navbar() {
 
           <div className="flex items-center gap-1 sm:gap-2">
             <div className="hidden sm:block">
-              <CommandMenu />
+              <Suspense fallback={null}>
+                <CommandMenu />
+              </Suspense>
             </div>
             <div className="hidden md:block">
               <DigitalClock variant="navbar" />
