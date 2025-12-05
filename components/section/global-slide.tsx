@@ -121,6 +121,29 @@ export default function GlobSlider({
     };
   }, [api]);
 
+  React.useEffect(() => {
+    if (!api) return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const cat = (params.get("category") || "").toLowerCase();
+      const indexMap: Record<string, number> = {
+        pajak: 0,
+        bpkad: 1,
+        ortal: 2,
+        dinkes: 3,
+        disdik: 4,
+        tpid: 5,
+        capil: 6,
+        sipuanpenari: 7,
+        distankan: 7,
+      };
+      const idx = indexMap[cat];
+      if (typeof idx === "number") {
+        api.scrollTo(idx);
+      }
+    } catch {}
+  }, [api]);
+
   const handleInnerDone = React.useCallback(() => {
     if (didAdvanceRef.current) return;
     didAdvanceRef.current = true;

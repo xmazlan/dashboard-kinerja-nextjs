@@ -56,7 +56,5 @@ export const siteConfig: SiteConfig = {
 };
 
 export const menuConfig = [
-  { href: "/", label: "Beranda" },
-  { href: "/Data", label: "Data" },
-  { href: "/about", label: "Tentang" },
+  { href: "/dashboard", label: "Dashboard" },
 ];

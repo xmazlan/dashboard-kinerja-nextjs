@@ -8,6 +8,7 @@ import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import QueryProvider from "@/provider/QueryProvider";
 import { createMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/config/site";
+import { NextProvider } from "fumadocs-core/framework/next";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -84,17 +85,19 @@ export default function RootLayout({
         >
           <TooltipProvider>
             <SonnerToaster />
-            <QueryProvider>
-              <NextAuthSessionProvider>
-                <div
-                  className={`force-4k ${geistSans.variable} ${geistMono.variable} antialiased`}
-                  vaul-drawer-wrapper=""
-                  suppressHydrationWarning
-                >
-                  {children}
-                </div>
-              </NextAuthSessionProvider>
-            </QueryProvider>
+            <NextProvider>
+              <QueryProvider>
+                <NextAuthSessionProvider>
+                  <div
+                    className={`force-4k ${geistSans.variable} ${geistMono.variable} antialiased`}
+                    vaul-drawer-wrapper=""
+                    suppressHydrationWarning
+                  >
+                    {children}
+                  </div>
+                </NextAuthSessionProvider>
+              </QueryProvider>
+            </NextProvider>
           </TooltipProvider>
         </ThemeProvider>
       </body>

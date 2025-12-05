@@ -11,22 +11,51 @@ import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
 import DisdikSlide from "./roby/slider-content/disdik-slide";
 
 export default function SectionTree() {
+  const [components, setComponents] = React.useState<
+    Array<{ key: string; label: string }>
+  >([
+    { key: "kominfo-erespon", label: "Kominfo E-Respon" },
+    { key: "disdik", label: "Disdik" },
+    { key: "tpid-komoditi", label: "TPID Komoditi" },
+    { key: "sipuan-penari", label: "Sipuan Penari" },
+  ]);
+
+  React.useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch(`/data-search.json`);
+        const json = await res.json();
+        const sections = Array.isArray(json?.sections) ? json.sections : [];
+        const s = sections.find((it: any) => it?.id === "section-tree");
+        const list = Array.isArray(s?.components) ? s.components : [];
+        if (active && list.length > 0) setComponents(list);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const componentMap: Record<string, React.ComponentType> = {
+    "kominfo-erespon": KominfoEresponSlide,
+    disdik: DisdikSlide,
+    "tpid-komoditi": SectionTpidKomoditiSlide,
+    "sipuan-penari": SipuanPenariSlide,
+  };
+
   return (
-    <SectionContainer>
+    <SectionContainer idSection={components.map((c) => c.key)}>
       <div className="grid grid-cols-1 gap-4 sm:gap-5 w-full">
-        <div className="col-span-full ">
-          <KominfoEresponSlide />
-        </div>
-        <div className="col-span-full ">
-          <DisdikSlide />
-        </div>
-        <div className="col-span-full ">
-          {/* <DataTpidPasarSlide /> */}
-          <SectionTpidKomoditiSlide />
-        </div>
-        <div className="col-span-full ">
-          <SipuanPenariSlide />
-        </div>
+        {components.map((c) => {
+          const Comp = componentMap[c.key];
+          if (!Comp) return null;
+          return (
+            <div className="col-span-full " data-key={c.key} key={c.key}>
+              <Comp />
+            </div>
+          );
+        })}
       </div>
     </SectionContainer>
   );

@@ -21,8 +21,16 @@ export default function Layout({
   const navbar = useLayoutStore((s) => s.navbar);
   const footer = useLayoutStore((s) => s.footer);
 
+  const [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const topOffset = Math.max((navbar?.height ?? 0) + topGap, 0);
   const bottomOffset = Math.max((footer?.height ?? 0) + bottomGap, 0);
+  const stableStyle = hydrated
+    ? { top: topOffset, bottom: bottomOffset }
+    : { top: 0, bottom: 0 };
 
   return (
     <>
@@ -30,7 +38,8 @@ export default function Layout({
       {viewMode === "page" && (
         <div
           className="fixed left-0 right-0 px-0"
-          style={{ top: topOffset, bottom: bottomOffset }}
+          suppressHydrationWarning
+          style={stableStyle}
         >
           <div className="relative w-full h-full overflow-auto">
             <div className="w-full h-full space-y-4 py-4">

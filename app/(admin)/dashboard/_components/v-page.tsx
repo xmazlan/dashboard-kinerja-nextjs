@@ -21,9 +21,11 @@ import { useLayoutStore } from "@/hooks/use-layout";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import React from "react";
 import ViewportInfo from "@/components/section/viewport-info";
+import { useSearchParams } from "next/navigation";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
   const isUnauthenticated = status === "unauthenticated";
   const setSizes = useLayoutStore((s) => s.setSizes);
   const viewMode = useDashboardStore((s) => s.viewMode);
@@ -76,6 +78,31 @@ export default function Dashboard() {
       ro.disconnect();
     };
   }, [recomputeLayout]);
+
+  React.useEffect(() => {
+    const params = searchParams;
+    const cat = params.get("category");
+    const rawComp = params.get("component");
+    const comp = (() => {
+      if (!rawComp) return null;
+      const alias: Record<string, string> = {
+        tpid: "tpid-komoditi",
+      };
+      return alias[rawComp] ?? rawComp;
+    })();
+    if (cat) setViewMode("slide");
+    if (comp) setViewMode("page");
+    if (comp) {
+      const scrollToTarget = () => {
+        const el = document.querySelector(
+          `[data-key="${comp}"]`
+        ) as HTMLElement | null;
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      requestAnimationFrame(() => scrollToTarget());
+      setTimeout(scrollToTarget, 300);
+    }
+  }, [searchParams, setViewMode]);
   return (
     <>
       <AlertDialog open={isUnauthenticated}>

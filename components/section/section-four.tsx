@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -32,6 +32,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
+import SectionContainer from "./section-container";
 
 // Mock data untuk dashboard
 const mockData = {
@@ -180,352 +181,376 @@ export default function SectionFour() {
     };
   }, [contentApi]);
 
+  const [components, setComponents] = React.useState<
+    Array<{ key: string; label: string }>
+  >([
+    { key: "target-realisasi", label: "Target vs Realisasi" },
+    { key: "status-program", label: "Status Program" },
+    { key: "produktivitas-unit", label: "Produktivitas Unit" },
+    { key: "kehadiran-mingguan", label: "Kehadiran Mingguan" },
+  ]);
+
+  React.useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch(`/data-search.json`);
+        const json = await res.json();
+        const sections = Array.isArray(json?.sections) ? json.sections : [];
+        const s = sections.find((it: any) => it?.id === "section-four");
+        const list = Array.isArray(s?.components) ? s.components : [];
+        if (active && list.length > 0) setComponents(list);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const blockMap: Record<string, () => JSX.Element> = {
+    "target-realisasi": () => (
+      <Card data-key="target-realisasi">
+        <CardHeader>
+          <CardTitle>Target vs Realisasi</CardTitle>
+          <CardDescription>
+            Geser untuk melihat 5 visual berbeda per bulan
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Carousel
+            className="w-full"
+            opts={{ loop: true, align: "start" }}
+            setApi={setChartApi}
+            onMouseEnter={() => setChartPaused(true)}
+            onMouseLeave={() => setChartPaused(false)}
+            onTouchStart={() => setChartPaused(true)}
+            onTouchEnd={() => setChartPaused(false)}
+          >
+            <CarouselContent>
+              <CarouselItem>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={mockData.realisasiPerBulan}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="var(--color-border)"
+                    />
+                    <XAxis
+                      dataKey="bulan"
+                      stroke="var(--color-muted-foreground)"
+                    />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                      }}
+                    />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="target"
+                      stroke="var(--color-chart-2)"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="realisasi"
+                      stroke="var(--color-chart-1)"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CarouselItem>
+              <CarouselItem>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={mockData.realisasiPerBulan}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="var(--color-border)"
+                    />
+                    <XAxis
+                      dataKey="bulan"
+                      stroke="var(--color-muted-foreground)"
+                    />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                      }}
+                    />
+                    <Legend />
+                    <Bar
+                      dataKey="target"
+                      fill="var(--color-chart-2)"
+                      radius={[8, 8, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="realisasi"
+                      fill="var(--color-chart-1)"
+                      radius={[8, 8, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CarouselItem>
+              <CarouselItem>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={mockData.statusProgram}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {mockData.statusProgram.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => `${value} program`} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CarouselItem>
+              <CarouselItem>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={mockData.kehadiranMingguan}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="var(--color-border)"
+                    />
+                    <XAxis
+                      dataKey="minggu"
+                      stroke="var(--color-muted-foreground)"
+                    />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                      }}
+                    />
+                    <Legend />
+                    <Bar
+                      dataKey="hadir"
+                      fill="var(--color-chart-1)"
+                      stackId="a"
+                      radius={[8, 8, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="cuti"
+                      fill="var(--color-chart-2)"
+                      stackId="a"
+                      radius={[8, 8, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="alfa"
+                      fill="var(--color-destructive)"
+                      stackId="a"
+                      radius={[8, 8, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CarouselItem>
+              <CarouselItem>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={mockData.realisasiPerBulan}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="var(--color-border)"
+                    />
+                    <XAxis
+                      dataKey="bulan"
+                      stroke="var(--color-muted-foreground)"
+                    />
+                    <YAxis stroke="var(--color-muted-foreground)" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                      }}
+                    />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="target"
+                      stroke="var(--color-chart-2)"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CarouselItem>
+            </CarouselContent>
+            <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+            <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
+          </Carousel>
+          <div className="mt-3 flex justify-center gap-2">
+            {chartScrollSnaps.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Ke slide ${idx + 1}`}
+                onClick={() => chartApi?.scrollTo(idx)}
+                className={cn(
+                  "h-2 w-2 rounded-full transition-colors",
+                  idx === chartSelectedIndex
+                    ? "bg-primary"
+                    : "bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    ),
+    "status-program": () => (
+      <Card data-key="status-program">
+        <CardHeader>
+          <CardTitle>Status Program</CardTitle>
+          <CardDescription>Distribusi status program dinas</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center">
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={mockData.statusProgram}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {mockData.statusProgram.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => `${value} program`} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="ml-4 space-y-2">
+            {mockData.statusProgram.map((status) => (
+              <div key={status.name} className="flex items-center gap-2">
+                <div
+                  className="h-3 w-3 rounded-full"
+                  style={{ backgroundColor: status.color }}
+                />
+                <span className="text-sm text-foreground">
+                  {status.name}: {status.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    ),
+    "produktivitas-unit": () => (
+      <Card className="lg:col-span-2" data-key="produktivitas-unit">
+        <CardHeader>
+          <CardTitle>Produktivitas per Unit</CardTitle>
+          <CardDescription>
+            Perbandingan realisasi dan target untuk setiap unit
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={mockData.produktivitasUnit}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="var(--color-border)"
+              />
+              <XAxis dataKey="unit" stroke="var(--color-muted-foreground)" />
+              <YAxis stroke="var(--color-muted-foreground)" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--color-card)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "6px",
+                }}
+              />
+              <Legend />
+              <Bar
+                dataKey="target"
+                fill="var(--color-chart-2)"
+                radius={[8, 8, 0, 0]}
+              />
+              <Bar
+                dataKey="realisasi"
+                fill="var(--color-chart-1)"
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    ),
+    "kehadiran-mingguan": () => (
+      <Card className="lg:col-span-2" data-key="kehadiran-mingguan">
+        <CardHeader>
+          <CardTitle>Kehadiran Mingguan</CardTitle>
+          <CardDescription>Data kehadiran pegawai per minggu</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={mockData.kehadiranMingguan}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="var(--color-border)"
+              />
+              <XAxis dataKey="minggu" stroke="var(--color-muted-foreground)" />
+              <YAxis stroke="var(--color-muted-foreground)" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--color-card)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "6px",
+                }}
+              />
+              <Legend />
+              <Bar
+                dataKey="hadir"
+                fill="var(--color-chart-1)"
+                stackId="a"
+                radius={[8, 8, 0, 0]}
+              />
+              <Bar
+                dataKey="cuti"
+                fill="var(--color-chart-2)"
+                stackId="a"
+                radius={[8, 8, 0, 0]}
+              />
+              <Bar
+                dataKey="alfa"
+                fill="var(--color-destructive)"
+                stackId="a"
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    ),
+  };
+
   return (
     <>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Target vs Realisasi (Carousel 5 slide) */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Target vs Realisasi</CardTitle>
-            <CardDescription>
-              Geser untuk melihat 5 visual berbeda per bulan
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Carousel
-              className="w-full"
-              opts={{ loop: true, align: "start" }}
-              setApi={setChartApi}
-              onMouseEnter={() => setChartPaused(true)}
-              onMouseLeave={() => setChartPaused(false)}
-              onTouchStart={() => setChartPaused(true)}
-              onTouchEnd={() => setChartPaused(false)}
-            >
-              <CarouselContent>
-                {/* Slide 1: Line Chart Target vs Realisasi */}
-                <CarouselItem>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={mockData.realisasiPerBulan}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="var(--color-border)"
-                      />
-                      <XAxis
-                        dataKey="bulan"
-                        stroke="var(--color-muted-foreground)"
-                      />
-                      <YAxis stroke="var(--color-muted-foreground)" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "6px",
-                        }}
-                      />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="target"
-                        stroke="var(--color-chart-2)"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="realisasi"
-                        stroke="var(--color-chart-1)"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CarouselItem>
-
-                {/* Slide 2: Bar Chart Target vs Realisasi per Bulan */}
-                <CarouselItem>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={mockData.realisasiPerBulan}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="var(--color-border)"
-                      />
-                      <XAxis
-                        dataKey="bulan"
-                        stroke="var(--color-muted-foreground)"
-                      />
-                      <YAxis stroke="var(--color-muted-foreground)" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "6px",
-                        }}
-                      />
-                      <Legend />
-                      <Bar
-                        dataKey="target"
-                        fill="var(--color-chart-2)"
-                        radius={[8, 8, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="realisasi"
-                        fill="var(--color-chart-1)"
-                        radius={[8, 8, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CarouselItem>
-
-                {/* Slide 3: Pie Chart Status Program */}
-                <CarouselItem>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={mockData.statusProgram}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={2}
-                        dataKey="value"
-                      >
-                        {mockData.statusProgram.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => `${value} program`} />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CarouselItem>
-
-                {/* Slide 4: Stacked Bar Kehadiran Mingguan */}
-                <CarouselItem>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={mockData.kehadiranMingguan}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="var(--color-border)"
-                      />
-                      <XAxis
-                        dataKey="minggu"
-                        stroke="var(--color-muted-foreground)"
-                      />
-                      <YAxis stroke="var(--color-muted-foreground)" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "6px",
-                        }}
-                      />
-                      <Legend />
-                      <Bar
-                        dataKey="hadir"
-                        fill="var(--color-chart-1)"
-                        stackId="a"
-                        radius={[8, 8, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="cuti"
-                        fill="var(--color-chart-2)"
-                        stackId="a"
-                        radius={[8, 8, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="alfa"
-                        fill="var(--color-destructive)"
-                        stackId="a"
-                        radius={[8, 8, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CarouselItem>
-
-                {/* Slide 5: Line Chart Target saja (tren) */}
-                <CarouselItem>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={mockData.realisasiPerBulan}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="var(--color-border)"
-                      />
-                      <XAxis
-                        dataKey="bulan"
-                        stroke="var(--color-muted-foreground)"
-                      />
-                      <YAxis stroke="var(--color-muted-foreground)" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "6px",
-                        }}
-                      />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="target"
-                        stroke="var(--color-chart-2)"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-              <CarouselNext className="top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80" />
-            </Carousel>
-            {/* Indikator dot */}
-            <div className="mt-3 flex justify-center gap-2">
-              {chartScrollSnaps.map((_, idx) => (
-                <button
-                  key={idx}
-                  aria-label={`Ke slide ${idx + 1}`}
-                  onClick={() => chartApi?.scrollTo(idx)}
-                  className={cn(
-                    "h-2 w-2 rounded-full transition-colors",
-                    idx === chartSelectedIndex
-                      ? "bg-primary"
-                      : "bg-muted-foreground/30"
-                  )}
-                />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Status Program */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Status Program</CardTitle>
-            <CardDescription>Distribusi status program dinas</CardDescription>
-          </CardHeader>
-          <CardContent className="flex items-center justify-center">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={mockData.statusProgram}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {mockData.statusProgram.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => `${value} program`} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="ml-4 space-y-2">
-              {mockData.statusProgram.map((status) => (
-                <div key={status.name} className="flex items-center gap-2">
-                  <div
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: status.color }}
-                  />
-                  <span className="text-sm text-foreground">
-                    {status.name}: {status.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Produktivitas Unit */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Produktivitas per Unit</CardTitle>
-            <CardDescription>
-              Perbandingan realisasi dan target untuk setiap unit
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={mockData.produktivitasUnit}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="var(--color-border)"
-                />
-                <XAxis dataKey="unit" stroke="var(--color-muted-foreground)" />
-                <YAxis stroke="var(--color-muted-foreground)" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "6px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="target"
-                  fill="var(--color-chart-2)"
-                  radius={[8, 8, 0, 0]}
-                />
-                <Bar
-                  dataKey="realisasi"
-                  fill="var(--color-chart-1)"
-                  radius={[8, 8, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Kehadiran Mingguan */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Kehadiran Mingguan</CardTitle>
-            <CardDescription>Data kehadiran pegawai per minggu</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={mockData.kehadiranMingguan}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="var(--color-border)"
-                />
-                <XAxis
-                  dataKey="minggu"
-                  stroke="var(--color-muted-foreground)"
-                />
-                <YAxis stroke="var(--color-muted-foreground)" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "6px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="hadir"
-                  fill="var(--color-chart-1)"
-                  stackId="a"
-                  radius={[8, 8, 0, 0]}
-                />
-                <Bar
-                  dataKey="cuti"
-                  fill="var(--color-chart-2)"
-                  stackId="a"
-                  radius={[8, 8, 0, 0]}
-                />
-                <Bar
-                  dataKey="alfa"
-                  fill="var(--color-destructive)"
-                  stackId="a"
-                  radius={[8, 8, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      <SectionContainer idSection={components.map((c) => c.key)}>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {components.map((c) => {
+            const render = blockMap[c.key];
+            if (!render) return null;
+            return <React.Fragment key={c.key}>{render()}</React.Fragment>;
+          })}
+        </div>
+      </SectionContainer>
     </>
   );
 }

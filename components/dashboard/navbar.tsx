@@ -38,6 +38,7 @@ import { Slider } from "@/components/ui/slider";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CommandMenu } from "@/components/command-menu";
 export function Navbar() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -159,6 +160,9 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
+            <div className="hidden sm:block">
+              <CommandMenu />
+            </div>
             <div className="hidden md:block">
               <DigitalClock variant="navbar" />
             </div>
