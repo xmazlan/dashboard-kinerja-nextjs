@@ -8,7 +8,9 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <>
-      <VPage />
+      <React.Suspense fallback={null}>
+        <VPage />
+      </React.Suspense>
     </>
   );
 }

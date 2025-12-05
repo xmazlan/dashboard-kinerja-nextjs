@@ -1,0 +1,32 @@
+{
+  "sections": [
+    {
+      "id": "section-one",
+      "label": "Section One",
+      "components": [
+        { "key": "pajak", "label": "Pajak" },
+        { "key": "bpkad", "label": "BPKAD" },
+        { "key": "ortal", "label": "Ortal" }
+      ]
+    },
+    {
+      "id": "section-two",
+      "label": "Section Two",
+      "components": [
+        { "key": "stunting", "label": "Stunting" },
+        { "key": "capil", "label": "Capil" },
+        { "key": "dinkes", "label": "Dinkes" }
+      ]
+    },
+    {
+      "id": "section-tree",
+      "label": "Section Tree",
+      "components": [
+        { "key": "kominfo-erespon", "label": "Kominfo E-Respon" },
+        { "key": "disdik", "label": "Disdik" },
+        { "key": "tpid-komoditi", "label": "TPID Komoditi" },
+        { "key": "sipuan-penari", "label": "Sipuan Penari" }
+      ]
+    }
+  ]
+}
