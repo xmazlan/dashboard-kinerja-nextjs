@@ -29,9 +29,12 @@ import { useSession } from "next-auth/react";
 import { useAplikasiOpdData } from "@/hooks/query/use-aplikasi-opd";
 import React from "react";
 import { CodeBlock } from "@/components/ui/code-block";
+import { SectionHero } from "@/components/layout/section-hero";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { toast } from "sonner";
 
 export default function VPageOverview() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const { data: aplikasiData, isLoading: isLoadingAplikasiData } =
     useAplikasiOpdData();
@@ -46,24 +49,55 @@ export default function VPageOverview() {
     opdName: session?.data?.user?.opd_slug || "",
     opdAplication,
   });
+
+  const kinerjaCount = React.useMemo(() => {
+    const srcCandidate = opdKinerjaData as unknown;
+    let raw: unknown = srcCandidate;
+    if (
+      srcCandidate &&
+      typeof srcCandidate === "object" &&
+      "data" in (srcCandidate as Record<string, unknown>)
+    ) {
+      raw = (srcCandidate as Record<string, unknown>).data as unknown;
+    }
+    if (Array.isArray(raw)) return raw.length;
+    if (raw && typeof raw === "object")
+      return Object.keys(raw as Record<string, unknown>).length;
+    return 0;
+  }, [opdKinerjaData]);
   return (
     <section className="relative ">
       <div className="mx-auto w-full max-w-6xl px-6 py-6">
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Overview Kinerja OPD
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Ringkasan cepat dan akses ke data kinerja
-            </p>
-          </div>
+        <div className="mb-6">
+          <SectionHero
+            title={`Selamat datang, ${String(
+              session?.data?.user?.name || "Pengguna"
+            )}`}
+            subtitle={`Anda masuk sebagai OPD: ${String(
+              session?.data?.user?.opd_slug || "-"
+            )}`}
+            right={
+              <>
+                <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
+                  <Users className="h-4 w-4" />
+                  <div>
+                    <div className="text-sm font-semibold">
+                      <NumberTicker value={aplikasiOptions.length} />
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Aplikasi tersedia
+                    </div>
+                  </div>
+                </div>
 
-          <Link href="/form">
-            <Button size="sm">Unggah Data Kinerja</Button>
-          </Link>
+                <Link href="/form">
+                  <Button size="sm">Unggah Data Kinerja</Button>
+                </Link>
+              </>
+            }
+          />
         </div>
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
             <PopoverTrigger asChild>
               <Button
@@ -124,11 +158,18 @@ export default function VPageOverview() {
           </Popover>
         </div>
 
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4 ">
           {opdAplication ? (
             <div className="rounded-md border bg-card shadow-sm overflow-hidden">
               <div className="flex items-center justify-between px-3 py-2 border-b">
-                <div className="text-xs font-medium">JSON Output</div>
+                <div className="flex items-center gap-2 text-xs font-medium">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  JSON Output
+                </div>
+                <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  {String(opdAplication)}
+                </div>
               </div>
               <div className="p-2">
                 <CodeBlock
