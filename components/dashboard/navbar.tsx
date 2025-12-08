@@ -160,11 +160,13 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
-            <div className="hidden sm:block">
-              <Suspense fallback={null}>
-                <CommandMenu />
-              </Suspense>
-            </div>
+            {session?.data?.user?.role === "pimpinan" && (
+              <div className="hidden sm:block">
+                <Suspense fallback={null}>
+                  <CommandMenu />
+                </Suspense>
+              </div>
+            )}
             <div className="hidden md:block">
               <DigitalClock variant="navbar" />
             </div>
