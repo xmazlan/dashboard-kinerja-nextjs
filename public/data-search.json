@@ -6,7 +6,8 @@
       "components": [
         { "key": "pajak", "label": "Pajak" },
         { "key": "bpkad", "label": "BPKAD" },
-        { "key": "ortal", "label": "Ortal" }
+        { "key": "ortal", "label": "Ortal" },
+        { "key": "pupr", "label": "PUPR" }
       ]
     },
     {

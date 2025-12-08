@@ -9,12 +9,14 @@ import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slid
 import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
 import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
 import DisdikSlide from "./roby/slider-content/disdik-slide";
+import PuprSlide from "./roby/slider-content/pupr-slide";
 
 export default function SectionTree() {
   const [components, setComponents] = React.useState<
     Array<{ key: string; label: string }>
   >([
     { key: "kominfo-erespon", label: "Kominfo E-Respon" },
+    { key: "pupr", label: "PUPR" },
     { key: "disdik", label: "Disdik" },
     { key: "tpid-komoditi", label: "TPID Komoditi" },
     { key: "sipuan-penari", label: "Sipuan Penari" },
@@ -42,6 +44,7 @@ export default function SectionTree() {
     disdik: DisdikSlide,
     "tpid-komoditi": SectionTpidKomoditiSlide,
     "sipuan-penari": SipuanPenariSlide,
+    pupr: PuprSlide,
   };
 
   return (

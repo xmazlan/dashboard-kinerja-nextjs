@@ -4,6 +4,7 @@ import SectionContainer from "./section-container";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
 import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
+import SectionPuprDataSlide from "./roby/slider-content/pupr-slide";
 
 export default function SectionOne() {
   const [components, setComponents] = React.useState<
@@ -12,6 +13,7 @@ export default function SectionOne() {
     { key: "pajak", label: "Pajak" },
     { key: "bpkad", label: "BPKAD" },
     { key: "ortal", label: "Ortal" },
+    { key: "pupr", label: "PUPR" },
   ]);
 
   React.useEffect(() => {
@@ -35,6 +37,7 @@ export default function SectionOne() {
     pajak: SectionPajakDataSlide,
     bpkad: SectionBpkadDataSlide,
     ortal: SectionOrtalDataSlide,
+    pupr: SectionPuprDataSlide,
   };
 
   return (
