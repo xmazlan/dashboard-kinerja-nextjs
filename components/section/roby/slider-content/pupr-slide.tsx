@@ -76,6 +76,12 @@ export default function SectionPuprDataSlide({
     }
   }, [chartApi, active, onDone, speed]);
 
+  React.useEffect(() => {
+    if (chartApi || !active) return;
+    const id = setTimeout(() => onDone?.(), speed);
+    return () => clearTimeout(id);
+  }, [chartApi, active, onDone, speed]);
+
   // State & kontrol untuk Carousel NON-CHART (Contoh Carousel)
   const [contentApi, setContentApi] = React.useState<CarouselApi | null>(null);
   const [contentPaused, setContentPaused] = React.useState(false);
@@ -116,7 +122,7 @@ export default function SectionPuprDataSlide({
 
   return (
     <>
-      <CardComponent className="p-3 shadow-lg border rounded-lg bg-card">
+      <CardComponent className="w-full h-full p-3 shadow-lg border rounded-lg bg-card">
         <Carousel
           className="w-full"
           opts={{ loop: true, align: "start" }}
@@ -126,8 +132,8 @@ export default function SectionPuprDataSlide({
           onTouchStart={() => active && setChartPaused(true)}
           onTouchEnd={() => active && setChartPaused(false)}
         >
-          <CarouselContent>
-            <CarouselItem>
+          <CarouselContent className="ml-0">
+            <CarouselItem className="pl-0">
               <DataPupr />
             </CarouselItem>
           </CarouselContent>

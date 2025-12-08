@@ -113,7 +113,7 @@ export default function DataPupr() {
         {isLoading ? (
           <LoadingContent />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="rounded-md border bg-card p-2">
               <BarChart
                 options={chartOptions}
