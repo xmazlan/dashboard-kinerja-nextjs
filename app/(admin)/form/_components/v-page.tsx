@@ -2,27 +2,51 @@
 import React from "react";
 import FormKinerja from "@/components/admin/form-kinerja";
 import { Card } from "@/components/ui/card";
+import { SectionHero } from "@/components/layout/section-hero";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { useSession } from "next-auth/react";
+import { FileSpreadsheet, CheckCircle2 } from "lucide-react";
 
 export default function VPageFormKinerja() {
+  const { data: session } = useSession();
   return (
-    <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-linear-to-b from-blue-50 to-white dark:from-blue-950/30 dark:to-background" />
-        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-900/30" />
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-cyan-200/40 blur-3xl dark:bg-cyan-900/30" />
-      </div>
-      <div className="mx-auto w-full max-w-3xl px-6">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold tracking-tight">
-            Unggah Data Kinerja
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Pilih jenis dan unggah berkas .xlsx maksimal 2MB
-          </p>
+    <section className="relative ">
+      <div className="mx-auto w-full max-w-6xl px-6 py-6">
+        <div className="mb-6">
+          <SectionHero
+            title={`Unggah Data Kinerja`}
+            subtitle={`Pengguna: ${String(session?.data?.user?.name || "-")}`}
+            right={
+              <>
+                <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
+                  <FileSpreadsheet className="h-4 w-4" />
+                  <div>
+                    <div className="text-sm font-semibold">.xlsx</div>
+                    <div className="text-xs text-muted-foreground">
+                      Tipe berkas
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <div>
+                    <div className="text-sm font-semibold">
+                      <NumberTicker value={2} /> MB
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Batas ukuran
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
+          />
         </div>
-        <Card className="p-6">
-          <FormKinerja />
-        </Card>
+        <div className="mb-6 grid grid-cols-1 gap-3">
+          <Card className="p-6">
+            <FormKinerja />
+          </Card>
+        </div>
       </div>
     </section>
   );
