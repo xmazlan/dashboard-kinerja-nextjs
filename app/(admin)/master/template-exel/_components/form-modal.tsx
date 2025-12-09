@@ -9,7 +9,7 @@ import {
   DialogClose,
   DialogFooter,
 } from "@/components/animate-ui/components/radix/dialog";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface FormModalProps {
   className?: string;
@@ -31,11 +31,6 @@ export default function FormModal({
   content,
   title,
   description,
-  formId,
-  submitLabel,
-  cancelLabel,
-  loading,
-  onCancel,
 }: FormModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -48,17 +43,6 @@ export default function FormModal({
         </DialogHeader>
 
         {content}
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" onClick={onCancel} disabled={!!loading}>
-              {cancelLabel ? cancelLabel : "Batal"}
-            </Button>
-          </DialogClose>
-          <Button type="submit" form={formId} disabled={!!loading}>
-            {submitLabel ? submitLabel : "Simpan"}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

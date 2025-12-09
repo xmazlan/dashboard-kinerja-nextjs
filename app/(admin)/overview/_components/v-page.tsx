@@ -203,24 +203,9 @@ export default function VPageOverview() {
                 title={`Selamat datang, ${String(
                   session?.data?.user?.name || "Pengguna"
                 )}`}
-                subtitle={`Anda masuk sebagai OPD: ${String(
+                subtitle={`Anda masuk sebagai : ${String(
                   session?.data?.user?.opd_slug || "-"
                 )}`}
-                right={
-                  <>
-                    <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
-                      <Users className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-semibold">
-                          <NumberTicker value={aplikasiOptions.length} />
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Aplikasi tersedia
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                }
               />
             </div>
           </div>

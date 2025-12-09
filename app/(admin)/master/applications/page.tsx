@@ -1,18 +1,17 @@
 import PageContainer from "@/components/dashboard/page-container";
 import { Metadata } from "next";
-import React from "react";
-import VPageUsers from "./_components/v-page";
+import VPageApplication from "./_components/v-page";
 
 export const metadata: Metadata = {
-  title: "Users",
-  description: "Dashboard Kinerja OPD Kota Pekanbaru",
+  title: "Application",
+  description: "Dashboard Kinerja Application Kota Pekanbaru",
 };
 
 export default function page() {
   return (
     <>
       <PageContainer>
-        <VPageUsers />
+        <VPageApplication />
       </PageContainer>
     </>
   );

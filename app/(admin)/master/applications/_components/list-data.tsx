@@ -10,48 +10,57 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
+import { Form } from "@/components/ui/form";
 import FormModal from "@/components/modal/form-modal";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
-import ListDataOpdTable from "@/components/admin/master/list-data-opd";
-
-type OpdItem = {
-  id: number;
-  opd: string;
-  opd_slug: string;
-  created_at?: string;
-  updated_at?: string;
-};
+import ListDataApplicationTable from "@/components/admin/master/list-data-application";
+import FormApplication from "./form-application";
+import type { ApplicationFormValues } from "./form-application";
+import type { ApplicationItem } from "@/components/admin/master/list-data-application";
+import { useMasterOpdList } from "@/hooks/query/use-master-opd-list";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const schema = z.object({
-  opd: z
+  nama_aplikasi: z
     .string()
     .min(2, "Minimal 2 karakter")
     .max(100, "Maksimal 100 karakter"),
+  master_opd_id: z.string().min(1, "Wajib pilih OPD"),
+  deskripsi: z.string().max(255, "Maksimal 255 karakter").optional(),
 });
 
-type OpdListProps = {
-  items: OpdItem[];
+type ApplicationListProps = {
+  items: ApplicationItem[];
   loading: boolean;
-  onCreate: (data: { opd: string }) => Promise<void> | void;
-  onUpdate: (id: number, data: { opd: string }) => Promise<void> | void;
+  onCreate: (data: {
+    nama_aplikasi: string;
+    master_opd_id: string;
+    deskripsi?: string | null;
+  }) => Promise<void> | void;
+  onUpdate: (
+    id: number,
+    data: {
+      nama_aplikasi: string;
+      master_opd_id: string;
+      deskripsi?: string | null;
+    }
+  ) => Promise<void> | void;
   onDelete: (id: number) => Promise<void> | void;
-  onView?: (item: OpdItem) => void;
+  onView?: (item: ApplicationItem) => void;
   pageSize?: number;
 };
 
-export default function ListDataOpd({
+export default function ListDataApplication({
   items,
   loading,
   onCreate,
@@ -59,31 +68,40 @@ export default function ListDataOpd({
   onDelete,
   onView,
   pageSize = 5,
-}: OpdListProps) {
-  const rows: OpdItem[] = Array.isArray(items) ? items : [];
+}: ApplicationListProps) {
+  const rows: ApplicationItem[] = Array.isArray(items) ? items : [];
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openView, setOpenView] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
-  const [selected, setSelected] = React.useState<OpdItem | null>(null);
-
-  const formCreate = useForm<z.infer<typeof schema>>({
+  const [selected, setSelected] = React.useState<ApplicationItem | null>(null);
+  const { data: opdList } = useMasterOpdList();
+  const opdOptions: Array<{ id: number; opd: string }> = Array.isArray(
+    opdList?.data
+  )
+    ? (opdList!.data as Array<{ id: number; opd: string }>)
+    : [];
+  const formCreate = useForm<ApplicationFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { opd: "" },
+    defaultValues: { nama_aplikasi: "", master_opd_id: "", deskripsi: "" },
     mode: "onTouched",
   });
-  const formEdit = useForm<z.infer<typeof schema>>({
+  const formEdit = useForm<ApplicationFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { opd: "" },
+    defaultValues: { nama_aplikasi: "", master_opd_id: "", deskripsi: "" },
     mode: "onTouched",
   });
 
   const handleCreate = async (values: z.infer<typeof schema>) => {
     try {
-      await onCreate({ opd: values.opd });
-      toast.success("Berhasil menambah OPD");
+      await onCreate({
+        nama_aplikasi: values.nama_aplikasi,
+        master_opd_id: values.master_opd_id,
+        deskripsi: values.deskripsi,
+      });
+      toast.success("Berhasil menambah Aplikasi");
       setOpenCreate(false);
-      formCreate.reset({ opd: "" });
+      formCreate.reset({ nama_aplikasi: "", master_opd_id: "", deskripsi: "" });
     } catch (e) {
       const detail = (() => {
         const err = e as unknown;
@@ -97,15 +115,19 @@ export default function ListDataOpd({
           return String(data);
         }
       })();
-      toast.error("Gagal menambah OPD", { description: detail });
+      toast.error("Gagal menambah Aplikasi", { description: detail });
     }
   };
 
   const handleEdit = async (values: z.infer<typeof schema>) => {
     if (!selected) return;
     try {
-      await onUpdate(selected.id, { opd: values.opd });
-      toast.success("Berhasil mengubah OPD");
+      await onUpdate(selected.id, {
+        nama_aplikasi: values.nama_aplikasi,
+        master_opd_id: values.master_opd_id,
+        deskripsi: values.deskripsi,
+      });
+      toast.success("Berhasil mengubah Aplikasi");
       setOpenEdit(false);
     } catch (e) {
       const detail = (() => {
@@ -120,7 +142,7 @@ export default function ListDataOpd({
           return String(data);
         }
       })();
-      toast.error("Gagal mengubah OPD", { description: detail });
+      toast.error("Gagal mengubah Aplikasi", { description: detail });
     }
   };
 
@@ -128,7 +150,7 @@ export default function ListDataOpd({
     if (!selected) return;
     try {
       await onDelete(selected.id);
-      toast.success("Berhasil menghapus OPD");
+      toast.success("Berhasil menghapus Aplikasi");
       setOpenDelete(false);
       setSelected(null);
     } catch (e) {
@@ -144,74 +166,117 @@ export default function ListDataOpd({
           return String(data);
         }
       })();
-      toast.error("Gagal menghapus OPD", { description: detail });
+      toast.error("Gagal menghapus Aplikasi", { description: detail });
     }
   };
 
-  const handleOpenEdit = (item: OpdItem) => {
+  const handleOpenEdit = (item: ApplicationItem) => {
     setSelected(item);
-    formEdit.reset({ opd: item.opd });
+    const selectedOpdId = opdOptions.find(
+      (opt) => opt.opd === String(item.opd || "")
+    )?.id;
+    formEdit.reset({
+      nama_aplikasi: item.nama_aplikasi,
+      master_opd_id: selectedOpdId ? String(selectedOpdId) : "",
+      deskripsi: String(item.deskripsi ?? ""),
+    });
     setOpenEdit(true);
   };
 
-  const handleOpenView = async (item: OpdItem) => {
+  const handleOpenView = async (item: ApplicationItem) => {
     setSelected(item);
     setOpenView(true);
   };
 
-  const handleOpenDelete = (item: OpdItem) => {
+  const handleOpenDelete = (item: ApplicationItem) => {
     setSelected(item);
     setOpenDelete(true);
   };
 
   const [search, setSearch] = React.useState("");
+  const [selectedOpd, setSelectedOpd] = React.useState("");
   const filtered = React.useMemo(() => {
     const s = search.trim().toLowerCase();
-    return s ? rows.filter((r) => r.opd.toLowerCase().includes(s)) : rows;
-  }, [rows, search]);
+    return rows.filter((r) => {
+      const matchesSearch = s
+        ? r.nama_aplikasi.toLowerCase().includes(s) ||
+          String(r.opd || "")
+            .toLowerCase()
+            .includes(s) ||
+          (r.deskripsi ? String(r.deskripsi).toLowerCase().includes(s) : false)
+        : true;
+      const matchesOpd = selectedOpd
+        ? String(r.opd || "") === selectedOpd
+        : true;
+      return matchesSearch && matchesOpd;
+    });
+  }, [rows, search, selectedOpd]);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex-1 max-w-xs">
-          <Input
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            placeholder="Cari OPD..."
-          />
+        <div className="flex items-center gap-2 flex-1">
+          <div className="max-w-xs w-full">
+            <Input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              placeholder="Cari aplikasi..."
+            />
+          </div>
+          <div className="w-[340px] flex items-center gap-2">
+            <div className="flex-1">
+              <Select
+                value={selectedOpd}
+                onValueChange={(v) => setSelectedOpd(v)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Semua OPD" />
+                </SelectTrigger>
+                <SelectContent>
+                  {opdOptions.map((opt) => (
+                    <SelectItem key={opt.id} value={opt.opd}>
+                      {opt.opd}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {selectedOpd ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedOpd("")}
+              >
+                Reset
+              </Button>
+            ) : null}
+          </div>
         </div>
         <Button size="sm" onClick={() => setOpenCreate(true)}>
-          <Plus className="w-4 h-4 mr-2" /> Tambah OPD
+          <Plus className="w-4 h-4 mr-2" /> Tambah Aplikasi
         </Button>
         <FormModal
+          className="sm:max-w-xl"
           isOpen={openCreate}
           onOpenChange={setOpenCreate}
-          title="Tambah OPD"
-          description="Masukkan nama OPD"
-          formId="opd-create-form"
+          title="Tambah Aplikasi"
+          description="Masukkan data aplikasi"
+          formId="application-create-form"
           submitLabel="Simpan"
           cancelLabel="Batal"
           content={
             <Form {...formCreate}>
               <form
-                id="opd-create-form"
+                id="application-create-form"
                 onSubmit={formCreate.handleSubmit(handleCreate)}
                 className="space-y-4"
               >
-                <FormField
-                  control={formCreate.control}
-                  name="opd"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label>OPD</Label>
-                      <FormControl>
-                        <Input placeholder="Contoh: DISDIK" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                <FormApplication
+                  form={formCreate}
+                  loading={loading}
+                  opdOptions={opdOptions}
                 />
               </form>
             </Form>
@@ -219,7 +284,7 @@ export default function ListDataOpd({
         />
       </div>
 
-      <ListDataOpdTable
+      <ListDataApplicationTable
         items={filtered}
         loading={loading}
         onView={(it) => handleOpenView(it)}
@@ -229,32 +294,25 @@ export default function ListDataOpd({
       />
 
       <FormModal
+        className="sm:max-w-xl"
         isOpen={openEdit}
         onOpenChange={setOpenEdit}
-        title="Edit OPD"
-        description="Perbarui nama OPD"
-        formId="opd-edit-form"
+        title="Edit Aplikasi"
+        description="Perbarui data aplikasi"
+        formId="application-edit-form"
         submitLabel="Simpan"
         cancelLabel="Batal"
         content={
           <Form {...formEdit}>
             <form
-              id="opd-edit-form"
+              id="application-edit-form"
               onSubmit={formEdit.handleSubmit(handleEdit)}
               className="space-y-4"
             >
-              <FormField
-                control={formEdit.control}
-                name="opd"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>OPD</Label>
-                    <FormControl>
-                      <Input placeholder="Contoh: DISDIK" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+              <FormApplication
+                form={formEdit}
+                loading={loading}
+                opdOptions={opdOptions}
               />
             </form>
           </Form>
@@ -264,20 +322,24 @@ export default function ListDataOpd({
       <Dialog open={openView} onOpenChange={setOpenView}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Detail OPD</DialogTitle>
-            <DialogDescription>Informasi OPD</DialogDescription>
+            <DialogTitle>Detail Aplikasi</DialogTitle>
+            <DialogDescription>Informasi Aplikasi</DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             <div className="text-sm">
               <span className="text-muted-foreground">ID:</span> {selected?.id}
             </div>
             <div className="text-sm">
-              <span className="text-muted-foreground">Nama:</span>{" "}
+              <span className="text-muted-foreground">Nama Aplikasi:</span>{" "}
+              {selected?.nama_aplikasi}
+            </div>
+            <div className="text-sm">
+              <span className="text-muted-foreground">OPD:</span>{" "}
               {selected?.opd}
             </div>
             <div className="text-sm">
-              <span className="text-muted-foreground">Slug:</span>{" "}
-              {selected?.opd_slug}
+              <span className="text-muted-foreground">Deskripsi:</span>{" "}
+              {String(selected?.deskripsi ?? "-")}
             </div>
             <div className="text-sm">
               <span className="text-muted-foreground">Dibuat:</span>{" "}
@@ -299,14 +361,14 @@ export default function ListDataOpd({
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Hapus OPD</DialogTitle>
+            <DialogTitle>Hapus Aplikasi</DialogTitle>
             <DialogDescription>
               Tindakan ini tidak dapat dibatalkan
             </DialogDescription>
           </DialogHeader>
           <div className="text-sm">
             Anda akan menghapus:{" "}
-            <span className="font-medium">{selected?.opd}</span>
+            <span className="font-medium">{selected?.nama_aplikasi}</span>
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setOpenDelete(false)}>

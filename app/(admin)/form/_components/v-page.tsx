@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import FormKinerja from "@/components/admin/form-kinerja";
+import FormKinerja from "./form-kinerja";
 import { Card } from "@/components/ui/card";
 import { SectionHero } from "@/components/layout/section-hero";
 import { NumberTicker } from "@/components/magicui/number-ticker";

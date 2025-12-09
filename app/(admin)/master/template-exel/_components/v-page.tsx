@@ -4,13 +4,14 @@ import { Card } from "@/components/ui/card";
 import { SectionHero } from "@/components/layout/section-hero";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { useSession } from "next-auth/react";
-import { useMasterOpdList } from "@/hooks/query/use-master-opd-list";
-import ListDataOpd from "./list-data";
+import ListDataTemplateExcel from "./list-data";
 import axios from "@/lib/axios";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMasterExcelOpdList } from "@/hooks/query/use-master-template-exel-list";
+import { toast } from "sonner";
 
-export default function VPageOPD() {
-  const { data: opdList, isLoading } = useMasterOpdList();
+export default function VPageExcelOpd() {
+  const { data: excelOpdList, isLoading } = useMasterExcelOpdList();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
@@ -26,40 +27,38 @@ export default function VPageOPD() {
 
   const invalidate = React.useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["master-opd-list", session?.data?.token],
+      queryKey: ["master-excel-opd-list", session?.data?.token],
     });
   }, [queryClient, session?.data?.token]);
 
-  const handleCreate = async (data: { opd: string }) => {
-    const url = `/api/v1/master/opd`;
-    await axios.post(url, data, { headers });
-    invalidate();
-  };
-
-  const handleUpdate = async (id: number, data: { opd: string }) => {
-    const url = `/api/v1/master/opd/${id}`;
-    await axios.patch(url, data, { headers });
-    invalidate();
-  };
-
   const handleDelete = async (id: number) => {
-    const url = `/api/v1/master/opd/${id}`;
-    await axios.delete(url, { headers });
-    invalidate();
+    try {
+      const url = `/api/v1/master/excel-opd/${id}`;
+      await axios.delete(url, { headers });
+      toast.success("Template Excel dihapus");
+      invalidate();
+    } catch (error) {
+      const data = (
+        error as {
+          response?: { data?: { message?: string } };
+        }
+      )?.response?.data;
+      toast.error(String(data?.message || "Gagal menghapus Template Excel"));
+    }
   };
   return (
     <section className="relative ">
       <div className="mx-auto w-full max-w-6xl px-6 py-6">
         <div className="mb-6">
           <SectionHero
-            title={`Master OPD`}
+            title={`Template Excel OPD`}
             right={
               <>
                 <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
                   <NumberTicker
                     value={
-                      Array.isArray(opdList?.data)
-                        ? (opdList!.data as any[]).length
+                      Array.isArray(excelOpdList?.data)
+                        ? excelOpdList!.data.length
                         : 0
                     }
                   />
@@ -75,13 +74,11 @@ export default function VPageOPD() {
         </div>
         <div className="mb-6 grid grid-cols-1 gap-3">
           <Card className="p-4">
-            <ListDataOpd
+            <ListDataTemplateExcel
               items={
-                Array.isArray(opdList?.data) ? (opdList!.data! as any) : []
+                Array.isArray(excelOpdList?.data) ? excelOpdList!.data! : []
               }
               loading={isLoading}
-              onCreate={handleCreate}
-              onUpdate={handleUpdate}
               onDelete={handleDelete}
             />
           </Card>

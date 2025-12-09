@@ -80,15 +80,20 @@ axios.interceptors.response.use(
   (error) => {
     // Enhanced error logging
     if (error.code === "ECONNABORTED") {
-      // silent timeout logging
     } else if (error.response) {
-      // Server responded with error status
-      console.error(`❌ API Error ${error.response.status}:`, {
+      const payload = error.response?.data as
+        | { message?: string; errors?: Record<string, unknown> }
+        | undefined;
+      const info = {
         url: error.config?.url,
         method: error.config?.method,
-        data: error.response.data,
         status: error.response.status,
-      });
+        message: String(payload?.message || ""),
+        errors: payload?.errors ?? null,
+      };
+      if (process.env.NODE_ENV === "development") {
+        console.error("❌ API Error", info);
+      }
     } else if (error.request) {
       // Request was made but no response received
       console.error("🔌 Network Error:", {
