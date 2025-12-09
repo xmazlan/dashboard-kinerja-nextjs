@@ -37,16 +37,6 @@ export default function NavOPD({
                 </Link>
               ) : (
                 <>
-                  <Link href="/master/users" className="inline-block">
-                    <Button
-                      size="sm"
-                      variant={
-                        pathname === "/master/users" ? "default" : "outline"
-                      }
-                    >
-                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Users
-                    </Button>
-                  </Link>
                   <Link href="/master/opd" className="inline-block">
                     <Button
                       size="sm"
@@ -55,6 +45,42 @@ export default function NavOPD({
                       }
                     >
                       <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> OPD
+                    </Button>
+                  </Link>
+                  <Link href="/master/applications" className="inline-block">
+                    <Button
+                      size="sm"
+                      variant={
+                        pathname === "/master/applications"
+                          ? "default"
+                          : "outline"
+                      }
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" />{" "}
+                      Application
+                    </Button>
+                  </Link>
+                  <Link href="/master/template-exel" className="inline-block">
+                    <Button
+                      size="sm"
+                      variant={
+                        pathname === "/master/template-exel"
+                          ? "default"
+                          : "outline"
+                      }
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Template
+                      Excel
+                    </Button>
+                  </Link>
+                  <Link href="/master/users" className="inline-block">
+                    <Button
+                      size="sm"
+                      variant={
+                        pathname === "/master/users" ? "default" : "outline"
+                      }
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Users
                     </Button>
                   </Link>
                 </>

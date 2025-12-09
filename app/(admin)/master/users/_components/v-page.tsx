@@ -4,13 +4,13 @@ import { Card } from "@/components/ui/card";
 import { SectionHero } from "@/components/layout/section-hero";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { useSession } from "next-auth/react";
-import { useMasterOpdList } from "@/hooks/query/use-master-opd-list";
-import ListDataOpd from "./list-data";
+import ListDataUsers from "./list-data";
 import axios from "@/lib/axios";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMasterUsersList } from "@/hooks/query/use-master-users-list";
 
-export default function VPageOPD() {
-  const { data: opdList, isLoading } = useMasterOpdList();
+export default function VPageUsers() {
+  const { data: usersList, isLoading } = useMasterUsersList();
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
@@ -26,24 +26,52 @@ export default function VPageOPD() {
 
   const invalidate = React.useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["master-opd-list", session?.data?.token],
+      queryKey: ["master-users-list", session?.data?.token],
     });
   }, [queryClient, session?.data?.token]);
 
-  const handleCreate = async (data: { opd: string }) => {
-    const url = `/api/v1/master/opd`;
+  interface UserItem {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    opd?: string | null;
+    opd_nama?: string | null;
+    created_at?: string;
+    updated_at?: string;
+  }
+
+  const handleCreate = async (data: {
+    name: string;
+    email: string;
+    role: string;
+    opd_id: string;
+    password: string;
+    password_confirmation: string;
+  }) => {
+    const url = `/api/v1/master/user`;
     await axios.post(url, data, { headers });
     invalidate();
   };
 
-  const handleUpdate = async (id: number, data: { opd: string }) => {
-    const url = `/api/v1/master/opd/${id}`;
+  const handleUpdate = async (
+    id: number,
+    data: {
+      name: string;
+      email: string;
+      role: string;
+      opd_id: string;
+      password?: string;
+      password_confirmation?: string;
+    }
+  ) => {
+    const url = `/api/v1/master/user/${id}`;
     await axios.patch(url, data, { headers });
     invalidate();
   };
 
   const handleDelete = async (id: number) => {
-    const url = `/api/v1/master/opd/${id}`;
+    const url = `/api/v1/master/user/${id}`;
     await axios.delete(url, { headers });
     invalidate();
   };
@@ -52,14 +80,14 @@ export default function VPageOPD() {
       <div className="mx-auto w-full max-w-6xl px-6 py-6">
         <div className="mb-6">
           <SectionHero
-            title={`Master OPD`}
+            title={`Master Pengguna`}
             right={
               <>
                 <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
                   <NumberTicker
                     value={
-                      Array.isArray(opdList?.data)
-                        ? (opdList!.data as any[]).length
+                      Array.isArray(usersList?.data)
+                        ? (usersList!.data as UserItem[]).length
                         : 0
                     }
                   />
@@ -75,9 +103,11 @@ export default function VPageOPD() {
         </div>
         <div className="mb-6 grid grid-cols-1 gap-3">
           <Card className="p-4">
-            <ListDataOpd
+            <ListDataUsers
               items={
-                Array.isArray(opdList?.data) ? (opdList!.data! as any) : []
+                Array.isArray(usersList?.data)
+                  ? (usersList!.data! as UserItem[])
+                  : []
               }
               loading={isLoading}
               onCreate={handleCreate}

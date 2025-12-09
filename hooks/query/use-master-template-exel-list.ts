@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const useMasterOpdList = () => {
+export const useMasterExcelOpdList = () => {
   const { data: session } = useSession();
 
   return useQuery<any>({
-    queryKey: ["master-opd-list", session?.data?.token],
+    queryKey: ["master-excel-opd-list", session?.data?.token],
     queryFn: async () => {
       const headers: Record<string, string> = {
         Accept: "application/json",
@@ -16,7 +16,7 @@ export const useMasterOpdList = () => {
       };
       if (session?.data?.token)
         headers.Authorization = `Bearer ${session.data.token}`;
-      const url = `${API_URL}/api/v1/master/opd`;
+      const url = `${API_URL}/api/v1/master/excel-opd`;
       const response = await axios.get(url, { headers });
       return response.data;
     },
