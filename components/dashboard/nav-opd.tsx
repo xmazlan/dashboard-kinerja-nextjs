@@ -6,9 +6,11 @@ import { FileSpreadsheet, LayoutDashboard, User } from "lucide-react";
 export default function NavOPD({
   pathname,
   name,
+  role,
 }: {
   pathname: string;
   name?: string;
+  role: string;
 }) {
   return (
     <>
@@ -24,14 +26,39 @@ export default function NavOPD({
                   <LayoutDashboard className="w-3.5 h-3.5 mr-1" /> Overview
                 </Button>
               </Link>
-              <Link href="/form" className="inline-block">
-                <Button
-                  size="sm"
-                  variant={pathname === "/form" ? "default" : "outline"}
-                >
-                  <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Form
-                </Button>
-              </Link>
+              {role === "opd" ? (
+                <Link href="/form" className="inline-block">
+                  <Button
+                    size="sm"
+                    variant={pathname === "/form" ? "default" : "outline"}
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Form
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/master/users" className="inline-block">
+                    <Button
+                      size="sm"
+                      variant={
+                        pathname === "/master/users" ? "default" : "outline"
+                      }
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> Users
+                    </Button>
+                  </Link>
+                  <Link href="/master/opd" className="inline-block">
+                    <Button
+                      size="sm"
+                      variant={
+                        pathname === "/master/opd" ? "default" : "outline"
+                      }
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 mr-1" /> OPD
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
             {name && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">

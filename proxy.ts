@@ -86,7 +86,7 @@ export default async function middleware(req: NextRequest) {
         const target =
           role === "pimpinan"
             ? "/dashboard"
-            : role === "opd"
+            : role === "opd" || role === "superadmin"
             ? "/overview"
             : "/dashboard";
         return NextResponse.redirect(new URL(target, req.url));
@@ -111,13 +111,14 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      const userRole =
+      const rawRole =
         (token as unknown as { user?: { role?: string }; role?: string })?.user
           ?.role ??
         (token as unknown as { role?: string })?.role ??
         "";
+      const role = typeof rawRole === "string" ? rawRole.toLowerCase() : "";
 
-      if (!["pimpinan"].includes(userRole)) {
+      if (!["pimpinan"].includes(role)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang
         return NextResponse.redirect(new URL("/auth/prohibited", req.url));
       }
@@ -140,13 +141,14 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Periksa peran pengguna
-      const userRole =
+      const rawRole =
         (token as unknown as { user?: { role?: string }; role?: string })?.user
           ?.role ??
         (token as unknown as { role?: string })?.role ??
         "";
+      const role = typeof rawRole === "string" ? rawRole.toLowerCase() : "";
 
-      if (!["opd"].includes(userRole)) {
+      if (!["opd", "superadmin"].includes(role)) {
         // Jika rolenya tidak sesuai, arahkan ke halaman terlarang
         return NextResponse.redirect(new URL("/auth/prohibited", req.url));
       }
@@ -156,8 +158,46 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
+  if (
+    path.startsWith("/config") ||
+    path.startsWith("/master") ||
+    path.startsWith("/mater")
+  ) {
+    try {
+      const token = await getToken({
+        req: req,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+
+      if (!token) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+
+      const rawRole =
+        (token as unknown as { user?: { role?: string }; role?: string })?.user
+          ?.role ??
+        (token as unknown as { role?: string })?.role ??
+        "";
+      const role = typeof rawRole === "string" ? rawRole.toLowerCase() : "";
+
+      if (role !== "superadmin") {
+        return NextResponse.redirect(new URL("/auth/prohibited", req.url));
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+
   // Handle rute terlindungi lainnya (dashboard, sso/profile, dll.)
-  const protectedPaths = ["/dashboard", "/admin", "/auth/prohibited"];
+  const protectedPaths = [
+    "/dashboard",
+    "/admin",
+    "/auth/prohibited",
+    "/config",
+    "/master",
+    "/mater",
+  ];
 
   if (protectedPaths.some((protectedPath) => path.startsWith(protectedPath))) {
     try {

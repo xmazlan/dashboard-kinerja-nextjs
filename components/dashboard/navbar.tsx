@@ -361,8 +361,13 @@ export function Navbar() {
         actionLabel={isLoggingOut ? "Keluar..." : "Keluar"}
         actionClassName="bg-blue-600 hover:bg-blue-700"
       />
-      {session?.data?.user?.role === "opd" && (
-        <NavOPD pathname={pathname} name={session?.data?.user?.name} />
+      {(session?.data?.user?.role === "opd" ||
+        session?.data?.user?.role === "superadmin") && (
+        <NavOPD
+          pathname={pathname}
+          name={session?.data?.user?.name}
+          role={session?.data?.user?.role}
+        />
       )}
     </nav>
   );
