@@ -22,7 +22,7 @@ export default function SectionCapilIkd() {
   return (
     <CardComponent
       className="gap-1 border-none shadow-none w-full h-full"
-      title="Layanan Capil"
+      title="Data Capil"
       description={(() => {
         const periode = String(dataRespon?.data?.Periode || "-");
         const last = String(dataRespon?.last_get || "");

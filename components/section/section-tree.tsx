@@ -1,15 +1,10 @@
 "use client";
 import React from "react";
-// Components
-import SipuanPenariProductionSection from "./sipuan-penari/production-section";
-import TPIDSection from "./tpid/view-section";
 import SectionContainer from "./section-container";
-import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
-import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
-import DataTpidPasarSlide from "./roby/slider-content/data-tpid-pasar-slide";
+import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
 import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
-import DisdikSlide from "./roby/slider-content/disdik-slide";
 import PuprSlide from "./roby/slider-content/pupr-slide";
+import SipuanPenariSlide from "./roby/slider-content/distankan-sipuanpenari-slide";
 
 export default function SectionTree() {
   const [components, setComponents] = React.useState<
@@ -18,7 +13,6 @@ export default function SectionTree() {
     { key: "kominfo-erespon", label: "Kominfo E-Respon" },
     { key: "pupr", label: "PUPR" },
     { key: "disdik", label: "Disdik" },
-    { key: "tpid-komoditi", label: "TPID Komoditi" },
     { key: "sipuan-penari", label: "Sipuan Penari" },
   ]);
 
@@ -40,10 +34,8 @@ export default function SectionTree() {
   }, []);
 
   const componentMap: Record<string, React.ComponentType> = {
-    "kominfo-erespon": KominfoEresponSlide,
-    disdik: DisdikSlide,
-    "tpid-komoditi": SectionTpidKomoditiSlide,
     "sipuan-penari": SipuanPenariSlide,
+    ortal: SectionOrtalDataSlide,
     pupr: PuprSlide,
   };
 
