@@ -19,7 +19,7 @@ interface DisdikDoItmResponse {
   last_get?: string;
 }
 export const useDinkesHivData = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const slug = {
     opd: "dinkes",
     application: "hiv",
@@ -38,9 +38,9 @@ export const useDinkesHivData = () => {
       return response.data;
     },
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    enabled: true,
+    enabled: status === "authenticated" && !!session?.data?.token,
     staleTime: Infinity,
     retry: 1,
     retryDelay: 1000,

@@ -16,7 +16,6 @@ const GlobSlider = dynamic(() => import("@/components/section/global-slide"), {
   ssr: false,
   loading: () => null,
 });
-import PageContainer from "@/components/dashboard/page-container";
 import { useLayoutStore } from "@/hooks/use-layout";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import React from "react";
@@ -119,33 +118,30 @@ export default function Dashboard() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <PageContainer>
-        <main className="h-full overflow-hidden">
-          <section className="h-full overflow-hidden">
-            {/* <ViewportInfo /> */}
-            {session?.data?.user?.role === "pimpinan" ? (
-              <>
-                {mounted && viewMode === "slide" ? (
-                  <GlobSlider
-                    fullScreen
-                    topGap={topGap}
-                    bottomGap={bottomGap}
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full space-y-4"
-                    suppressHydrationWarning
-                  ></div>
-                )}
-              </>
-            ) : (
-              <>
-                <h1> Page OPD</h1>
-              </>
-            )}
-          </section>
-        </main>
-      </PageContainer>
+      <main className="h-full overflow-hidden">
+        <section className="h-full overflow-hidden">
+          {session?.data?.user?.role === "pimpinan" ? (
+            <>
+              {mounted && viewMode === "slide" ? (
+                <GlobSlider
+                  fullScreen
+                  topGap={topGap}
+                  bottomGap={bottomGap}
+                />
+              ) : (
+                <div
+                  className="w-full h-full space-y-4"
+                  suppressHydrationWarning
+                ></div>
+              )}
+            </>
+          ) : (
+            <>
+              <h1> Page OPD</h1>
+            </>
+          )}
+        </section>
+      </main>
     </>
   );
 }

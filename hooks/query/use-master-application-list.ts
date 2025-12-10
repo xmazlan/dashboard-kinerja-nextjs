@@ -31,3 +31,22 @@ export const useMasterApplicationList = () => {
     retryDelay: 1000,
   });
 };
+export const useMasterApplicationOpdList = (opdId: number) => {
+  const { data: session, status } = useSession();
+
+  return useQuery<any>({
+    queryKey: ["master-application-opd-list", session?.data?.token, opdId],
+    queryFn: async () => {
+      const headers: Record<string, string> = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+      if (session?.data?.token)
+        headers.Authorization = `Bearer ${session.data.token}`;
+      const url = `${API_URL}/api/v1/master/opdaplikasi/${opdId}`;
+      const response = await axios.get(url, { headers });
+      return response.data;
+    },
+    enabled: !!session?.data?.token && !!opdId,
+  });
+};

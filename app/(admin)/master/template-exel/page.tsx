@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <>
-      <PageContainer>
-        <VPageExcelOpd />
-      </PageContainer>
+      <VPageExcelOpd />
     </>
   );
 }
