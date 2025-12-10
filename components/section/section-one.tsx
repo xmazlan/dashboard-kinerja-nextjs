@@ -3,8 +3,9 @@ import React from "react";
 import SectionContainer from "./section-container";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
-import SectionOrtalDataSlide from "./roby/slider-content/ortal-slide";
-import SectionPuprDataSlide from "./roby/slider-content/pupr-slide";
+
+import KominfoEresponSlide from "./roby/slider-content/kominfo-erespon-slide";
+import SectionTpidKomoditiSlide from "./roby/slider-content/tpid-komditi-slide";
 
 export default function SectionOne() {
   const [components, setComponents] = React.useState<
@@ -12,8 +13,8 @@ export default function SectionOne() {
   >([
     { key: "pajak", label: "Pajak" },
     { key: "bpkad", label: "BPKAD" },
-    { key: "ortal", label: "Ortal" },
-    { key: "pupr", label: "PUPR" },
+    { key: "sipuan-penari", label: "Sipuan Penari" },
+    { key: "kominfo-erespon", label: "Kominfo E-Respon" },
   ]);
 
   React.useEffect(() => {
@@ -36,8 +37,9 @@ export default function SectionOne() {
   const componentMap: Record<string, React.ComponentType> = {
     pajak: SectionPajakDataSlide,
     bpkad: SectionBpkadDataSlide,
-    ortal: SectionOrtalDataSlide,
-    pupr: SectionPuprDataSlide,
+
+    "tpid-komoditi": SectionTpidKomoditiSlide,
+    "kominfo-erespon": KominfoEresponSlide,
   };
 
   return (

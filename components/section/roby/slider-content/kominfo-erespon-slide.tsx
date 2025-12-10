@@ -14,7 +14,8 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
 import DataEresponMasterData from "../data/pengaduan/data-erespon-master-data";
 
-export default function KominfoEresponSlide() {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+export default function KominfoEresponSlide({ onDone, fullSize, active }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -29,80 +30,63 @@ export default function KominfoEresponSlide() {
 
   // Autoplay sesuai pengaturan, berhenti saat hover/touch (CHART)
   React.useEffect(() => {
-    if (!chartApi) return;
+    if (!chartApi || !active) return;
     const id = setInterval(() => {
       if (!chartPausedRef.current) {
         chartApi.scrollNext();
       }
     }, speed);
     return () => clearInterval(id);
-  }, [chartApi, speed]);
+  }, [chartApi, active, speed]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
 
+  const prevRef = React.useRef(0);
   React.useEffect(() => {
     if (!chartApi) return;
-    setChartScrollSnaps(chartApi.scrollSnapList());
-    const onSelect = () => setChartSelectedIndex(chartApi.selectedScrollSnap());
+    const snaps = chartApi.scrollSnapList();
+    setChartScrollSnaps(snaps);
+    const last = Math.max(0, snaps.length - 1);
+    const onSelect = () => {
+      const cur = chartApi.selectedScrollSnap();
+      setChartSelectedIndex(cur);
+      if (active && snaps.length > 1 && prevRef.current === last && cur === 0) {
+        onDone?.();
+      }
+      prevRef.current = cur;
+    };
     chartApi.on("select", onSelect);
     onSelect();
     return () => {
       chartApi.off("select", onSelect);
     };
-  }, [chartApi]);
-
-  // State & kontrol untuk Carousel NON-CHART (Contoh Carousel)
-  const [contentApi, setContentApi] = React.useState<CarouselApi | null>(null);
-  const [contentPaused, setContentPaused] = React.useState(false);
-  const contentPausedRef = React.useRef(false);
-  const childSpeed = useDashboardStore((s) => s.childSpeed);
-
+  }, [chartApi, active, onDone]);
   React.useEffect(() => {
-    contentPausedRef.current = contentPaused;
-  }, [contentPaused]);
+    if (!chartApi) return;
+    const snaps = chartApi.scrollSnapList();
+    if (active && snaps.length <= 1) {
+      const id = setTimeout(() => onDone?.(), speed);
+      return () => clearTimeout(id);
+    }
+  }, [chartApi, active, onDone, speed]);
 
-  // Autoplay konten tambahan, berhenti saat hover/touch (NON-CHART)
-  React.useEffect(() => {
-    if (!contentApi) return;
-    const id = setInterval(() => {
-      if (!contentPausedRef.current) {
-        contentApi.scrollNext();
-      }
-    }, childSpeed);
-    return () => clearInterval(id);
-  }, [contentApi, childSpeed]);
-
-  const [contentScrollSnaps, setContentScrollSnaps] = React.useState<number[]>(
-    []
-  );
-  const [contentSelectedIndex, setContentSelectedIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!contentApi) return;
-    setContentScrollSnaps(contentApi.scrollSnapList());
-    const onSelect = () =>
-      setContentSelectedIndex(contentApi.selectedScrollSnap());
-    contentApi.on("select", onSelect);
-    onSelect();
-    return () => {
-      contentApi.off("select", onSelect);
-    };
-  }, [contentApi]);
+  // (Non-chart carousel dihapus untuk menyeragamkan pola seperti pajak-slide)
 
   return (
     <>
-      <CardComponent className="p-3 shadow-lg border rounded-lg bg-card">
+      <CardComponent className={cn(fullSize ? "p-0 shadow-lg w-full h-full" : "p-3 shadow-lg border rounded-lg bg-card")}>
+        <div className={cn(fullSize ? "flex h-full flex-col" : undefined)}>
         <Carousel
-          className="w-full"
+          className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
           opts={{ loop: true, align: "start" }}
           setApi={setChartApi}
-          onMouseEnter={() => setChartPaused(true)}
-          onMouseLeave={() => setChartPaused(false)}
-          onTouchStart={() => setChartPaused(true)}
-          onTouchEnd={() => setChartPaused(false)}
+          onMouseEnter={() => active && setChartPaused(true)}
+          onMouseLeave={() => active && setChartPaused(false)}
+          onTouchStart={() => active && setChartPaused(true)}
+          onTouchEnd={() => active && setChartPaused(false)}
         >
-          <CarouselContent>
+          <CarouselContent className={cn(fullSize ? "h-full" : undefined)}>
             <CarouselItem>
               <DataEresponMasterData />
             </CarouselItem>
@@ -111,7 +95,7 @@ export default function KominfoEresponSlide() {
           <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
         </Carousel>
         {/* Indikator dot */}
-        <div className="mt-3 flex justify-center gap-2 mb-3">
+        <div className={cn(fullSize ? "flex justify-center gap-2 mb-3" : "mt-3 flex justify-center gap-2 mb-3")}>
           {chartScrollSnaps.map((_, idx) => (
             <button
               key={idx}
@@ -127,6 +111,7 @@ export default function KominfoEresponSlide() {
               {idx + 1}
             </button>
           ))}
+        </div>
         </div>
       </CardComponent>
     </>

@@ -34,7 +34,12 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import KecamatanGroupGrid from "../data/stunting/kecamatan-group-grid";
 import LoadingContent from "../data/loading-content";
 
-export default function DataStuntingKecamatanSlide() {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+export default function DataStuntingKecamatanSlide({
+  onDone,
+  fullSize,
+  active,
+}: Props) {
   const { data: apiData, isLoading: isLoadingApiData } =
     useStuntingSweeperKecamatanData();
   const [api, setApi] = React.useState<CarouselApi | null>(null);
@@ -46,26 +51,44 @@ export default function DataStuntingKecamatanSlide() {
   }, [paused]);
   const speed = useDashboardStore((s) => s.speed);
   React.useEffect(() => {
-    if (!api) return;
+    if (!api || !active) return;
     const id = setInterval(() => {
       if (!pausedRef.current) {
         api.scrollNext();
       }
     }, speed);
     return () => clearInterval(id);
-  }, [api, speed]);
+  }, [api, active, speed]);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const prevRef = React.useRef(0);
   React.useEffect(() => {
     if (!api) return;
-    setScrollSnaps(api.scrollSnapList());
-    const onSelect = () => setSelectedIndex(api.selectedScrollSnap());
+    const snaps = api.scrollSnapList();
+    setScrollSnaps(snaps);
+    const last = Math.max(0, snaps.length - 1);
+    const onSelect = () => {
+      const cur = api.selectedScrollSnap();
+      setSelectedIndex(cur);
+      if (active && snaps.length > 1 && prevRef.current === last && cur === 0) {
+        onDone?.();
+      }
+      prevRef.current = cur;
+    };
     api.on("select", onSelect);
     onSelect();
     return () => {
       api.off("select", onSelect);
     };
-  }, [api]);
+  }, [api, active, onDone]);
+  React.useEffect(() => {
+    if (!api) return;
+    const snaps = api.scrollSnapList();
+    if (active && snaps.length <= 1) {
+      const id = setTimeout(() => onDone?.(), speed);
+      return () => clearTimeout(id);
+    }
+  }, [api, active, onDone, speed]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -99,7 +122,9 @@ export default function DataStuntingKecamatanSlide() {
   return (
     <>
       <CardComponent
-        className="p-2  shadow-lg"
+        className={cn(
+          fullSize ? "p-0 shadow-lg w-full h-full" : "p-2 shadow-lg"
+        )}
         title="Data Penangan Stunting"
         description={
           <>
@@ -186,15 +211,20 @@ export default function DataStuntingKecamatanSlide() {
             return (
               <div className="h-full flex flex-col space-y-3">
                 <Carousel
-                  className="w-full"
+                  className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
                   opts={{ loop: true, align: "start" }}
                   setApi={setApi}
-                  onMouseEnter={() => setPaused(true)}
-                  onMouseLeave={() => setPaused(false)}
-                  onTouchStart={() => setPaused(true)}
-                  onTouchEnd={() => setPaused(false)}
+                  onMouseEnter={() => active && setPaused(true)}
+                  onMouseLeave={() => active && setPaused(false)}
+                  onTouchStart={() => active && setPaused(true)}
+                  onTouchEnd={() => active && setPaused(false)}
                 >
-                  <CarouselContent className="items-stretch">
+                  <CarouselContent
+                    className={cn(
+                      "items-stretch",
+                      fullSize ? "h-full" : undefined
+                    )}
+                  >
                     <CarouselItem>
                       <DataStuntingSlide />
                     </CarouselItem>
@@ -207,7 +237,13 @@ export default function DataStuntingKecamatanSlide() {
                   {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
                   <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
                 </Carousel>
-                <div className="mt-3 flex justify-center gap-2">
+                <div
+                  className={cn(
+                    fullSize
+                      ? "flex justify-center gap-2"
+                      : "mt-3 flex justify-center gap-2"
+                  )}
+                >
                   {scrollSnaps.map((_, idx) => (
                     <button
                       key={idx}

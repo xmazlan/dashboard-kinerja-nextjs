@@ -4,14 +4,16 @@ import SectionContainer from "./section-container";
 import DataStuntingKecamatanSlide from "./roby/slider-content/data-stunting-kecamatan-slide";
 import SectionCapilDataSlide from "./roby/slider-content/capil-slide";
 import SectionDinkesDataSlide from "./roby/slider-content/dinkes-slide";
+import DisdikSlide from "./roby/slider-content/disdik-slide";
 
 export default function SectionTwo() {
   const [components, setComponents] = React.useState<
     Array<{ key: string; label: string }>
   >([
-    { key: "stunting", label: "Stunting" },
     { key: "capil", label: "Capil" },
+    { key: "stunting", label: "Stunting" },
     { key: "dinkes", label: "Dinkes" },
+    { key: "disdik", label: "Disdik" },
   ]);
 
   React.useEffect(() => {
@@ -32,9 +34,10 @@ export default function SectionTwo() {
   }, []);
 
   const componentMap: Record<string, React.ComponentType> = {
-    stunting: DataStuntingKecamatanSlide,
     capil: SectionCapilDataSlide,
+    stunting: DataStuntingKecamatanSlide,
     dinkes: SectionDinkesDataSlide,
+    disdik: DisdikSlide,
   };
 
   return (

@@ -6,27 +6,27 @@
       "components": [
         { "key": "pajak", "label": "Pajak" },
         { "key": "bpkad", "label": "BPKAD" },
-        { "key": "ortal", "label": "Ortal" },
-        { "key": "pupr", "label": "PUPR" }
+        { "key": "tpid-komoditi", "label": "TPID Komoditi" },
+        { "key": "kominfo-erespon", "label": "Kominfo E-Respon" }
       ]
     },
     {
       "id": "section-two",
       "label": "Section Two",
       "components": [
-        { "key": "stunting", "label": "Stunting" },
         { "key": "capil", "label": "Capil" },
-        { "key": "dinkes", "label": "Dinkes" }
+        { "key": "stunting", "label": "Stunting" },
+        { "key": "dinkes", "label": "Dinkes" },
+        { "key": "disdik", "label": "Disdik" }
       ]
     },
     {
       "id": "section-tree",
       "label": "Section Tree",
       "components": [
-        { "key": "kominfo-erespon", "label": "Kominfo E-Respon" },
-        { "key": "disdik", "label": "Disdik" },
-        { "key": "tpid-komoditi", "label": "TPID Komoditi" },
-        { "key": "sipuan-penari", "label": "Sipuan Penari" }
+        { "key": "sipuan-penari", "label": "Sipuan Penari" },
+        { "key": "ortal", "label": "Ortal" },
+        { "key": "pupr", "label": "PUPR" }
       ]
     }
   ]

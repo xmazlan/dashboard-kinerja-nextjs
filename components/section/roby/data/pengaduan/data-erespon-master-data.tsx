@@ -1,9 +1,6 @@
 "use client";
-import React from "react";
-import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
-import LoadingSkeleton from "@/components/loading-skeleton";
 import {
   Building2,
   Tags,
@@ -52,7 +49,7 @@ export default function DataEresponMasterData() {
     <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
-        title="Data pengaduan masyarakat (Master Data)"
+        title="Data pengaduan masyarakat"
         description={
           <>
             Last update: {masterData?.last_get ?? ""}
