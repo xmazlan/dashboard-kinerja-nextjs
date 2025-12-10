@@ -19,7 +19,7 @@ interface DisdikDoItmResponse {
   last_get?: string;
 }
 export const useDisdikDoItmData = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const slug = {
     opd: "disdik",
     application: "do_ltm",
@@ -38,16 +38,16 @@ export const useDisdikDoItmData = () => {
       return response.data;
     },
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    enabled: true,
+    enabled: status === "authenticated" && !!session?.data?.token,
     staleTime: Infinity,
     retry: 1,
     retryDelay: 1000,
   });
 };
 export const useDisdikKebutuhanGuruData = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const slug = {
     opd: "disdik",
     application: "kebutuhan_guru",
@@ -66,9 +66,9 @@ export const useDisdikKebutuhanGuruData = () => {
       return response.data;
     },
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    enabled: true,
+    enabled: status === "authenticated" && !!session?.data?.token,
     staleTime: Infinity,
     retry: 1,
     retryDelay: 1000,

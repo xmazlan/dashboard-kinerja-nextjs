@@ -1,4 +1,3 @@
-import PageContainer from "@/components/dashboard/page-container";
 import { Metadata } from "next";
 import VPageFormKinerja from "./_components/v-page";
 export const metadata: Metadata = {
@@ -8,9 +7,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <>
-      <PageContainer>
-        <VPageFormKinerja />
-      </PageContainer>
+      <VPageFormKinerja />
     </>
   );
 }

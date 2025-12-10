@@ -1,4 +1,3 @@
-import PageContainer from "@/components/dashboard/page-container";
 import { Metadata } from "next";
 import React from "react";
 import VPageOverview from "./_components/v-page";
@@ -11,9 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <>
-      <PageContainer>
-        <VPageOverview />
-      </PageContainer>
+      <VPageOverview />
     </>
   );
 }

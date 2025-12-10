@@ -32,8 +32,10 @@ import {
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useMasterOpdList } from "@/hooks/query/use-master-opd-list";
-import { useMasterApplicationList } from "@/hooks/query/use-master-application-list";
+import { useMasterApplicationOpdList } from "@/hooks/query/use-master-application-list";
 import { Textarea } from "@/components/ui/textarea";
+import DebugForm from "@/components/debug-form";
+import DebugData from "@/components/debug-data";
 
 const schemaCreate = z.object({
   opd_id: z.string().regex(/^\d+$/, "OPD wajib dipilih"),
@@ -103,7 +105,8 @@ export default function FormTemplate({
       file: undefined,
       keterangan: "",
     },
-    mode: "onTouched",
+    mode: "onChange",
+    shouldFocusError: true,
   });
   const { data: opdList } = useMasterOpdList();
   const opdOptions: Array<{ id: number; opd: string }> = Array.isArray(
@@ -111,16 +114,26 @@ export default function FormTemplate({
   )
     ? (opdList!.data as Array<{ id: number; opd: string }>)
     : [];
-  const { data: applicationList } = useMasterApplicationList();
+  const opdIdField = form.watch("opd_id");
+  const opdIdNum = (() => {
+    const n = Number(String(opdIdField || "").trim());
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  })();
+  const { data: applicationByOpd, isLoading: isLoadingApplicationByOpd } =
+    useMasterApplicationOpdList(opdIdNum);
   const aplikasiOptions: Array<{ id: number; nama_aplikasi: string }> =
-    Array.isArray(applicationList?.data)
+    Array.isArray(applicationByOpd?.data)
       ? (
-          applicationList!.data as Array<{
+          applicationByOpd!.data as Array<{
             id: number;
             nama_aplikasi: string;
           }>
         ).map((d) => ({ id: d.id, nama_aplikasi: d.nama_aplikasi }))
       : [];
+  React.useEffect(() => {
+    const cur = form.getValues("aplikasi_id");
+    if (!opdIdNum && cur) form.setValue("aplikasi_id", "");
+  }, [opdIdNum, form]);
   const [openComboboxOpd, setOpenComboboxOpd] = React.useState(false);
   const [openComboboxAplikasi, setOpenComboboxAplikasi] = React.useState(false);
   const submitting = form.formState.isSubmitting;
@@ -288,6 +301,7 @@ export default function FormTemplate({
   return (
     <>
       {/* <DebugForm form={form} /> */}
+      {/* <DebugData data={applicationByOpd} /> */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
@@ -392,7 +406,11 @@ export default function FormTemplate({
                             );
                             return cur?.nama_aplikasi
                               ? String(cur.nama_aplikasi)
-                              : "— Pilih Aplikasi —";
+                              : isLoadingApplicationByOpd
+                              ? "Memuat daftar aplikasi..."
+                              : opdIdNum
+                              ? "— Pilih Aplikasi —"
+                              : "Pilih OPD terlebih dahulu";
                           })()}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -515,7 +533,10 @@ export default function FormTemplate({
               >
                 Reset
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button
+                type="submit"
+                disabled={submitting || !form.formState.isValid}
+              >
                 Simpan
               </Button>
             </div>
