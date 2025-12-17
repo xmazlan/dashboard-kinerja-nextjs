@@ -217,7 +217,7 @@ export function CommandMenu({ ...props }: DialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           className={cn(
             "bg-surface text-foreground dark:bg-card relative h-8 w-full justify-start pl-3 font-medium shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64"
           )}
@@ -228,7 +228,7 @@ export function CommandMenu({ ...props }: DialogProps) {
             <span className="inline-flex max-w-[60%] truncate">{search}</span>
           ) : (
             <>
-              <span className="hidden lg:inline-flex">Cari...</span>
+              <span className="hidden lg:inline-flex text-white">Cari...</span>
               <span className="inline-flex lg:hidden">Search...</span>
             </>
           )}
@@ -265,7 +265,7 @@ export function CommandMenu({ ...props }: DialogProps) {
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="rounded-xl border-none bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 dark:bg-neutral-900 dark:ring-neutral-800"
+        className="rounded-xl border-none bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-border bg-card text-foreground"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Search documentation...</DialogTitle>
@@ -437,7 +437,7 @@ export function CommandMenu({ ...props }: DialogProps) {
               )}
           </CommandList>
         </Command>
-        <div className="text-muted-foreground absolute inset-x-0 bottom-0 z-20 flex h-10 items-center gap-2 rounded-b-xl border-t border-t-neutral-100 bg-neutral-50 px-4 text-xs font-medium dark:border-t-neutral-700 dark:bg-neutral-800">
+        <div className="text-muted-foreground absolute inset-x-0 bottom-0 z-20 flex h-10 items-center gap-2 rounded-b-xl border-t border-border bg-muted px-4 text-xs font-medium">
           <div className="flex items-center gap-2">
             <CommandMenuKbd>
               <CornerDownLeftIcon />
