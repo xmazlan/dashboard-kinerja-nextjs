@@ -68,9 +68,9 @@ export const useBpkadSp2dData = () => {
       );
       return response.data;
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     refetchOnMount: true,
-    refetchOnReconnect: false,
+    refetchOnReconnect: true,
     enabled: !!session?.data?.token,
     staleTime: Infinity,
     gcTime: Infinity,

@@ -105,7 +105,7 @@ export default function SectionBpkadDataSlide({
                 aria-label={`Ke slide ${idx + 1}`}
                 onClick={() => chartApi?.scrollTo(idx)}
                 className={cn(
-                  "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                   idx === chartSelectedIndex
                     ? "bg-primary text-white border-primary"
                     : "bg-transparent text-foreground/70 border-border hover:text-foreground"
