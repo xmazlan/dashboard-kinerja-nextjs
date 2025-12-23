@@ -152,7 +152,7 @@ export default function DataPajakAIRBAWAHTANAH() {
           <>
             Last update: <span suppressHydrationWarning>{last || "-"}</span>
             <br />
-            <span className="italic text-xs">(Sumber : BPKAD)</span>
+            <span className="italic text-xs">(Sumber : Papenda)</span>
           </>
         }
         action={
