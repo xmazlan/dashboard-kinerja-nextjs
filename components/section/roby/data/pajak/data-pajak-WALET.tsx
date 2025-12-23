@@ -151,7 +151,7 @@ export default function DataPajakWALET() {
           <>
             Last update: <span suppressHydrationWarning>{last || "-"}</span>
             <br />
-            <span className="italic text-xs">(Sumber : Papenda)</span>
+            <span className="italic text-xs">(Sumber : Bapenda)</span>
           </>
         }
         action={
