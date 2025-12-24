@@ -32,6 +32,14 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { SectionHero } from "@/components/layout/section-hero";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { toast } from "sonner";
+import SectionContainer from "@/components/section/section-container";
+import DataPupr from "@/components/section/roby/data/pupr/data-pupr";
+import DataDisdikDoItm from "@/components/section/roby/data/disdik/data-disdik-doitm";
+import DataDisdikKebutuhanGuru from "@/components/section/roby/data/disdik/data-disdik-kebutuhan_guru";
+import SectionCapilIkd from "@/components/section/roby/data/capil/data-capil-ikd";
+import DataOrtalIkm from "@/components/section/roby/data/ortal/data-ortal-ikm";
+import DataOrtalRb from "@/components/section/roby/data/ortal/data-ortal-rb";
+import DataOrtalSakip from "@/components/section/roby/data/ortal/data-ortal-sakip";
 
 export default function VPageOverview() {
   const { data: session, status } = useSession();
@@ -68,8 +76,8 @@ export default function VPageOverview() {
   return (
     <>
       {session?.data?.user?.role === "opd" ? (
-        <section className="relative ">
-          <div className="mx-auto w-full max-w-6xl px-6 py-6">
+        <section className="relative flex-1 min-h-0">
+          <div className="mx-auto w-full h-full min-h-0 max-w-8xl px-6 py-6 flex flex-col">
             <div className="mb-6">
               <SectionHero
                 title={`Selamat datang, ${String(
@@ -100,7 +108,7 @@ export default function VPageOverview() {
               />
             </div>
 
-            <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 ">
               <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
                 <PopoverTrigger asChild>
                   <Button
@@ -166,32 +174,90 @@ export default function VPageOverview() {
               </Popover>
             </div>
 
-            <div className="flex flex-1 flex-col gap-4 ">
-              {opdAplication ? (
-                <div className="rounded-md border bg-card shadow-sm overflow-hidden">
-                  <div className="flex items-center justify-between px-3 py-2 border-b">
-                    <div className="flex items-center gap-2 text-xs font-medium">
-                      <TrendingUp className="h-3.5 w-3.5" />
-                      JSON Output
-                    </div>
-                    <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {String(opdAplication)}
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <CodeBlock
-                      language="json"
-                      filename="response.json"
-                      code={JSON.stringify(opdKinerjaData ?? {}, null, 2)}
-                    />
+            <div className="flex flex-1 flex-col gap-3 min-h-0">
+              <SectionContainer
+                idSection={opdAplication ? [opdAplication] : undefined}
+                className="h-full min-h-0 flex-1"
+              >
+                <div className="grid grid-cols-1 gap-4 w-full h-full min-h-0">
+                  <div className="h-full min-h-0 flex flex-col">
+                    {opdAplication ? (
+                      <div className="rounded-md border bg-card shadow-sm overflow-hidden flex-1 min-h-0 h-full">
+                        <div className="flex items-center justify-between px-3 py-2 border-b">
+                          <div className="flex items-center gap-2 text-xs font-medium">
+                            <TrendingUp className="h-3.5 w-3.5" />
+                            Output
+                          </div>
+                          <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                            {String(opdAplication)}
+                          </div>
+                        </div>
+                        <div className="p-2 flex-1 min-h-0 h-full">
+                          {opdAplication === "l2t2" ? (
+                            <div className="h-full">
+                              <DataPupr />
+                            </div>
+                          ) : opdAplication === "do-ltm" ? (
+                            // DISDIK-DO-LTM
+                            <div className="h-full">
+                              <DataDisdikDoItm
+                                ratioDesktop={1}
+                                ratioMobile={1}
+                              />
+                            </div>
+                          ) : opdAplication === "kebutuhan-guru" ? (
+                            // DISDIK-KEBUTUHAN-GURU
+                            <div className="h-full">
+                              <DataDisdikKebutuhanGuru
+                                ratioDesktop={1}
+                                ratioMobile={1}
+                              />
+                            </div>
+                          ) : opdAplication === "layanan-blanko" ? (
+                            // CAPIL -LAYANAN-BLANKO
+                            <div className="h-full">
+                              <SectionCapilIkd
+                                ratioDesktop={1}
+                                ratioMobile={1}
+                              />
+                            </div>
+                          ) : opdAplication === "ikm" ? (
+                            // DISDIK-IKM
+                            <div className="h-full">
+                              <DataOrtalIkm ratioDesktop={1} ratioMobile={1} />
+                            </div>
+                          ) : opdAplication === "rb" ? (
+                            // DISDIK-RB
+                            <div className="h-full">
+                              <DataOrtalRb ratioDesktop={1} ratioMobile={1} />
+                            </div>
+                          ) : opdAplication === "sakip" ? (
+                            // DISDIK-SAKIP
+                            <div className="h-full">
+                              <DataOrtalSakip
+                                ratioDesktop={1}
+                                ratioMobile={1}
+                              />
+                            </div>
+                          ) : opdAplication === "l2t8" ? (
+                            <p>Data kinerja L2T8 disimpan dalam format JSON.</p>
+                          ) : (
+                            <p>
+                              Data kinerja {opdAplication} disimpan dalam format
+                              JSON.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-sm text-muted-foreground">
+                        Pilih aplikasi untuk menampilkan data kinerja.
+                      </div>
+                    )}
                   </div>
                 </div>
-              ) : (
-                <div className="text-sm text-muted-foreground">
-                  Pilih aplikasi untuk menampilkan data kinerja.
-                </div>
-              )}
+              </SectionContainer>
             </div>
           </div>
         </section>

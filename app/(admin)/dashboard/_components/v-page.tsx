@@ -123,11 +123,7 @@ export default function Dashboard() {
           {session?.data?.user?.role === "pimpinan" ? (
             <>
               {mounted && viewMode === "slide" ? (
-                <GlobSlider
-                  fullScreen
-                  topGap={topGap}
-                  bottomGap={bottomGap}
-                />
+                <GlobSlider fullScreen topGap={topGap} bottomGap={bottomGap} />
               ) : (
                 <div
                   className="w-full h-full space-y-4"
@@ -136,9 +132,7 @@ export default function Dashboard() {
               )}
             </>
           ) : (
-            <>
-              <h1> Page OPD</h1>
-            </>
+            <></>
           )}
         </section>
       </main>

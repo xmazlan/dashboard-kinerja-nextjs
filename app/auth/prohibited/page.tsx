@@ -2,6 +2,8 @@ import { AlertCircle } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import ButtonBack from "@/components/auth/button-back";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function ProhibitedPage() {
   const session = await getServerSession(authOptions);
@@ -21,7 +23,10 @@ export default async function ProhibitedPage() {
           Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Silakan
           hubungi administrator jika Anda merasa ini adalah kesalahan.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 items-center">
+          <Link href="/" className="block w-full sm:w-auto">
+            <Button variant="link">Home</Button>
+          </Link>
           <ButtonBack />
         </div>
         <div className="text-xs text-muted-foreground space-y-2">

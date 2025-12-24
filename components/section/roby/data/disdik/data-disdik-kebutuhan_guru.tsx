@@ -22,7 +22,13 @@ import BarChart from "@/components/apexchart/bar-chart";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
-export default function DataDisdikKebutuhanGuru() {
+export default function DataDisdikKebutuhanGuru({
+  ratioDesktop = 0.5,
+  ratioMobile = 0.38,
+}: {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+}) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
@@ -85,8 +91,8 @@ export default function DataDisdikKebutuhanGuru() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <LayoutCard
                     className="relative bg-card rounded-lg shadow-sm p-3 border"
-                    ratioDesktop={0.5}
-                    ratioMobile={0.38}
+                    ratioDesktop={ratioDesktop}
+                    ratioMobile={ratioMobile}
                   >
                     <div className="flex h-full flex-col">
                       <div className="flex-1 min-h-0 overflow-hidden">
@@ -196,8 +202,8 @@ export default function DataDisdikKebutuhanGuru() {
 
                   <LayoutCard
                     className="relative bg-card rounded-lg shadow-sm p-3 border"
-                    ratioDesktop={0.5}
-                    ratioMobile={0.38}
+                    ratioDesktop={ratioDesktop}
+                    ratioMobile={ratioMobile}
                   >
                     <div className="flex h-full flex-col">
                       <h3 className="text-xs font-semibold text-foreground mb-2 pb-1 border-b">

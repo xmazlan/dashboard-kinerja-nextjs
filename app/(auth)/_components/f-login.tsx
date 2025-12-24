@@ -25,6 +25,7 @@ import { LoginSchemaValues, loginSchema } from "./schema-login";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import axios from "@/lib/axios";
 export function LoginForm({ className }: React.ComponentProps<"form">) {
   const DEMO_EMAIL =
     process.env.NEXT_PUBLIC_DUMMY_EMAIL ?? "demo@kominfo.go.id";
@@ -52,6 +53,20 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
     try {
       addLog("Validasi input");
       const start = Date.now();
+      addLog("Memeriksa kredensial ke API");
+      const preflight = await axios.post(
+        "/api/v1/auth/login",
+        { email: values.email.trim(), password: values.password },
+        { validateStatus: () => true }
+      );
+      if (!(preflight.status >= 200 && preflight.status < 300)) {
+        const payload = preflight.data as { message?: string };
+        const apiMsg = String(payload?.message || "Autentikasi gagal.");
+        setError(apiMsg);
+        toast.error(apiMsg);
+        addLog(`Gagal: ${apiMsg}`);
+        return;
+      }
       addLog("Mengirim request credentials ke server");
       const result = await signIn("credentials", {
         redirect: false,
@@ -64,10 +79,8 @@ export function LoginForm({ className }: React.ComponentProps<"form">) {
       if (result?.error) {
         const code = result.error;
         const msg = (() => {
-          if (code === "CredentialsSignin")
-            return "Autentikasi gagal. Periksa kredensial atau coba lagi nanti.";
-          if (code === "Callback")
-            return "Data autentikasi lambat atau tidak merespons. Silakan coba lagi.";
+          if (code === "CredentialsSignin") return "Autentikasi gagal.";
+          if (code === "Callback") return "Data autentikasi lambat.";
           if (code === "AccessDenied") return "Akses ditolak.";
           if (code === "Configuration")
             return "Konfigurasi autentikasi bermasalah.";

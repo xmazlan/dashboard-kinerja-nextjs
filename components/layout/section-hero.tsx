@@ -24,13 +24,26 @@ export function SectionHero({
   className,
 }: SectionHeroProps) {
   return (
-    <div className={cn("relative rounded-xl border bg-card shadow-sm overflow-hidden", className)}>
-      <ShineBorder borderWidth={borderWidth} duration={duration} shineColor={shineColor} />
+    <div
+      className={cn(
+        "relative rounded-xl border bg-card shadow-sm overflow-hidden",
+        className
+      )}
+    >
+      <ShineBorder
+        borderWidth={borderWidth}
+        duration={duration}
+        shineColor={shineColor}
+      />
       <div className="relative flex items-center justify-between gap-3 px-4 py-4">
         <div className="min-w-0">
-          <div className="text-xl sm:text-2xl font-bold tracking-tight">{title}</div>
+          <div className="text-xl sm:text-2xl font-bold tracking-tight">
+            {title}
+          </div>
           {subtitle ? (
-            <div className="text-sm text-muted-foreground truncate">{subtitle}</div>
+            <div className="text-sm text-muted-foreground truncate">
+              {subtitle}
+            </div>
           ) : null}
         </div>
         {right ? <div className="flex items-center gap-3">{right}</div> : null}

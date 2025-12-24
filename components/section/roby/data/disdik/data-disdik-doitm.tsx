@@ -23,7 +23,13 @@ import { ModalDetail } from "@/components/modal/detail-modal";
 import DataDisdikKebutuhanGuru from "./data-disdik-kebutuhan_guru";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
-export default function DataDisdikDoItm() {
+export default function DataDisdikDoItm({
+  ratioDesktop = 0.6,
+  ratioMobile = 0.4,
+}: {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+}) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
@@ -392,13 +398,13 @@ export default function DataDisdikDoItm() {
           (() => {
             return (
               <CardComponent className="shadow-none border-none">
-                <div ref={rootRef} className="max-h-full space-y-3">
+                <div ref={rootRef} className="h-full min-h-0 space-y-3">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                     <div className="grid-cols-1">
                       <LayoutCard
                         className="relative bg-card rounded-lg shadow-lg p-3 border"
-                        ratioDesktop={0.6}
-                        ratioMobile={0.4}
+                        ratioDesktop={ratioDesktop}
+                        ratioMobile={ratioMobile}
                       >
                         <div className="flex h-full flex-col">
                           <div
@@ -419,8 +425,8 @@ export default function DataDisdikDoItm() {
                     <div className="grid-cols-1">
                       <LayoutCard
                         className="relative bg-card rounded-lg shadow-lg p-3 border"
-                        ratioDesktop={0.6}
-                        ratioMobile={0.4}
+                        ratioDesktop={ratioDesktop}
+                        ratioMobile={ratioMobile}
                       >
                         <div className="flex h-full flex-col">
                           {ltmChartData.length > 0 && (
