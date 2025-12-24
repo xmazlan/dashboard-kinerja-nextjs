@@ -3,6 +3,7 @@ import React from "react";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 import { useSession, signOut } from "next-auth/react";
+import { useLayoutStore } from "@/hooks/use-layout";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -23,6 +24,58 @@ export default function PageContainer({
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" });
   };
+  const setSizes = useLayoutStore((s) => s.setSizes);
+  React.useEffect(() => {
+    const updateViewport = () => {
+      setSizes({
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+      });
+    };
+    const updateNavFooter = () => {
+      const navEl = document.querySelector(
+        '[data-role="navbar"]'
+      ) as HTMLElement | null;
+      const footEl = document.querySelector(
+        '[data-role="footer"]'
+      ) as HTMLElement | null;
+      if (navEl)
+        setSizes({
+          navbar: {
+            width: navEl.offsetWidth,
+            height: navEl.offsetHeight,
+          },
+        });
+      if (footEl)
+        setSizes({
+          footer: {
+            width: footEl.offsetWidth,
+            height: footEl.offsetHeight,
+          },
+        });
+    };
+    const handleResize = () => {
+      updateViewport();
+      updateNavFooter();
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    const ro = new ResizeObserver(() => updateNavFooter());
+    const navEl = document.querySelector(
+      '[data-role="navbar"]'
+    ) as HTMLElement | null;
+    const footEl = document.querySelector(
+      '[data-role="footer"]'
+    ) as HTMLElement | null;
+    if (navEl) ro.observe(navEl);
+    if (footEl) ro.observe(footEl);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      ro.disconnect();
+    };
+  }, [setSizes]);
   return (
     <>
       <AlertDialog open={isUnauthenticated}>

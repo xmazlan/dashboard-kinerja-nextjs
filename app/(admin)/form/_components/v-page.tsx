@@ -10,7 +10,7 @@ export default function VPageFormKinerja() {
   const { data: session } = useSession();
   return (
     <section className="relative ">
-      <div className="mx-auto w-full max-w-6xl px-6 py-6">
+      <div className="mx-auto w-full h-full min-h-0 max-w-8xl px-6 py-6 flex flex-col">
         <div className="mb-6">
           <SectionHero
             title={`Unggah Data Kinerja`}
