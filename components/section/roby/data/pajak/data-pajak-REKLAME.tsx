@@ -136,7 +136,7 @@ export default function DataPajakREKLAME() {
           <>
             Last update: <span suppressHydrationWarning>{last || "-"}</span>
             <br />
-            <span className="italic text-xs">(Sumber : BPKAD)</span>
+            <span className="italic text-xs">(Sumber : Bapenda)</span>
           </>
         }
         action={
