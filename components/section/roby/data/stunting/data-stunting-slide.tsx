@@ -88,7 +88,10 @@ export default function DataStuntingSlide() {
                           Data Balita Terdata
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {totalBalita.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -108,7 +111,10 @@ export default function DataStuntingSlide() {
                           Berat Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBU.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -141,7 +147,10 @@ export default function DataStuntingSlide() {
                           Tinggi Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumTBU.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -174,7 +183,10 @@ export default function DataStuntingSlide() {
                           Berat Badan menurut Tinggi Badan
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBTB.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -232,7 +244,10 @@ export default function DataStuntingSlide() {
                               {section.keyLabel}
                             </p>
                           </div>
-                          <div className="text-xs font-bold tabular-nums">
+                          <div
+                            className="text-xs font-bold tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {section.sum.toLocaleString("id-ID")}
                           </div>
                         </div>
@@ -251,7 +266,10 @@ export default function DataStuntingSlide() {
                               >
                                 {e.label}
                               </div>
-                              <div className="text-xs font-mono font-semibold tabular-nums">
+                              <div
+                                className="text-xs font-mono font-semibold tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {e.value.toLocaleString("id-ID")}
                               </div>
                             </div>

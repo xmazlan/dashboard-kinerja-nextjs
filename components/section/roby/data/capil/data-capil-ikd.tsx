@@ -35,7 +35,9 @@ export default function SectionCapilIkd({
         return (
           <>
             <div className="flex justify-between items-center gap-2">
-              <span className="text-xs">Last update: {last || "-"}</span>
+              <span className="text-xs">
+                Last update: <span suppressHydrationWarning>{last || "-"}</span>
+              </span>
             </div>
             <span className="italic text-xs">(Sumber : IKD Capil)</span>
           </>

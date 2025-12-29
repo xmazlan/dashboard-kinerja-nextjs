@@ -127,7 +127,10 @@ export default function DataBpkad() {
                       <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
                         {s.label}
                       </div>
-                      <div className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right">
+                      <div
+                        className="text-xl md:text-2xl font-bold tracking-wide tabular-nums text-right"
+                        suppressHydrationWarning
+                      >
                         {s.label === "Persentase"
                           ? `${Number(s.value).toFixed(2)}%`
                           : Number(s.value).toLocaleString("id-ID")}
@@ -190,7 +193,10 @@ export default function DataBpkad() {
                             <div className="text-[10px] uppercase opacity-90">
                               Realisasi
                             </div>
-                            <div className="text-sm font-bold tabular-nums">
+                            <div
+                              className="text-sm font-bold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {real.toLocaleString("id-ID")}
                             </div>
                           </div>
@@ -198,7 +204,10 @@ export default function DataBpkad() {
                             <div className="text-[10px] uppercase opacity-90">
                               Pagu
                             </div>
-                            <div className="text-sm font-bold tabular-nums">
+                            <div
+                              className="text-sm font-bold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {pagu.toLocaleString("id-ID")}
                             </div>
                           </div>

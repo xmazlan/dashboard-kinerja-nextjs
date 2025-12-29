@@ -35,7 +35,10 @@ const DashboardTile = ({ label, value, Icon, pattern }: any) => (
           {label}
         </div>
       </div>
-      <div className="text-xl sm:text-2xl font-bold tabular-nums text-right">
+      <div
+        className="text-xl sm:text-2xl font-bold tabular-nums text-right"
+        suppressHydrationWarning
+      >
         {Number(value).toLocaleString("id-ID")}
       </div>
     </div>
@@ -52,7 +55,8 @@ export default function DataEresponMasterData() {
         title="Data pengaduan masyarakat"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : E-Respon)</span>
           </>

@@ -26,7 +26,8 @@ export default function DataTpidKomoditiDetail() {
         title="Data Tim Pengendalian Inflasi Daerah (Komoditi)"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : TPID)</span>
           </>
@@ -106,7 +107,10 @@ export default function DataTpidKomoditiDetail() {
                             <div className="text-[10px] uppercase opacity-90">
                               Rata-rata
                             </div>
-                            <div className="text-sm font-bold tabular-nums">
+                            <div
+                              className="text-sm font-bold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {hargaRata.toLocaleString("id-ID")}
                             </div>
                           </div>
@@ -119,7 +123,10 @@ export default function DataTpidKomoditiDetail() {
                             <div className="text-[10px] uppercase opacity-90">
                               Termurah
                             </div>
-                            <div className="text-sm font-bold tabular-nums">
+                            <div
+                              className="text-sm font-bold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {hargaMurah.toLocaleString("id-ID")}
                             </div>
                             <div className="text-[10px] opacity-80">
@@ -135,7 +142,10 @@ export default function DataTpidKomoditiDetail() {
                             <div className="text-[10px] uppercase opacity-90">
                               Termahal
                             </div>
-                            <div className="text-sm font-bold tabular-nums">
+                            <div
+                              className="text-sm font-bold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {hargaMahal.toLocaleString("id-ID")}
                             </div>
                             <div className="text-[10px] opacity-80">
@@ -162,6 +172,7 @@ export default function DataTpidKomoditiDetail() {
                                     "inline-flex items-center rounded-lg px-2 py-0.5 text-[11px] font-mono font-semibold tabular-nums text-white",
                                     getPatternByKey(pasar)
                                   )}
+                                  suppressHydrationWarning
                                 >
                                   {toNum(harga).toLocaleString("id-ID")}
                                 </span>

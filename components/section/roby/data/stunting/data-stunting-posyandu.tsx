@@ -44,7 +44,8 @@ export default function DataStuntingPosyandu() {
         title="Data Penangan Stunting per Posyandu"
         description={
           <>
-            Last update: {apiData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{apiData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
             <div className="mt-1 text-xs">Posyandu: {itemsSorted.length}</div>
@@ -73,7 +74,10 @@ export default function DataStuntingPosyandu() {
                           Akumulasi keseluruhan
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {totalBalitaAll.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -91,7 +95,10 @@ export default function DataStuntingPosyandu() {
                       />
                       <div className="flex items-center justify-between">
                         <div className="text-xs font-semibold">{it.nama}</div>
-                        <div className="text-xs font-bold tabular-nums">
+                        <div
+                          className="text-xs font-bold tabular-nums"
+                          suppressHydrationWarning
+                        >
                           {toNum(it.totalBalita).toLocaleString("id-ID")}
                         </div>
                       </div>
@@ -121,7 +128,10 @@ export default function DataStuntingPosyandu() {
                             >
                               {e.label}
                             </div>
-                            <div className="text-[12px] font-mono font-semibold tabular-nums">
+                            <div
+                              className="text-[12px] font-mono font-semibold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {e.value.toLocaleString("id-ID")}
                             </div>
                           </div>

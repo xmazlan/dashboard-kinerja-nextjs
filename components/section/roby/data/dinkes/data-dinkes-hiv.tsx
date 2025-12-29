@@ -123,7 +123,10 @@ export default function DataDinkesHiv() {
                                 <div className="text-xs font-semibold line-clamp-1">
                                   {p.label}
                                 </div>
-                                <div className="text-lg font-bold tabular-nums">
+                                <div
+                                  className="text-lg font-bold tabular-nums"
+                                  suppressHydrationWarning
+                                >
                                   {p.value.toLocaleString("id-ID", {
                                     minimumFractionDigits: 0,
                                     maximumFractionDigits: 0,
@@ -143,7 +146,10 @@ export default function DataDinkesHiv() {
                               <div className="text-xs font-semibold">
                                 Total Pasien
                               </div>
-                              <div className="text-lg font-bold tabular-nums">
+                              <div
+                                className="text-lg font-bold tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {points
                                   .reduce(
                                     (acc, it) => acc + (Number(it.value) || 0),

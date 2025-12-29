@@ -224,7 +224,9 @@ export default function PajakStatistikContent(props: Props) {
                       </div>
                     </div>
                     <div className="text-md sm:text-lg font-bold text-white mb-1">
-                      {formatCurrency(totalTarget)}
+                      <span suppressHydrationWarning>
+                        {formatCurrency(totalTarget)}
+                      </span>
                     </div>
                     <div className="text-[11px] sm:text-xs text-white/80">
                       Target tahun {tahun}
@@ -248,7 +250,9 @@ export default function PajakStatistikContent(props: Props) {
                       </div>
                     </div>
                     <div className="text-md sm:text-lg font-bold text-white mb-1">
-                      {formatCurrency(totalRealisasi)}
+                      <span suppressHydrationWarning>
+                        {formatCurrency(totalRealisasi)}
+                      </span>
                     </div>
                     <div className="text-[11px] sm:text-xs text-white/80">
                       Realisasi tahun {tahun}
@@ -285,7 +289,10 @@ export default function PajakStatistikContent(props: Props) {
                               className="flex items-center justify-between text-[11px] text-muted-foreground"
                             >
                               <span className="truncate">{it.Jenis}</span>
-                              <span className="font-mono">
+                              <span
+                                className="font-mono"
+                                suppressHydrationWarning
+                              >
                                 {(() => {
                                   const val = Number(it.Target || 0);
                                   const total = Number(pieTotal || 0);

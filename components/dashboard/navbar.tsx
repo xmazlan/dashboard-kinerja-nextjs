@@ -56,13 +56,23 @@ export function Navbar() {
   const setSpeed = useDashboardStore((s) => s.setSpeed);
   const setChildSpeed = useDashboardStore((s) => s.setChildSpeed);
   const pathname = usePathname();
+
+  const [hydrated, setHydrated] = useState(false);
+
   useEffect(() => {
+    setHydrated(true);
     const handleChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
     };
     document.addEventListener("fullscreenchange", handleChange);
     return () => document.removeEventListener("fullscreenchange", handleChange);
   }, []);
+
+  const safeViewMode = hydrated ? viewMode : "page";
+  const safeTopGap = hydrated ? topGap : 0;
+  const safeBottomGap = hydrated ? bottomGap : 0;
+  const safeSpeed = hydrated ? speed : 4000;
+  const safeChildSpeed = hydrated ? childSpeed : 4000;
 
   const toggleFullscreen = async () => {
     try {
@@ -210,7 +220,7 @@ export function Navbar() {
                         <div className="flex gap-2">
                           <Button
                             variant={
-                              viewMode === "slide" ? "default" : "outline"
+                              safeViewMode === "slide" ? "default" : "outline"
                             }
                             size="sm"
                             onClick={() => setViewMode("slide")}
@@ -219,7 +229,7 @@ export function Navbar() {
                           </Button>
                           <Button
                             variant={
-                              viewMode === "page" ? "default" : "outline"
+                              safeViewMode === "page" ? "default" : "outline"
                             }
                             size="sm"
                             onClick={() => setViewMode("page")}
@@ -231,25 +241,25 @@ export function Navbar() {
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Jarak Atas</div>
                         <Slider
-                          value={[topGap]}
+                          value={[safeTopGap]}
                           min={0}
                           max={64}
                           onValueChange={(v) => setTopGap(v[0] ?? topGap)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {topGap}px
+                          {safeTopGap}px
                         </div>
                       </div>
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Jarak Bawah</div>
                         <Slider
-                          value={[bottomGap]}
+                          value={[safeBottomGap]}
                           min={0}
                           max={64}
                           onValueChange={(v) => setBottomGap(v[0] ?? bottomGap)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {bottomGap}px
+                          {safeBottomGap}px
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -257,13 +267,13 @@ export function Navbar() {
                           Kecepatan Slide (ms)
                         </div>
                         <Slider
-                          value={[speed]}
+                          value={[safeSpeed]}
                           min={1000}
                           max={10000}
                           onValueChange={(v) => setSpeed(v[0] ?? speed)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {speed} ms
+                          {safeSpeed} ms
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -271,7 +281,7 @@ export function Navbar() {
                           Kecepatan Slide Anak (ms)
                         </div>
                         <Slider
-                          value={[childSpeed]}
+                          value={[safeChildSpeed]}
                           min={1000}
                           max={10000}
                           onValueChange={(v) =>
@@ -279,7 +289,7 @@ export function Navbar() {
                           }
                         />
                         <div className="text-xs text-muted-foreground">
-                          {childSpeed} ms
+                          {safeChildSpeed} ms
                         </div>
                       </div>
                     </div>

@@ -128,7 +128,8 @@ export default function DataStuntingKecamatanSlide({
         title="Data Penangan Stunting"
         description={
           <>
-            Last update: {apiData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{apiData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
             {/* <div className="mt-1 space-y-0.5 text-xs ">
@@ -250,7 +251,7 @@ export default function DataStuntingKecamatanSlide({
                       aria-label={`Ke slide ${idx + 1}`}
                       onClick={() => api?.scrollTo(idx)}
                       className={cn(
-                        "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                        "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                         idx === selectedIndex
                           ? "bg-primary text-white border-primary"
                           : "bg-transparent text-foreground/70 border-border hover:text-foreground"

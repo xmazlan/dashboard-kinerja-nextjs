@@ -68,7 +68,7 @@ export default function DataBpkadRfk() {
                   type="date"
                   value={tanggal}
                   onChange={(e) => setTanggal(e.target.value)}
-                  className="w-[160px]"
+                  className="w-40"
                 />
               </div>
               <ModalDetail
@@ -230,7 +230,10 @@ export default function DataBpkadRfk() {
                             className="flex items-center justify-between text-[10px] text-muted-foreground"
                           >
                             <span className="truncate">{it.name}</span>
-                            <span className="font-mono">
+                            <span
+                              className="font-mono"
+                              suppressHydrationWarning
+                            >
                               {`${it.value.toFixed(2)}% (${
                                 totalPie > 0
                                   ? ((it.value / totalPie) * 100).toFixed(2)

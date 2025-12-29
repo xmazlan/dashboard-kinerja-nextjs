@@ -35,11 +35,7 @@ export const useCapilIkdData = (tanggal?: string) => {
     queryFn: async () => {
       const url = `${API_URL}/api/v1/json/${slug?.opd}/${slug?.application}`;
       const params = { tanggal: tgl };
-      if (typeof window !== "undefined") {
-        try {
-          console.log("[CAPIL IKD] GET", url, params ? { params } : {});
-        } catch {}
-      }
+
       const response = await axios.get(url, {
         params,
         headers: {

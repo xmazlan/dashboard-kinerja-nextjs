@@ -45,7 +45,8 @@ export default function DataTpidPasar() {
         title="Data Pasar dan Harga Komoditas"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : TPID)</span>
           </>
@@ -64,7 +65,7 @@ export default function DataTpidPasar() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Cari nama pasar..."
-                  className="w-[220px] md:w-[280px]"
+                  className="w-55 md:w-70"
                 />
               </InputGroup>
               <Badge variant="outline">Total pasar: {totalPasar}</Badge>
@@ -184,7 +185,10 @@ export default function DataTpidPasar() {
                                   </div>
                                 </div>
                               </div>
-                              <div className="text-[12px] font-mono font-semibold tabular-nums">
+                              <div
+                                className="text-[12px] font-mono font-semibold tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {it.harga.toLocaleString("id-ID")}
                               </div>
                             </div>
@@ -239,7 +243,10 @@ export default function DataTpidPasar() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                    <div
+                                      className="text-[12px] font-mono font-semibold tabular-nums"
+                                      suppressHydrationWarning
+                                    >
                                       {it.harga.toLocaleString("id-ID")}
                                     </div>
                                   </div>

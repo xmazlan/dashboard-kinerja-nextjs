@@ -173,7 +173,10 @@ export default function DataBpkadSp2d() {
                         <TrendingUp className="w-4 h-4 text-muted-foreground" />
                       </div>
                     </div>
-                    <div className="text-lg font-bold text-white mb-1">
+                    <div
+                      className="text-lg font-bold text-white mb-1"
+                      suppressHydrationWarning
+                    >
                       {formatCurrency(jumlahPagu)}
                     </div>
                     <div className="text-[11px] text-white/80">
@@ -197,7 +200,10 @@ export default function DataBpkadSp2d() {
                         )}
                       </div>
                     </div>
-                    <div className="text-lg font-bold text-white mb-1">
+                    <div
+                      className="text-lg font-bold text-white mb-1"
+                      suppressHydrationWarning
+                    >
                       {formatCurrency(jumlahRealisasi)}
                     </div>
                     <div className="text-[11px] text-white/80">
@@ -230,7 +236,10 @@ export default function DataBpkadSp2d() {
                             className="flex items-center justify-between text-[10px] text-muted-foreground"
                           >
                             <span className="truncate">{it.name}</span>
-                            <span className="font-mono">
+                            <span
+                              className="font-mono"
+                              suppressHydrationWarning
+                            >
                               {`${formatCurrency(it.value)} (${
                                 totalPie > 0
                                   ? ((it.value / totalPie) * 100).toFixed(2)

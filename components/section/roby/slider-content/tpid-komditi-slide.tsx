@@ -99,7 +99,8 @@ export default function SectionTpidKomoditiSlide({
         title="Data Pasar dan Harga Komoditas"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : TPID)</span>
           </>
@@ -246,7 +247,10 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Rata-rata
                                     </div>
-                                    <div className="text-base md:text-lg font-bold tabular-nums">
+                                    <div
+                                      className="text-base md:text-lg font-bold tabular-nums"
+                                      suppressHydrationWarning
+                                    >
                                       {hargaRata.toLocaleString("id-ID")}
                                     </div>
                                   </div>
@@ -259,7 +263,10 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Termurah
                                     </div>
-                                    <div className="text-base md:text-lg font-bold tabular-nums">
+                                    <div
+                                      className="text-base md:text-lg font-bold tabular-nums"
+                                      suppressHydrationWarning
+                                    >
                                       {hargaMurah.toLocaleString("id-ID")}
                                     </div>
                                     <div className="text-[10px] opacity-80">
@@ -275,7 +282,10 @@ export default function SectionTpidKomoditiSlide({
                                     <div className="text-[10px] uppercase opacity-90">
                                       Termahal
                                     </div>
-                                    <div className="text-base md:text-lg font-bold tabular-nums">
+                                    <div
+                                      className="text-base md:text-lg font-bold tabular-nums"
+                                      suppressHydrationWarning
+                                    >
                                       {hargaMahal.toLocaleString("id-ID")}
                                     </div>
                                     <div className="text-[10px] opacity-80">
@@ -301,6 +311,7 @@ export default function SectionTpidKomoditiSlide({
                                             "inline-flex items-center rounded-lg px-2 py-0.5 text-[11px] font-mono font-semibold tabular-nums text-white",
                                             getPatternByKey(pasar)
                                           )}
+                                          suppressHydrationWarning
                                         >
                                           {toNum(harga).toLocaleString("id-ID")}
                                         </span>
@@ -328,7 +339,7 @@ export default function SectionTpidKomoditiSlide({
                 aria-label={`Ke slide ${idx + 1}`}
                 onClick={() => chartApi?.scrollTo(idx)}
                 className={cn(
-                  "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                   idx === chartSelectedIndex
                     ? "bg-primary text-white border-primary"
                     : "bg-transparent text-foreground/70 border-border hover:text-foreground"
