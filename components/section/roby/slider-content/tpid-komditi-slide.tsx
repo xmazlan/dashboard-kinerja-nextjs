@@ -88,6 +88,27 @@ export default function SectionTpidKomoditiSlide({
     }
   }, [chartApi, active, onDone, safeSpeed, isGlobalPaused]);
 
+  // Handle empty data case to prevent stuck slider
+  React.useEffect(() => {
+    const items = (masterData?.data ?? []) as any[];
+    if (
+      active &&
+      !isLoadingMasterData &&
+      items.length === 0 &&
+      !isGlobalPaused
+    ) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
+      return () => clearTimeout(id);
+    }
+  }, [
+    active,
+    isLoadingMasterData,
+    masterData,
+    isGlobalPaused,
+    onDone,
+    safeSpeed,
+  ]);
+
   React.useEffect(() => {
     if (!chartApi) return;
     if (active) {
