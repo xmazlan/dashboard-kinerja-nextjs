@@ -31,7 +31,7 @@ const DashboardTile = ({ label, value, Icon, pattern }: any) => (
         <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-white/20 dark:bg-white/10 flex items-center justify-center shrink-0">
           <Icon className="w-5 h-5" />
         </div>
-        <div className="text-[12px] sm:text-sm font-semibold uppercase opacity-90 truncate">
+        <div className="text-xl sm:text-sm font-semibold uppercase opacity-90 truncate">
           {label}
         </div>
       </div>
@@ -169,8 +169,8 @@ export default function DataEresponMasterData() {
                   <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Kiri: Master */}
                     <div className="flex min-h-0 flex-col">
-                      <div className="p-3 sm:p-4">
-                        <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-3">
+                      <div className="">
+                        <h2 className="text-base sm:text-xl font-semibold text-gray-800 dark:text-white mb-3">
                           Ringkasan Pengajuan
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-3">
@@ -191,8 +191,8 @@ export default function DataEresponMasterData() {
 
                     {/* Kanan: Aduan */}
                     <div className="flex min-h-0 flex-col">
-                      <div className="p-3 sm:p-4">
-                        <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white mb-3">
+                      <div className="">
+                        <h2 className="text-base sm:text-xl font-semibold text-gray-800 dark:text-white mb-3">
                           Status Detail
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">

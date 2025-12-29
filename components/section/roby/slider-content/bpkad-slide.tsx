@@ -26,6 +26,10 @@ export default function SectionBpkadDataSlide({
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
   const speed = useDashboardStore((s) => s.speed);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
@@ -35,12 +39,12 @@ export default function SectionBpkadDataSlide({
   React.useEffect(() => {
     if (!chartApi || !active) return;
     const id = setInterval(() => {
-      if (!chartPausedRef.current) {
+      if (!chartPausedRef.current && !isGlobalPaused) {
         chartApi.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [chartApi, active, speed]);
+  }, [chartApi, active, safeChildSpeed, isGlobalPaused]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
@@ -68,11 +72,11 @@ export default function SectionBpkadDataSlide({
   React.useEffect(() => {
     if (!chartApi) return;
     const snaps = chartApi.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [chartApi, active, onDone, speed]);
+  }, [chartApi, active, onDone, safeSpeed, isGlobalPaused]);
 
   return (
     <>

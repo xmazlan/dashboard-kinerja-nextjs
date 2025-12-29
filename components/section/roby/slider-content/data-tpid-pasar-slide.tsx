@@ -52,6 +52,10 @@ export default function DataTpidPasarSlide({
   const pausedRef = React.useRef(false);
   const [expandedAll, setExpandedAll] = React.useState(false);
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
 
   React.useEffect(() => {
     pausedRef.current = paused;
@@ -60,12 +64,12 @@ export default function DataTpidPasarSlide({
   React.useEffect(() => {
     if (!api || !active) return;
     const id = setInterval(() => {
-      if (!pausedRef.current) {
+      if (!pausedRef.current && !isGlobalPaused) {
         api.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [api, active, speed]);
+  }, [api, active, safeChildSpeed, isGlobalPaused]);
 
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -93,11 +97,11 @@ export default function DataTpidPasarSlide({
   React.useEffect(() => {
     if (!api) return;
     const snaps = api.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [api, active, onDone, speed]);
+  }, [api, active, onDone, safeSpeed, isGlobalPaused]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;

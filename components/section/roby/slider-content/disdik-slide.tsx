@@ -22,6 +22,10 @@ export default function DisdikSlide({ onDone, fullSize, active }: Props) {
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
@@ -31,12 +35,12 @@ export default function DisdikSlide({ onDone, fullSize, active }: Props) {
   React.useEffect(() => {
     if (!chartApi || !active) return;
     const id = setInterval(() => {
-      if (!chartPausedRef.current) {
+      if (!chartPausedRef.current && !isGlobalPaused) {
         chartApi.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [chartApi, active, speed]);
+  }, [chartApi, active, safeChildSpeed, isGlobalPaused]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
@@ -64,11 +68,11 @@ export default function DisdikSlide({ onDone, fullSize, active }: Props) {
   React.useEffect(() => {
     if (!chartApi) return;
     const snaps = chartApi.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [chartApi, active, onDone, speed]);
+  }, [chartApi, active, onDone, safeSpeed, isGlobalPaused]);
 
   return (
     <>
@@ -101,7 +105,7 @@ export default function DisdikSlide({ onDone, fullSize, active }: Props) {
                 aria-label={`Ke slide ${idx + 1}`}
                 onClick={() => chartApi?.scrollTo(idx)}
                 className={cn(
-                  "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                   idx === chartSelectedIndex
                     ? "bg-primary text-white border-primary"
                     : "bg-transparent text-foreground/70 border-border hover:text-foreground"
