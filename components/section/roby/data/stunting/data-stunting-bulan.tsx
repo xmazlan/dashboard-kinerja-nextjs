@@ -47,7 +47,8 @@ export default function DataStuntingBulan() {
         title="Data Penangan Stunting per Bulan"
         description={
           <>
-            Last update: {apiData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{apiData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
             <div className="mt-1 text-xs">Tahun: {selectedYear || "-"}</div>
@@ -76,7 +77,10 @@ export default function DataStuntingBulan() {
                           Akumulasi per bulan
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {totalBalitaYear.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -99,7 +103,10 @@ export default function DataStuntingBulan() {
                             Tahun {m.tahun}
                           </div>
                         </div>
-                        <div className="text-xs font-bold tabular-nums">
+                        <div
+                          className="text-xs font-bold tabular-nums"
+                          suppressHydrationWarning
+                        >
                           {toNum(m.totalBalita).toLocaleString("id-ID")}
                         </div>
                       </div>
@@ -126,7 +133,10 @@ export default function DataStuntingBulan() {
                             >
                               {e.label}
                             </div>
-                            <div className="text-[12px] font-mono font-semibold tabular-nums">
+                            <div
+                              className="text-[12px] font-mono font-semibold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {e.value.toLocaleString("id-ID")}
                             </div>
                           </div>

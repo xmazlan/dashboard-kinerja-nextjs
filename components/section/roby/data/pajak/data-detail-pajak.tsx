@@ -85,7 +85,7 @@ export default function DataDetailPajak({
               </div>
               <div className="grid grid-cols-7 gap-2">
                 {Array.from({ length: 28 }).map((_, i) => (
-                  <Skeleton key={i} className="min-h-[56px] rounded-lg" />
+                  <Skeleton key={i} className="min-h-14 rounded-lg" />
                 ))}
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function DataDetailPajak({
               return (
                 <div className="w-full">
                   <div className="w-full overflow-x-auto">
-                    <div className="min-w-[560px]">
+                    <div className="min-w-140">
                       <div className="grid grid-cols-7 gap-2 mb-2">
                         {headers.map((h, i) => (
                           <div
@@ -134,7 +134,7 @@ export default function DataDetailPajak({
                           d > 0 ? (
                             <div
                               key={i}
-                              className="rounded-lg border p-2 min-h-[56px] flex flex-col transition-all hover:shadow-md cursor-pointer"
+                              className="rounded-lg border p-2 min-h-14 flex flex-col transition-all hover:shadow-md cursor-pointer"
                               style={{
                                 backgroundColor:
                                   values[d] > 0
@@ -157,13 +157,19 @@ export default function DataDetailPajak({
                                 {d}
                               </div>
                               <div className="text-[10px] font-medium ">
-                                {values[d] > 0 ? formatNumber(values[d]) : "-"}
+                                {values[d] > 0 ? (
+                                  <span suppressHydrationWarning>
+                                    {formatNumber(values[d])}
+                                  </span>
+                                ) : (
+                                  "-"
+                                )}
                               </div>
                             </div>
                           ) : (
                             <div
                               key={i}
-                              className="rounded-lg p-2 min-h-[56px]"
+                              className="rounded-lg p-2 min-h-14"
                               style={{
                                 backgroundColor: isDark ? "#0f172a" : "#f8fafc",
                               }}
@@ -186,11 +192,11 @@ export default function DataDetailPajak({
             Tren Harian - {monthLabel} {tahun}
           </h3>
           {isLoading ? (
-            <Skeleton className="h-[220px] w-full rounded" />
+            <Skeleton className="h-55 w-full rounded" />
           ) : (
             Array.isArray(perBulanData) &&
             perBulanData.length > 0 && (
-              <div className="h-[335px]">
+              <div className="h-83.75">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={perBulanData}>
                     <CartesianGrid

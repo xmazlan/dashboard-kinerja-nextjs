@@ -15,7 +15,11 @@ import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-eresp
 import DataEresponMasterData from "../data/pengaduan/data-erespon-master-data";
 
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
-export default function KominfoEresponSlide({ onDone, fullSize, active }: Props) {
+export default function KominfoEresponSlide({
+  onDone,
+  fullSize,
+  active,
+}: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
@@ -23,6 +27,10 @@ export default function KominfoEresponSlide({ onDone, fullSize, active }: Props)
   const { data: masterData, isLoading: isLoadingMasterData } =
     usePengaduanEresponMasterData();
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
 
   React.useEffect(() => {
     chartPausedRef.current = chartPaused;
@@ -32,12 +40,12 @@ export default function KominfoEresponSlide({ onDone, fullSize, active }: Props)
   React.useEffect(() => {
     if (!chartApi || !active) return;
     const id = setInterval(() => {
-      if (!chartPausedRef.current) {
+      if (!chartPausedRef.current && !isGlobalPaused) {
         chartApi.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [chartApi, active, speed]);
+  }, [chartApi, active, safeChildSpeed, isGlobalPaused]);
 
   const [chartScrollSnaps, setChartScrollSnaps] = React.useState<number[]>([]);
   const [chartSelectedIndex, setChartSelectedIndex] = React.useState(0);
@@ -62,56 +70,69 @@ export default function KominfoEresponSlide({ onDone, fullSize, active }: Props)
       chartApi.off("select", onSelect);
     };
   }, [chartApi, active, onDone]);
+
   React.useEffect(() => {
     if (!chartApi) return;
     const snaps = chartApi.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [chartApi, active, onDone, speed]);
+  }, [chartApi, active, onDone, safeSpeed, isGlobalPaused]);
 
   // (Non-chart carousel dihapus untuk menyeragamkan pola seperti pajak-slide)
 
   return (
     <>
-      <CardComponent className={cn(fullSize ? "p-0 shadow-lg w-full h-full" : "p-3 shadow-lg border rounded-lg bg-card")}>
+      <CardComponent
+        className={cn(
+          fullSize
+            ? "p-0 shadow-lg w-full h-full"
+            : "p-3 shadow-lg border rounded-lg bg-card"
+        )}
+      >
         <div className={cn(fullSize ? "flex h-full flex-col" : undefined)}>
-        <Carousel
-          className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
-          opts={{ loop: true, align: "start" }}
-          setApi={setChartApi}
-          onMouseEnter={() => active && setChartPaused(true)}
-          onMouseLeave={() => active && setChartPaused(false)}
-          onTouchStart={() => active && setChartPaused(true)}
-          onTouchEnd={() => active && setChartPaused(false)}
-        >
-          <CarouselContent className={cn(fullSize ? "h-full" : undefined)}>
-            <CarouselItem>
-              <DataEresponMasterData />
-            </CarouselItem>
-          </CarouselContent>
-          {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
+          <Carousel
+            className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
+            opts={{ loop: true, align: "start" }}
+            setApi={setChartApi}
+            onMouseEnter={() => active && setChartPaused(true)}
+            onMouseLeave={() => active && setChartPaused(false)}
+            onTouchStart={() => active && setChartPaused(true)}
+            onTouchEnd={() => active && setChartPaused(false)}
+          >
+            <CarouselContent className={cn(fullSize ? "h-full" : undefined)}>
+              <CarouselItem>
+                <DataEresponMasterData />
+              </CarouselItem>
+            </CarouselContent>
+            {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
           <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
-        </Carousel>
-        {/* Indikator dot */}
-        <div className={cn(fullSize ? "flex justify-center gap-2 mb-3" : "mt-3 flex justify-center gap-2 mb-3")}>
-          {chartScrollSnaps.map((_, idx) => (
-            <button
-              key={idx}
-              aria-label={`Ke slide ${idx + 1}`}
-              onClick={() => chartApi?.scrollTo(idx)}
-              className={cn(
-                "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
-                idx === chartSelectedIndex
-                  ? "bg-primary text-white border-primary"
-                  : "bg-transparent text-foreground/70 border-border hover:text-foreground"
-              )}
-            >
-              {idx + 1}
-            </button>
-          ))}
-        </div>
+          </Carousel>
+          {/* Indikator dot */}
+          <div
+            className={cn(
+              fullSize
+                ? "flex justify-center gap-2 mb-3"
+                : "mt-3 flex justify-center gap-2 mb-3"
+            )}
+          >
+            {chartScrollSnaps.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Ke slide ${idx + 1}`}
+                onClick={() => chartApi?.scrollTo(idx)}
+                className={cn(
+                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                  idx === chartSelectedIndex
+                    ? "bg-primary text-white border-primary"
+                    : "bg-transparent text-foreground/70 border-border hover:text-foreground"
+                )}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </CardComponent>
     </>

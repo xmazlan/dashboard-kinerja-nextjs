@@ -33,7 +33,7 @@ export default function SectionTree() {
     };
   }, []);
 
-  const componentMap: Record<string, React.ComponentType> = {
+  const componentMap: Record<string, React.ComponentType<any>> = {
     "sipuan-penari": SipuanPenariSlide,
     ortal: SectionOrtalDataSlide,
     pupr: PuprSlide,
@@ -47,7 +47,7 @@ export default function SectionTree() {
           if (!Comp) return null;
           return (
             <div className="col-span-full " data-key={c.key} key={c.key}>
-              <Comp />
+              <Comp active={true} />
             </div>
           );
         })}

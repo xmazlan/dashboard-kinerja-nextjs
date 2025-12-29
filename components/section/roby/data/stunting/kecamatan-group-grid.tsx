@@ -41,7 +41,10 @@ export default function KecamatanGroupGrid({
             >
               <div className="flex items-center justify-between">
                 <div className="text-xs font-semibold">{it.nama}</div>
-                <div className="text-xs font-bold tabular-nums">
+                <div
+                  className="text-xs font-bold tabular-nums"
+                  suppressHydrationWarning
+                >
                   {toNum(it.totalBalita).toLocaleString("id-ID")}
                 </div>
               </div>
@@ -68,7 +71,10 @@ export default function KecamatanGroupGrid({
                     >
                       {e.label}
                     </div>
-                    <div className="text-xs font-mono font-semibold tabular-nums">
+                    <div
+                      className="text-xs font-mono font-semibold tabular-nums"
+                      suppressHydrationWarning
+                    >
                       {e.value.toLocaleString("id-ID")}
                     </div>
                   </div>

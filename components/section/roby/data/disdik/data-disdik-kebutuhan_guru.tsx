@@ -211,7 +211,7 @@ export default function DataDisdikKebutuhanGuru({
                       </h3>
                       <div className="flex-1 min-h-0 overflow-auto">
                         <Table>
-                          <TableCaption>
+                          <TableCaption suppressHydrationWarning>
                             Total: {sumTotal.toLocaleString("id-ID")}
                           </TableCaption>
                           <TableHeader>
@@ -227,7 +227,7 @@ export default function DataDisdikKebutuhanGuru({
                                 <TableCell>
                                   {String(it?.tingkat ?? "")}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell suppressHydrationWarning>
                                   {Number(it?.jumlah ?? 0).toLocaleString(
                                     "id-ID"
                                   )}

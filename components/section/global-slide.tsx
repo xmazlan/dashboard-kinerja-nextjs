@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
 import { useLayoutStore } from "@/hooks/use-layout";
+import { useDashboardStore } from "@/hooks/use-dashboard";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
 import DisdikSlide from "./roby/slider-content/disdik-slide";
@@ -131,13 +132,16 @@ export default function GlobSlider({
       const indexMap: Record<string, number> = {
         pajak: 0,
         bpkad: 1,
-        ortal: 2,
-        dinkes: 3,
-        disdik: 4,
-        tpid: 5,
-        capil: 6,
-        sipuanpenari: 7,
-        distankan: 7,
+        tpid: 2,
+        erespon: 3,
+        capil: 4,
+        stunting: 5,
+        dinkes: 6,
+        disdik: 7,
+        sipuanpenari: 8,
+        distankan: 8,
+        ortal: 9,
+        pupr: 10,
       };
       const idx = indexMap[cat];
       if (typeof idx === "number") {
@@ -146,11 +150,13 @@ export default function GlobSlider({
     } catch {}
   }, [api]);
 
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+
   const handleInnerDone = React.useCallback(() => {
     if (didAdvanceRef.current) return;
     didAdvanceRef.current = true;
-    if (!pausedRef.current) api?.scrollNext();
-  }, [api]);
+    if (!pausedRef.current && !isGlobalPaused) api?.scrollNext();
+  }, [api, isGlobalPaused]);
 
   //
 
@@ -263,13 +269,13 @@ export default function GlobSlider({
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionTpidKomoditiSlide
                     key={
-                      mounted && selected === 5
-                        ? `active-5-${selected}`
-                        : `idle-5`
+                      mounted && selected === 2
+                        ? `active-2-${selected}`
+                        : `idle-2`
                     }
                     onDone={handleInnerDone}
                     fullSize
-                    active={mounted && selected === 5}
+                    active={mounted && selected === 2}
                   />
                 </div>
               </div>
@@ -281,13 +287,13 @@ export default function GlobSlider({
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
                   <KominfoEresponSlide
                     key={
-                      mounted && selected === 7
-                        ? `active-7-${selected}`
-                        : `idle-7`
+                      mounted && selected === 3
+                        ? `active-3-${selected}`
+                        : `idle-3`
                     }
                     onDone={handleInnerDone}
                     fullSize
-                    active={mounted && selected === 7}
+                    active={mounted && selected === 3}
                   />
                 </div>
               </div>
@@ -300,57 +306,6 @@ export default function GlobSlider({
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionCapilDataSlide
                     key={
-                      mounted && selected === 6
-                        ? `active-6-${selected}`
-                        : `idle-6`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 6}
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-            {/* STUNTING */}
-            <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DataStuntingKecamatanSlide
-                    key={
-                      mounted && selected === 3
-                        ? `active-3-${selected}`
-                        : `idle-3`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 3}
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-            {/* DINKES */}
-            <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionDinkesDataSlide
-                    key={
-                      mounted && selected === 3
-                        ? `active-3-${selected}`
-                        : `idle-3`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 3}
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-            {/* DISDIK */}
-            <CarouselItem className="h-full">
-              <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DisdikSlide
-                    key={
                       mounted && selected === 4
                         ? `active-4-${selected}`
                         : `idle-4`
@@ -362,13 +317,45 @@ export default function GlobSlider({
                 </div>
               </div>
             </CarouselItem>
-
-            {/* ======= SECTION THREE ======= */}
-            {/* SIPUAN PENARI */}
+            {/* STUNTING */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
-                  <SipuanPenariSlide
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <DataStuntingKecamatanSlide
+                    key={
+                      mounted && selected === 5
+                        ? `active-5-${selected}`
+                        : `idle-5`
+                    }
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 5}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
+            {/* DINKES */}
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <SectionDinkesDataSlide
+                    key={
+                      mounted && selected === 6
+                        ? `active-6-${selected}`
+                        : `idle-6`
+                    }
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 6}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
+            {/* DISDIK */}
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                  <DisdikSlide
                     key={
                       mounted && selected === 7
                         ? `active-7-${selected}`
@@ -381,19 +368,38 @@ export default function GlobSlider({
                 </div>
               </div>
             </CarouselItem>
+
+            {/* ======= SECTION THREE ======= */}
+            {/* SIPUAN PENARI */}
+            <CarouselItem className="h-full">
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
+                  <SipuanPenariSlide
+                    key={
+                      mounted && selected === 8
+                        ? `active-8-${selected}`
+                        : `idle-8`
+                    }
+                    onDone={handleInnerDone}
+                    fullSize
+                    active={mounted && selected === 8}
+                  />
+                </div>
+              </div>
+            </CarouselItem>
             {/* ORTAL */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionOrtalDataSlide
                     key={
-                      mounted && selected === 2
-                        ? `active-2-${selected}`
-                        : `idle-2`
+                      mounted && selected === 9
+                        ? `active-9-${selected}`
+                        : `idle-9`
                     }
                     onDone={handleInnerDone}
                     fullSize
-                    active={mounted && selected === 2}
+                    active={mounted && selected === 9}
                   />
                 </div>
               </div>
@@ -404,13 +410,13 @@ export default function GlobSlider({
                 <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
                   <SectionPuprDataSlide
                     key={
-                      mounted && selected === 2
-                        ? `active-2-${selected}`
-                        : `idle-2`
+                      mounted && selected === 10
+                        ? `active-10-${selected}`
+                        : `idle-10`
                     }
                     onDone={handleInnerDone}
                     fullSize
-                    active={mounted && selected === 2}
+                    active={mounted && selected === 10}
                   />
                 </div>
               </div>

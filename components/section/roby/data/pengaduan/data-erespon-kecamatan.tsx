@@ -23,7 +23,10 @@ export default function DataEresponKecamatan() {
         title="Data pengaduan masyarakat (Kecamatan)"
         description={
           <>
-            Last update: {kecamatanData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>
+              {kecamatanData?.last_get ?? ""}
+            </span>
             <br />
             <span className="italic text-xs">(Sumber : E-Respone)</span>
           </>
@@ -54,7 +57,7 @@ export default function DataEresponKecamatan() {
                           String(item?.nama_kec || "-")
                         )}
                       >
-                        <div className="flex items-center justify-between gap-3 min-h-[45px]">
+                        <div className="flex items-center justify-between gap-3 min-h-11.25">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
                               <Info className="w-5 h-5" />
@@ -67,7 +70,10 @@ export default function DataEresponKecamatan() {
                             </div>
                           </div>
                           <div className="text-2xl md:text-3xl font-extrabold tracking-tight text-right">
-                            <span className="tabular-nums font-mono bg-black/20 rounded-md px-2 py-0.5">
+                            <span
+                              className="tabular-nums font-mono bg-black/20 rounded-md px-2 py-0.5"
+                              suppressHydrationWarning
+                            >
                               {Number(item?.total || 0).toLocaleString("id-ID")}
                             </span>
                           </div>
@@ -80,7 +86,10 @@ export default function DataEresponKecamatan() {
                               <span>Belum</span>
                             </div>
                             <div className="text-lg md:text-xl font-bold text-white">
-                              <span className="font-mono tabular-nums">
+                              <span
+                                className="font-mono tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {Number(item?.belum || 0).toLocaleString(
                                   "id-ID"
                                 )}
@@ -93,7 +102,10 @@ export default function DataEresponKecamatan() {
                               <span>Sedang</span>
                             </div>
                             <div className="text-lg md:text-xl font-bold text-white">
-                              <span className="font-mono tabular-nums">
+                              <span
+                                className="font-mono tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {Number(item?.sedang || 0).toLocaleString(
                                   "id-ID"
                                 )}
@@ -106,7 +118,10 @@ export default function DataEresponKecamatan() {
                               <span>Selesai</span>
                             </div>
                             <div className="text-lg md:text-xl font-bold text-white">
-                              <span className="font-mono tabular-nums">
+                              <span
+                                className="font-mono tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {Number(item?.selesai || 0).toLocaleString(
                                   "id-ID"
                                 )}
@@ -119,7 +134,10 @@ export default function DataEresponKecamatan() {
                               <span>Pending</span>
                             </div>
                             <div className="text-lg md:text-xl font-bold text-white">
-                              <span className="font-mono tabular-nums">
+                              <span
+                                className="font-mono tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {Number(item?.pending || 0).toLocaleString(
                                   "id-ID"
                                 )}

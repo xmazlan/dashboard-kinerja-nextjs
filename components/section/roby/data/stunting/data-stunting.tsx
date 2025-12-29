@@ -78,7 +78,8 @@ export default function DataStuntingData() {
         title="Data Penangan Stunting"
         description={
           <>
-            Last update: {apiData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{apiData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-md">(Sumber : Stunting Sweeper)</span>
           </>
@@ -140,7 +141,10 @@ export default function DataStuntingData() {
                           Data Balita Terdata
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {totalBalita.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -160,7 +164,10 @@ export default function DataStuntingData() {
                           Berat Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBU.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -193,7 +200,10 @@ export default function DataStuntingData() {
                           Tinggi Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumTBU.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -226,7 +236,10 @@ export default function DataStuntingData() {
                           Berat Badan menurut Tinggi Badan
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBTB.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -284,7 +297,10 @@ export default function DataStuntingData() {
                             {section.keyLabel}
                           </p>
                         </div>
-                        <div className="text-md font-bold tabular-nums">
+                        <div
+                          className="text-md font-bold tabular-nums"
+                          suppressHydrationWarning
+                        >
                           {section.sum.toLocaleString("id-ID")}
                         </div>
                       </div>
@@ -303,7 +319,10 @@ export default function DataStuntingData() {
                             >
                               {e.label}
                             </div>
-                            <div className="text-[12px] font-mono font-semibold tabular-nums">
+                            <div
+                              className="text-[12px] font-mono font-semibold tabular-nums"
+                              suppressHydrationWarning
+                            >
                               {e.value.toLocaleString("id-ID")}
                             </div>
                           </div>

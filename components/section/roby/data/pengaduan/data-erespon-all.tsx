@@ -28,7 +28,8 @@ export default function DataEresponAll() {
         title="Data pengaduan masyarakat (All Data)"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : E-Respone)</span>
           </>
@@ -73,19 +74,34 @@ export default function DataEresponAll() {
                           >
                             {String(c?.jenis || "-")}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className="text-right tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {Number(c?.total || 0).toLocaleString("id-ID")}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className="text-right tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {Number(c?.belum || 0).toLocaleString("id-ID")}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className="text-right tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {Number(c?.sedang || 0).toLocaleString("id-ID")}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className="text-right tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {Number(c?.selesai || 0).toLocaleString("id-ID")}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className="text-right tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {Number(c?.pending || 0).toLocaleString("id-ID")}
                           </TableCell>
                         </TableRow>

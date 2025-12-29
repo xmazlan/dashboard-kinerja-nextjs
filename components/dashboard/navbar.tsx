@@ -10,6 +10,9 @@ import {
   SlidersHorizontal,
   LayoutDashboard,
   FileSpreadsheet,
+  RefreshCw,
+  Play,
+  Pause,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -34,6 +37,11 @@ import {
   SheetTitle,
   SheetFooter,
 } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Slider } from "@/components/ui/slider";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import Link from "next/link";
@@ -55,14 +63,32 @@ export function Navbar() {
   const setBottomGap = useDashboardStore((s) => s.setBottomGap);
   const setSpeed = useDashboardStore((s) => s.setSpeed);
   const setChildSpeed = useDashboardStore((s) => s.setChildSpeed);
+  const resetSpeed = useDashboardStore((s) => s.resetSpeed);
+  const resetChildSpeed = useDashboardStore((s) => s.resetChildSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const toggleGlobalPaused = useDashboardStore((s) => s.toggleGlobalPaused);
   const pathname = usePathname();
+
+  const [hydrated, setHydrated] = useState(false);
+
   useEffect(() => {
+    setHydrated(true);
     const handleChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
     };
     document.addEventListener("fullscreenchange", handleChange);
     return () => document.removeEventListener("fullscreenchange", handleChange);
   }, []);
+
+  const safeViewMode = hydrated ? viewMode : "page";
+  const safeTopGap = hydrated ? topGap : 0;
+  const safeBottomGap = hydrated ? bottomGap : 0;
+  const safeSpeed = hydrated ? (speed >= 3000 ? speed : 3000) : 4000;
+  const safeChildSpeed = hydrated
+    ? childSpeed >= 3000
+      ? childSpeed
+      : 3000
+    : 4000;
 
   const toggleFullscreen = async () => {
     try {
@@ -173,21 +199,53 @@ export function Navbar() {
             </div>
             {session?.data?.user?.role === "pimpinan" && (
               <>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label={
-                    isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
-                  }
-                  onClick={toggleFullscreen}
-                  className="hover:bg-muted hidden sm:inline-flex"
-                >
-                  {isFullscreen ? (
-                    <Minimize2 className="w-5 h-5" />
-                  ) : (
-                    <Maximize className="w-5 h-5" />
-                  )}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={
+                        isGlobalPaused ? "Mainkan Slide" : "Hentikan Slide"
+                      }
+                      onClick={toggleGlobalPaused}
+                      className="hover:bg-muted hidden sm:inline-flex"
+                    >
+                      {isGlobalPaused ? (
+                        <Play className="w-5 h-5" />
+                      ) : (
+                        <Pause className="w-5 h-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{isGlobalPaused ? "Mainkan Slide" : "Hentikan Slide"}</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={
+                        isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"
+                      }
+                      onClick={toggleFullscreen}
+                      className="hover:bg-muted hidden sm:inline-flex"
+                    >
+                      {isFullscreen ? (
+                        <Minimize2 className="w-5 h-5" />
+                      ) : (
+                        <Maximize className="w-5 h-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      {isFullscreen ? "Keluar fullscreen" : "Masuk fullscreen"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
 
                 <Sheet>
                   <SheetTrigger asChild>
@@ -210,7 +268,7 @@ export function Navbar() {
                         <div className="flex gap-2">
                           <Button
                             variant={
-                              viewMode === "slide" ? "default" : "outline"
+                              safeViewMode === "slide" ? "default" : "outline"
                             }
                             size="sm"
                             onClick={() => setViewMode("slide")}
@@ -219,7 +277,7 @@ export function Navbar() {
                           </Button>
                           <Button
                             variant={
-                              viewMode === "page" ? "default" : "outline"
+                              safeViewMode === "page" ? "default" : "outline"
                             }
                             size="sm"
                             onClick={() => setViewMode("page")}
@@ -231,55 +289,77 @@ export function Navbar() {
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Jarak Atas</div>
                         <Slider
-                          value={[topGap]}
+                          value={[safeTopGap]}
                           min={0}
                           max={64}
                           onValueChange={(v) => setTopGap(v[0] ?? topGap)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {topGap}px
+                          {safeTopGap}px
                         </div>
                       </div>
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Jarak Bawah</div>
                         <Slider
-                          value={[bottomGap]}
+                          value={[safeBottomGap]}
                           min={0}
                           max={64}
                           onValueChange={(v) => setBottomGap(v[0] ?? bottomGap)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {bottomGap}px
+                          {safeBottomGap}px
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <div className="text-sm font-medium">
-                          Kecepatan Slide (ms)
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">
+                            Kecepatan Slide (ms)
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={resetSpeed}
+                            title="Reset Kecepatan Slide"
+                          >
+                            <RefreshCw className="h-3 w-3" />
+                          </Button>
                         </div>
                         <Slider
-                          value={[speed]}
-                          min={1000}
+                          value={[safeSpeed]}
+                          min={3000}
                           max={10000}
                           onValueChange={(v) => setSpeed(v[0] ?? speed)}
                         />
                         <div className="text-xs text-muted-foreground">
-                          {speed} ms
+                          {safeSpeed} ms
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <div className="text-sm font-medium">
-                          Kecepatan Slide Anak (ms)
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">
+                            Kecepatan Slide Anak (ms)
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={resetChildSpeed}
+                            title="Reset Kecepatan Slide Anak"
+                          >
+                            <RefreshCw className="h-3 w-3" />
+                          </Button>
                         </div>
                         <Slider
-                          value={[childSpeed]}
-                          min={1000}
+                          value={[safeChildSpeed]}
+                          min={3000}
                           max={10000}
                           onValueChange={(v) =>
                             setChildSpeed(v[0] ?? childSpeed)
                           }
                         />
                         <div className="text-xs text-muted-foreground">
-                          {childSpeed} ms
+                          {safeChildSpeed} ms
                         </div>
                       </div>
                     </div>

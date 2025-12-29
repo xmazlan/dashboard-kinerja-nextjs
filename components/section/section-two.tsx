@@ -33,7 +33,7 @@ export default function SectionTwo() {
     };
   }, []);
 
-  const componentMap: Record<string, React.ComponentType> = {
+  const componentMap: Record<string, React.ComponentType<any>> = {
     capil: SectionCapilDataSlide,
     stunting: DataStuntingKecamatanSlide,
     dinkes: SectionDinkesDataSlide,
@@ -50,7 +50,7 @@ export default function SectionTwo() {
               if (!Comp) return null;
               return (
                 <div className="" data-key={c.key} key={c.key}>
-                  <Comp />
+                  <Comp active={true} />
                 </div>
               );
             })}

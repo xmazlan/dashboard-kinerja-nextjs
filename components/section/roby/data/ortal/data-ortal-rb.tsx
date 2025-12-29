@@ -156,7 +156,7 @@ export default function DataOrtalRb({
                                 {points.map((p, idx) => (
                                   <TableRow key={idx}>
                                     <TableCell>{p.year}</TableCell>
-                                    <TableCell>
+                                    <TableCell suppressHydrationWarning>
                                       {p.value.toLocaleString("id-ID", {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2,

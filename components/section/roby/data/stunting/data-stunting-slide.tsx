@@ -81,14 +81,17 @@ export default function DataStuntingSlide() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-xl font-semibold uppercase opacity-90">
                           Total Balita
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-sm md:text-sm opacity-80">
                           Data Balita Terdata
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {totalBalita.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -101,14 +104,17 @@ export default function DataStuntingSlide() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-xl font-semibold uppercase opacity-90">
                           BBU
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-sm md:text-sm opacity-80">
                           Berat Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBU.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -121,7 +127,7 @@ export default function DataStuntingSlide() {
                         />
                       ))}
                     </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
+                    <div className="mt-1 text-sm md:text-sm opacity-80">
                       Dominan: {bbuSorted[0]?.label}{" "}
                       {percent(bbuSorted[0]?.value || 0, sumBBU)}%
                     </div> */}
@@ -134,30 +140,20 @@ export default function DataStuntingSlide() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-xl font-semibold uppercase opacity-90">
                           TBU
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-sm md:text-sm opacity-80">
                           Tinggi Badan menurut Umur
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumTBU.toLocaleString("id-ID")}
                       </div>
                     </div>
-                    {/* <div className="mt-2 h-1.5 rounded-lg overflow-hidden ring-1 ring-white/20 flex">
-                      {tbuEntries.map((e) => (
-                        <div
-                          key={e.label}
-                          style={{ width: `${percent(e.value, sumTBU)}%` }}
-                          className={cn(colorMapTBU[e.label] || "bg-primary")}
-                        />
-                      ))}
-                    </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
-                      Dominan: {tbuNonStuntingSorted[0]?.label}{" "}
-                      {percent(tbuNonStuntingSorted[0]?.value || 0, sumTBU)}%
-                    </div> */}
                   </div>
                   <div
                     className={cn(
@@ -167,14 +163,17 @@ export default function DataStuntingSlide() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] md:text-xs font-semibold uppercase opacity-90">
+                        <div className="text-sm md:text-xl font-semibold uppercase opacity-90">
                           BBTB
                         </div>
-                        <div className="text-[10px] md:text-[11px] opacity-80">
+                        <div className="text-sm md:text-sm opacity-80">
                           Berat Badan menurut Tinggi Badan
                         </div>
                       </div>
-                      <div className="text-base md:text-lg font-bold tabular-nums">
+                      <div
+                        className="text-base md:text-lg font-bold tabular-nums"
+                        suppressHydrationWarning
+                      >
                         {sumBBTB.toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -187,7 +186,7 @@ export default function DataStuntingSlide() {
                         />
                       ))}
                     </div>
-                    <div className="mt-1 text-[10px] md:text-[11px] opacity-80">
+                    <div className="mt-1 text-sm md:text-sm opacity-80">
                       Dominan: {bbtbSorted[0]?.label}{" "}
                       {percent(bbtbSorted[0]?.value || 0, sumBBTB)}%
                     </div> */}
@@ -226,13 +225,16 @@ export default function DataStuntingSlide() {
                     >
                       <div className="flex h-full flex-col">
                         <div className="flex items-center justify-between">
-                          <div className="text-xs font-semibold">
+                          <div className="text-lg font-semibold">
                             {section.key}{" "}
-                            <p className="text-[10px] md:text-[11px] opacity-80 italic">
+                            <p className="text-sm md:text-sm opacity-80 italic">
                               {section.keyLabel}
                             </p>
                           </div>
-                          <div className="text-xs font-bold tabular-nums">
+                          <div
+                            className="text-lg font-bold tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {section.sum.toLocaleString("id-ID")}
                           </div>
                         </div>
@@ -246,12 +248,15 @@ export default function DataStuntingSlide() {
                               )}
                             >
                               <div
-                                className="text-xs font-semibold truncate"
+                                className="text-lg font-semibold truncate"
                                 title={e.label}
                               >
                                 {e.label}
                               </div>
-                              <div className="text-xs font-mono font-semibold tabular-nums">
+                              <div
+                                className="text-lg font-mono font-semibold tabular-nums"
+                                suppressHydrationWarning
+                              >
                                 {e.value.toLocaleString("id-ID")}
                               </div>
                             </div>

@@ -22,8 +22,9 @@ export function Footer() {
         {/* Divider */}
         <div className=" border-border">
           <p className="text-center text-xs text-muted-foreground">
-            © {currentYear} {process.env.NEXT_PUBLIC_APP_NAME}. Semua hak
-            dilindungi. {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
+            © <span suppressHydrationWarning>{currentYear}</span>{" "}
+            {process.env.NEXT_PUBLIC_APP_NAME}. Semua hak dilindungi.{" "}
+            {process.env.NEXT_PUBLIC_APP_DESCRIPTION}
           </p>
         </div>
       </div>

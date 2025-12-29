@@ -15,7 +15,7 @@ export default function Layout({
   sectionTwo: React.ReactNode;
   sectionTree: React.ReactNode;
 }) {
-  const viewMode = useDashboardStore((s) => s.viewMode);
+  const storeViewMode = useDashboardStore((s) => s.viewMode);
   const topGap = useDashboardStore((s) => s.topGap);
   const bottomGap = useDashboardStore((s) => s.bottomGap);
   const navbar = useLayoutStore((s) => s.navbar);
@@ -25,6 +25,9 @@ export default function Layout({
   React.useEffect(() => {
     setHydrated(true);
   }, []);
+
+  // During SSR/hydration, force "page" mode to match server
+  const viewMode = hydrated ? storeViewMode : "page";
 
   const topOffset = Math.max((navbar?.height ?? 0) + topGap, 0);
   const bottomOffset = Math.max((footer?.height ?? 0) + bottomGap, 0);

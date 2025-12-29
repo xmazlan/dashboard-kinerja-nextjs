@@ -46,22 +46,31 @@ export default function DataStuntingKecamatanSlide({
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
   const [q, setQ] = React.useState("");
+
   React.useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
+
   React.useEffect(() => {
     if (!api || !active) return;
     const id = setInterval(() => {
-      if (!pausedRef.current) {
+      if (!pausedRef.current && !isGlobalPaused) {
         api.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [api, active, speed]);
+  }, [api, active, safeChildSpeed, isGlobalPaused]);
+
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const prevRef = React.useRef(0);
+
   React.useEffect(() => {
     if (!api) return;
     const snaps = api.scrollSnapList();
@@ -81,14 +90,16 @@ export default function DataStuntingKecamatanSlide({
       api.off("select", onSelect);
     };
   }, [api, active, onDone]);
+
   React.useEffect(() => {
     if (!api) return;
     const snaps = api.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [api, active, onDone, speed]);
+  }, [api, active, onDone, safeSpeed, isGlobalPaused]);
+
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -104,66 +115,58 @@ export default function DataStuntingKecamatanSlide({
     stunting: number | string;
     bb_kurang: number | string;
   }
-  const items: KecamatanItem[] = Array.isArray(apiData?.data)
-    ? (apiData?.data as unknown as KecamatanItem[])
-    : [];
-  const itemsSorted = [...items].sort(
-    (a, b) => toNum(b.totalBalita) - toNum(a.totalBalita)
+
+  const items: KecamatanItem[] = React.useMemo(
+    () =>
+      Array.isArray(apiData?.data)
+        ? (apiData?.data as unknown as KecamatanItem[])
+        : [],
+    [apiData]
   );
+
+  const itemsSorted = React.useMemo(
+    () =>
+      [...items].sort((a, b) => toNum(b.totalBalita) - toNum(a.totalBalita)),
+    [items]
+  );
+
   const qLower = q.trim().toLowerCase();
-  const itemsFiltered = qLower
-    ? itemsSorted.filter((it) => String(it.nama).toLowerCase().includes(qLower))
-    : itemsSorted;
-  const totalBalitaAll = itemsSorted.reduce(
-    (acc, it) => acc + toNum(it.totalBalita),
-    0
+  const itemsFiltered = React.useMemo(
+    () =>
+      qLower
+        ? itemsSorted.filter((it) =>
+            String(it.nama).toLowerCase().includes(qLower)
+          )
+        : itemsSorted,
+    [itemsSorted, qLower]
+  );
+
+  const pages = React.useMemo(
+    () =>
+      Array.from({ length: Math.ceil(itemsFiltered.length / 5) }, (_, i) =>
+        itemsFiltered.slice(i * 5, i * 5 + 5)
+      ),
+    [itemsFiltered]
   );
 
   return (
     <>
       <CardComponent
         className={cn(
-          fullSize ? "p-0 shadow-lg w-full h-full" : "p-2 shadow-lg"
+          fullSize ? "p-2 shadow-lg w-full h-full" : "p-4 shadow-lg"
         )}
         title="Data Penangan Stunting"
         description={
           <>
-            Last update: {apiData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{apiData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : Stunting Sweeper)</span>
-            {/* <div className="mt-1 space-y-0.5 text-xs ">
-              <p>
-                <span className="font-bold">BBU</span> (Berat Badan menurut
-                Umur)
-              </p>
-              <p>
-                <span className="font-bold">TBU</span> (Tinggi Badan menurut
-                Umur)
-              </p>
-              <p>
-                <span className="font-bold">BBTB</span> (Berat Badan menurut
-                Tinggi Badan)
-              </p>
-            </div> */}
           </>
         }
         action={
           <>
             <div className="flex items-center gap-2">
-              {/* <InputGroup>
-                <InputGroupAddon>
-                  <Search className="h-4 w-4" />
-                </InputGroupAddon>
-                <InputGroupInput
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Cari nama kecamatan..."
-                  className="w-[220px] md:w-[280px]"
-                />
-              </InputGroup>
-              <Badge variant="outline">
-                Total kecamatan: {itemsFiltered.length}
-              </Badge> */}
               <ModalDetail
                 title="Detail Data Penangan Stunting"
                 description="Ringkasan dan detail per kategori. Gulir untuk melihat semua informasi."
@@ -200,70 +203,59 @@ export default function DataStuntingKecamatanSlide({
           </>
         }
       >
-        {isLoadingApiData ? (
-          <LoadingContent />
-        ) : (
-          (() => {
-            const pages = Array.from(
-              { length: Math.ceil(itemsFiltered.length / 5) },
-              (_, i) => itemsFiltered.slice(i * 5, i * 5 + 5)
-            );
-            return (
-              <div className="h-full flex flex-col space-y-3">
-                <Carousel
-                  className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
-                  opts={{ loop: true, align: "start" }}
-                  setApi={setApi}
-                  onMouseEnter={() => active && setPaused(true)}
-                  onMouseLeave={() => active && setPaused(false)}
-                  onTouchStart={() => active && setPaused(true)}
-                  onTouchEnd={() => active && setPaused(false)}
-                >
-                  <CarouselContent
-                    className={cn(
-                      "items-stretch",
-                      fullSize ? "h-full" : undefined
-                    )}
-                  >
-                    <CarouselItem>
-                      <DataStuntingSlide />
-                    </CarouselItem>
-                    {pages.map((group, pidx) => (
-                      <CarouselItem key={`page-${pidx}`}>
-                        <KecamatanGroupGrid group={group} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />
-                  <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" /> */}
-                </Carousel>
-                <div
-                  className={cn(
-                    fullSize
-                      ? "flex justify-center gap-2"
-                      : "mt-3 flex justify-center gap-2"
-                  )}
-                >
-                  {scrollSnaps.map((_, idx) => (
-                    <button
-                      key={idx}
-                      aria-label={`Ke slide ${idx + 1}`}
-                      onClick={() => api?.scrollTo(idx)}
-                      className={cn(
-                        "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
-                        idx === selectedIndex
-                          ? "bg-primary text-white border-primary"
-                          : "bg-transparent text-foreground/70 border-border hover:text-foreground"
-                      )}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })()
-        )}
+        <div className="h-full flex flex-col space-y-3 relative">
+          {isLoadingApiData && (
+            <div className="absolute inset-0 z-50 bg-background/50 flex items-center justify-center">
+              <LoadingContent />
+            </div>
+          )}
+
+          <Carousel
+            className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
+            opts={{ loop: true, align: "start" }}
+            setApi={setApi}
+            onMouseEnter={() => active && setPaused(true)}
+            onMouseLeave={() => active && setPaused(false)}
+            onTouchStart={() => active && setPaused(true)}
+            onTouchEnd={() => active && setPaused(false)}
+          >
+            <CarouselContent
+              className={cn("items-stretch", fullSize ? "h-full" : undefined)}
+            >
+              <CarouselItem>
+                <DataStuntingSlide />
+              </CarouselItem>
+              {pages.map((group, pidx) => (
+                <CarouselItem key={`page-${pidx}`}>
+                  <KecamatanGroupGrid group={group} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+          <div
+            className={cn(
+              fullSize
+                ? "flex justify-center gap-2"
+                : "mt-3 flex justify-center gap-2"
+            )}
+          >
+            {scrollSnaps.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Ke slide ${idx + 1}`}
+                onClick={() => api?.scrollTo(idx)}
+                className={cn(
+                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                  idx === selectedIndex
+                    ? "bg-primary text-white border-primary"
+                    : "bg-transparent text-foreground/70 border-border hover:text-foreground"
+                )}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
       </CardComponent>
     </>
   );

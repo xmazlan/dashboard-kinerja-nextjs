@@ -61,6 +61,7 @@ export default function TableDistrictly({ year, unit, tableHeadColspan, tableFoo
                 <TableCell
                   key={idx}
                   align="right"
+                  suppressHydrationWarning
                 >
                   {new Intl.NumberFormat('id-ID', {
                     minimumFractionDigits: 0,
@@ -89,7 +90,7 @@ export default function TableDistrictly({ year, unit, tableHeadColspan, tableFoo
                 }).format(Number(total))}
               </TableCell>
             ))}
-            <TableCell align="right">
+            <TableCell align="right" suppressHydrationWarning>
               {sumTotal ? new Intl.NumberFormat('id-ID', {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 2,

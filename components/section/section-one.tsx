@@ -34,7 +34,7 @@ export default function SectionOne() {
     };
   }, []);
 
-  const componentMap: Record<string, React.ComponentType> = {
+  const componentMap: Record<string, React.ComponentType<any>> = {
     pajak: SectionPajakDataSlide,
     bpkad: SectionBpkadDataSlide,
 
@@ -55,7 +55,7 @@ export default function SectionOne() {
                 data-key={c.key}
                 key={c.key}
               >
-                <Comp />
+                <Comp active={true} />
               </div>
             );
           })}

@@ -1,33 +1,51 @@
-import React from 'react';
+import React from "react";
 // Props
-import type { ResponsePer } from '@/types/sipuan-penari';
+import type { ResponsePer } from "@/types/sipuan-penari";
 // Components
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Props {
-  dataFreq: 'quarterly' | 'monthly';
-  year: number | string,
-  unit?: string,
-  tableHeadColspan: string,
-  tableFooterTotal: string,
-  dataChart: ResponsePer,
+  dataFreq: "quarterly" | "monthly";
+  year: number | string;
+  unit?: string;
+  tableHeadColspan: string;
+  tableFooterTotal: string;
+  dataChart: ResponsePer;
 }
 
-export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, tableFooterTotal, dataChart }: Props) {
-
+export default function TableMonthly({
+  dataFreq,
+  year,
+  unit,
+  tableHeadColspan,
+  tableFooterTotal,
+  dataChart,
+}: Props) {
   let FREQS = [];
-  if (dataFreq === 'quarterly') {
+  if (dataFreq === "quarterly") {
+    FREQS = ["Triwulan I", "Triwulan II", "Triwulan III", "Triwulan IV"];
+  } else {
     FREQS = [
-      "Triwulan I",
-      "Triwulan II",
-      "Triwulan III",
-      "Triwulan IV",
-    ];
-  }
-  else {
-    FREQS = [
-      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-      "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
     ];
   }
 
@@ -55,16 +73,34 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
         {/* [&_thead>tr>th]:border [&_tbody>tr>td]:border [&_tfoot>tr>td]:border */}
         <TableHeader className="bg-muted/50 [&_tr>th]:font-bold [&_tr>th]:whitespace-pre-wrap">
           <TableRow>
-            <TableHead rowSpan={2} align="center" className="text-center w-[20%]"> Komoditi </TableHead>
-            <TableHead colSpan={FREQS.length} align="center" className="text-center">
+            <TableHead
+              rowSpan={2}
+              align="center"
+              className="text-center w-[20%]"
+            >
+              {" "}
+              Komoditi{" "}
+            </TableHead>
+            <TableHead
+              colSpan={FREQS.length}
+              align="center"
+              className="text-center"
+            >
               {tableHeadColspan}
             </TableHead>
             {hasUnitProduction && (
-              <TableHead rowSpan={2} align="center" className="text-center w-[10%]">
+              <TableHead
+                rowSpan={2}
+                align="center"
+                className="text-center w-[10%]"
+              >
                 Satuan
               </TableHead>
             )}
-            <TableHead rowSpan={2} align="center" className="text-center"> Total {unit && `(${unit})`} </TableHead>
+            <TableHead rowSpan={2} align="center" className="text-center">
+              {" "}
+              Total {unit && `(${unit})`}{" "}
+            </TableHead>
           </TableRow>
           <TableRow>
             {FREQS.map((freq) => (
@@ -83,11 +119,8 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
               </TableCell>
 
               {row.values.map((value, idx: number) => (
-                <TableCell
-                  key={idx}
-                  align="right"
-                >
-                  {new Intl.NumberFormat('id-ID', {
+                <TableCell key={idx} align="right" suppressHydrationWarning>
+                  {new Intl.NumberFormat("id-ID", {
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 2,
                   }).format(Number(value))}
@@ -100,8 +133,12 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
                 </TableCell>
               )}
 
-              <TableCell align="right" className="font-bold">
-                {new Intl.NumberFormat('id-ID', {
+              <TableCell
+                align="right"
+                className="font-bold"
+                suppressHydrationWarning
+              >
+                {new Intl.NumberFormat("id-ID", {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 2,
                 }).format(Number(row.total))}
@@ -111,10 +148,13 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
         </TableBody>
         <TableFooter className="[&_tr>td]:font-bold">
           <TableRow>
-            <TableCell align="center" className="whitespace-pre-wrap"> {tableFooterTotal} </TableCell>
+            <TableCell align="center" className="whitespace-pre-wrap">
+              {" "}
+              {tableFooterTotal}{" "}
+            </TableCell>
             {frequentlyTotals.map((total, idx) => (
-              <TableCell key={idx} align="right">
-                {new Intl.NumberFormat('id-ID', {
+              <TableCell key={idx} align="right" suppressHydrationWarning>
+                {new Intl.NumberFormat("id-ID", {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 2,
                 }).format(Number(total))}
@@ -125,15 +165,17 @@ export default function TableMonthly({ dataFreq, year, unit, tableHeadColspan, t
                 -
               </TableCell>
             )}
-            <TableCell align="right">
-              {sumTotal ? new Intl.NumberFormat('id-ID', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2,
-              }).format(Number(sumTotal)) : 0}
+            <TableCell align="right" suppressHydrationWarning>
+              {sumTotal
+                ? new Intl.NumberFormat("id-ID", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }).format(Number(sumTotal))
+                : 0}
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
     </div>
-  )
+  );
 }

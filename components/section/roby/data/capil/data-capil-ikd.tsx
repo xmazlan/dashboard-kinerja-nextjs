@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+
 import { cn } from "@/lib/utils";
 
 import CardComponent from "@/components/card/card-component";
 import { useCapilIkdData } from "@/hooks/query/use-capil";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
 import {
   IconId,
@@ -12,7 +11,6 @@ import {
   IconLayoutGrid,
   IconListDetails,
 } from "@tabler/icons-react";
-import { ShineBorder } from "@/components/magicui/shine-border";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 
@@ -35,7 +33,9 @@ export default function SectionCapilIkd({
         return (
           <>
             <div className="flex justify-between items-center gap-2">
-              <span className="text-xs">Last update: {last || "-"}</span>
+              <span className="text-xs">
+                Last update: <span suppressHydrationWarning>{last || "-"}</span>
+              </span>
             </div>
             <span className="italic text-xs">(Sumber : IKD Capil)</span>
           </>
@@ -103,7 +103,7 @@ export default function SectionCapilIkd({
                                 <div className="flex items-center gap-2 min-w-0">
                                   <IconId className="h-4 w-4 text-white opacity-90 shrink-0" />
                                   <div
-                                    className="text-[11px] font-medium truncate"
+                                    className="text-sm md:text-lg font-medium truncate"
                                     title={it.nama}
                                   >
                                     {it.nama}
@@ -140,7 +140,7 @@ export default function SectionCapilIkd({
                                 <div className="flex items-center gap-2 min-w-0">
                                   <IconCertificate className="h-4 w-4 text-white opacity-90 shrink-0" />
                                   <div
-                                    className="text-[11px] font-medium truncate"
+                                    className="text-sm md:text-lg font-medium truncate"
                                     title={it.nama}
                                   >
                                     {it.nama}

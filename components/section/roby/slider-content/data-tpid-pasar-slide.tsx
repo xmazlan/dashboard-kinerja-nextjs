@@ -52,6 +52,10 @@ export default function DataTpidPasarSlide({
   const pausedRef = React.useRef(false);
   const [expandedAll, setExpandedAll] = React.useState(false);
   const speed = useDashboardStore((s) => s.speed);
+  const childSpeed = useDashboardStore((s) => s.childSpeed);
+  const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
+  const safeSpeed = speed >= 3000 ? speed : 3000;
+  const safeChildSpeed = childSpeed >= 3000 ? childSpeed : 3000;
 
   React.useEffect(() => {
     pausedRef.current = paused;
@@ -60,12 +64,12 @@ export default function DataTpidPasarSlide({
   React.useEffect(() => {
     if (!api || !active) return;
     const id = setInterval(() => {
-      if (!pausedRef.current) {
+      if (!pausedRef.current && !isGlobalPaused) {
         api.scrollNext();
       }
-    }, speed);
+    }, safeChildSpeed);
     return () => clearInterval(id);
-  }, [api, active, speed]);
+  }, [api, active, safeChildSpeed, isGlobalPaused]);
 
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -93,11 +97,11 @@ export default function DataTpidPasarSlide({
   React.useEffect(() => {
     if (!api) return;
     const snaps = api.scrollSnapList();
-    if (active && snaps.length <= 1) {
-      const id = setTimeout(() => onDone?.(), speed);
+    if (active && snaps.length <= 1 && !isGlobalPaused) {
+      const id = setTimeout(() => onDone?.(), safeSpeed);
       return () => clearTimeout(id);
     }
-  }, [api, active, onDone, speed]);
+  }, [api, active, onDone, safeSpeed, isGlobalPaused]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -114,7 +118,8 @@ export default function DataTpidPasarSlide({
         title="Data Pasar dan Harga Komoditas"
         description={
           <>
-            Last update: {masterData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{masterData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : TPID)</span>
           </>
@@ -134,7 +139,7 @@ export default function DataTpidPasarSlide({
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Cari nama pasar..."
-                    className="w-[220px] md:w-[280px]"
+                    className="w-55 md:w-70"
                   />
                 </InputGroup>
                 <Badge variant="outline">Total pasar: {totalPasar}</Badge> */}
@@ -290,7 +295,10 @@ export default function DataTpidPasarSlide({
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                    <div
+                                      className="text-[12px] font-mono font-semibold tabular-nums"
+                                      suppressHydrationWarning
+                                    >
                                       {it.harga.toLocaleString("id-ID")}
                                     </div>
                                   </div>
@@ -341,7 +349,10 @@ export default function DataTpidPasarSlide({
                                               </div>
                                             </div>
                                           </div>
-                                          <div className="text-[12px] font-mono font-semibold tabular-nums">
+                                          <div
+                                            className="text-[12px] font-mono font-semibold tabular-nums"
+                                            suppressHydrationWarning
+                                          >
                                             {it.harga.toLocaleString("id-ID")}
                                           </div>
                                         </div>
@@ -366,7 +377,7 @@ export default function DataTpidPasarSlide({
                       aria-label={`Ke slide ${idx + 1}`}
                       onClick={() => api?.scrollTo(idx)}
                       className={cn(
-                        "h-7 min-w-[28px] md:h-8 md:min-w-[32px] px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                        "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
                         idx === selectedIndex
                           ? "bg-primary text-white border-primary"
                           : "bg-transparent text-foreground/70 border-border hover:text-foreground"

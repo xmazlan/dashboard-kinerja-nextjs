@@ -277,7 +277,10 @@ export default function DataDisdikDoItm({
                           >
                             Urutkan {doAsc ? "Naik" : "Turun"}
                           </button>
-                          <div className="text-xs font-bold tabular-nums">
+                          <div
+                            className="text-xs font-bold tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {sumDO.toLocaleString("id-ID")}
                           </div>
                         </div>
@@ -308,7 +311,10 @@ export default function DataDisdikDoItm({
                                 <TableCell className="font-medium">
                                   {it.label}
                                 </TableCell>
-                                <TableCell className="text-right tabular-nums font-mono">
+                                <TableCell
+                                  className="text-right tabular-nums font-mono"
+                                  suppressHydrationWarning
+                                >
                                   {it.value.toLocaleString("id-ID")}
                                 </TableCell>
 
@@ -340,7 +346,10 @@ export default function DataDisdikDoItm({
                           >
                             Urutkan {ltmAsc ? "Naik" : "Turun"}
                           </button>
-                          <div className="text-xs font-bold tabular-nums">
+                          <div
+                            className="text-xs font-bold tabular-nums"
+                            suppressHydrationWarning
+                          >
                             {sumLTM.toLocaleString("id-ID")}
                           </div>
                         </div>
@@ -371,7 +380,10 @@ export default function DataDisdikDoItm({
                                 <TableCell className="font-medium">
                                   {it.label}
                                 </TableCell>
-                                <TableCell className="text-right tabular-nums font-mono">
+                                <TableCell
+                                  className="text-right tabular-nums font-mono"
+                                  suppressHydrationWarning
+                                >
                                   {it.value.toLocaleString("id-ID")}
                                 </TableCell>
 
@@ -450,7 +462,10 @@ export default function DataDisdikDoItm({
                                   className="flex items-center justify-between text-[10px] text-muted-foreground"
                                 >
                                   <span className="truncate">{it.name}</span>
-                                  <span className="font-mono">
+                                  <span
+                                    className="font-mono"
+                                    suppressHydrationWarning
+                                  >
                                     {`${it.value.toLocaleString("id-ID")} `}
                                   </span>
                                 </div>

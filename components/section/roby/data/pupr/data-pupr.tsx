@@ -88,7 +88,7 @@ export default function DataPupr() {
         title="Data PUPR - L2T2"
         description={
           <>
-            Last update: {String(data?.last_get || "")}
+            Last update: <span suppressHydrationWarning>{String(data?.last_get || "")}</span>
             <br />
             <span className="italic text-xs">(Sumber: PUPR - L2T2)</span>
           </>

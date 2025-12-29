@@ -19,7 +19,8 @@ export default function DataEresponOpd() {
         title="Data pengaduan masyarakat (OPD)"
         description={
           <>
-            Last update: {opdData?.last_get ?? ""}
+            Last update:{" "}
+            <span suppressHydrationWarning>{opdData?.last_get ?? ""}</span>
             <br />
             <span className="italic text-xs">(Sumber : E-Respone)</span>
           </>
@@ -31,13 +32,13 @@ export default function DataEresponOpd() {
           (() => {
             const list = Array.isArray(opdData?.data) ? opdData?.data : [];
             return (
-              <div className="h-[50px] flex flex-col">
+              <div className="h-12.5 flex flex-col">
                 {list.length === 0 ? (
                   <div className="flex items-center justify-center h-24 text-sm text-muted-foreground">
                     Tidak ada data
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-[50px] flex-1">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-12.5 flex-1">
                     {list.map((item: any, idx: number) => (
                       <div
                         key={idx}
@@ -48,7 +49,7 @@ export default function DataEresponOpd() {
                             : NEUTRAL_PATTERN
                         )}
                       >
-                        <div className="flex items-center justify-between gap-3 min-h-[92px]">
+                        <div className="flex items-center justify-between gap-3 min-h-23">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center">
                               <Info className="w-5 h-5" />
@@ -60,7 +61,10 @@ export default function DataEresponOpd() {
                               {String(item?.opd_nama || "-")}
                             </div>
                           </div>
-                          <div className="text-xl md:text-2xl font-bold tabular-nums text-right">
+                          <div
+                            className="text-xl md:text-2xl font-bold tabular-nums text-right"
+                            suppressHydrationWarning
+                          >
                             {Number(
                               item?.total_jenis_aduan || 0
                             ).toLocaleString("id-ID")}
