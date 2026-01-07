@@ -120,7 +120,10 @@ export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
   }, [contentApi, safeChildSpeed, isGlobalPaused]);
 
   // Year state
-  const [year, setYear] = useState(new Date().getFullYear().toString());
+  // const [year, setYear] = useState(new Date().getFullYear().toString());
+  const today = new Date();
+  today.setMonth(today.getMonth() - 1);
+  const [year, setYear] = useState(today.getFullYear().toString());
   // const [year, setYear] = useState('2023');
 
   // Chart pertanian state
