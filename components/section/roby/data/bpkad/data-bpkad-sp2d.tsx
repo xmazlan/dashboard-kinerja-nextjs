@@ -1,10 +1,6 @@
 "use client";
 import CardComponent from "@/components/card/card-component";
 
-import {
-  NEUTRAL_PATTERN,
-  getGradientStyleByKey,
-} from "@/components/patern-collor";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
 import { useTheme } from "next-themes";
 import merge from "deepmerge";
@@ -111,25 +107,9 @@ export default function DataBpkadSp2d() {
               ? (masterData?.data?.data as Row[])
               : [];
 
-            const summary = [
-              {
-                label: "Jumlah Realisasi",
-                value: jumlahRealisasi,
-                bg: "bg-emerald-600",
-              },
-              { label: "Jumlah Pagu", value: jumlahPagu, bg: "bg-indigo-700" },
-              { label: "Persentase", value: persentase, bg: "bg-orange-600" },
-            ];
-
-            const cleanOPDName = (s: unknown) => {
-              const str = String(s ?? "").trim();
-              const match = str.match(/^[\d.]+\s+(.+)$/);
-              return match ? match[1] : str;
-            };
-
             const pieData = [
-              { name: "Jumlah Realisasi", value: jumlahRealisasi },
-              { name: "Jumlah Pagu", value: jumlahPagu },
+              { name: "Total Pagu", value: jumlahPagu },
+              { name: "Total Realisasi", value: jumlahRealisasi },
             ];
             const totalPie = jumlahRealisasi + jumlahPagu;
             const periodeDisplay = String(rekap?.Periode ?? "-");
@@ -146,6 +126,7 @@ export default function DataBpkadSp2d() {
                 `Periode ${periodeDisplay}`
               ),
               {
+                colors: ["#3b82f6", "#10b981"],
                 xaxis: { categories: pieLabels },
                 legend: { show: false },
                 plotOptions: { bar: { distributed: true } },
@@ -161,10 +142,7 @@ export default function DataBpkadSp2d() {
             return (
               <div className="space-y-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div
-                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
-                    style={getGradientStyleByKey("pajak-target")}
-                  >
+                  <div className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow bg-linear-to-br from-blue-500 to-blue-600">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-lg font-bold text-white/90">
                         Total Pagu
@@ -184,10 +162,7 @@ export default function DataBpkadSp2d() {
                     </div>
                   </div>
 
-                  <div
-                    className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow"
-                    style={getGradientStyleByKey("pajak-realisasi")}
-                  >
+                  <div className="rounded-lg shadow-lg p-2 hover:shadow-xl transition-shadow bg-linear-to-br from-emerald-500 to-emerald-600">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-lg font-bold text-white/90">
                         Total Realisasi
