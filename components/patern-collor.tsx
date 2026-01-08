@@ -66,6 +66,20 @@ export function getGradientStyleByIndex(index: number, total?: number) {
   } as CSSProperties;
 }
 
+export function getColorByKey(key?: string) {
+  const s = String(key ?? "");
+  let h = 0x811c9dc5; // FNV-1a basis
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+    h >>>= 0;
+  }
+  const hue = h % 360;
+  const sat = 60 + (h % 25); // 60–85%
+  const l1 = 40 + (h % 12); // 40–52%
+  return `hsl(${hue}, ${sat}%, ${l1}%)`;
+}
+
 export function getGradientStyleByKey(key?: string) {
   const s = String(key ?? "");
   let h = 0x811c9dc5; // FNV-1a basis
