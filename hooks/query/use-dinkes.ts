@@ -22,7 +22,7 @@ export const useDinkesHivData = () => {
   const { data: session, status } = useSession();
   const slug = {
     opd: "dinkes",
-    application: "hiv",
+    application: "hiv-aids",
   };
   return useQuery<DisdikDoItmResponse>({
     queryKey: ["data-dinkes-hiv", session?.data?.token],
