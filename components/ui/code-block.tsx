@@ -1,8 +1,12 @@
 "use client";
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import {
+  atomDark,
+  prism,
+} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
+import { useTheme } from "next-themes";
 
 type CodeBlockProps = {
   language: string;
@@ -33,6 +37,12 @@ export const CodeBlock = ({
 }: CodeBlockProps) => {
   const [copied, setCopied] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState(0);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const tabsExist = tabs.length > 0;
 
@@ -53,8 +63,20 @@ export const CodeBlock = ({
     ? tabs[activeTab].highlightLines || []
     : highlightLines;
 
+  if (!mounted) {
+    return (
+      <div className="relative w-full rounded-lg bg-slate-900 p-4 font-mono text-sm h-25 animate-pulse" />
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
+
   return (
-    <div className="relative w-full rounded-lg bg-slate-900 p-4 font-mono text-sm">
+    <div
+      className={`relative w-full rounded-lg p-4 font-mono text-sm ${
+        isDark ? "bg-slate-900" : "bg-zinc-50 border border-zinc-200"
+      }`}
+    >
       <div className="flex flex-col gap-2">
         {tabsExist && (
           <div className="flex  overflow-x-auto">
@@ -64,8 +86,12 @@ export const CodeBlock = ({
                 onClick={() => setActiveTab(index)}
                 className={`px-3 py-2! text-xs transition-colors font-sans ${
                   activeTab === index
-                    ? "text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
+                    ? isDark
+                      ? "text-white"
+                      : "text-zinc-900"
+                    : isDark
+                    ? "text-zinc-400 hover:text-zinc-200"
+                    : "text-zinc-500 hover:text-zinc-700"
                 }`}
               >
                 {tab.name}
@@ -75,10 +101,20 @@ export const CodeBlock = ({
         )}
         {!tabsExist && filename && (
           <div className="flex justify-between items-center py-2">
-            <div className="text-xs text-zinc-400">{filename}</div>
+            <div
+              className={`text-xs ${
+                isDark ? "text-zinc-400" : "text-zinc-500"
+              }`}
+            >
+              {filename}
+            </div>
             <button
               onClick={copyToClipboard}
-              className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-200 transition-colors font-sans"
+              className={`flex items-center gap-1 text-xs transition-colors font-sans ${
+                isDark
+                  ? "text-zinc-400 hover:text-zinc-200"
+                  : "text-zinc-500 hover:text-zinc-700"
+              }`}
             >
               {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
             </button>
@@ -87,7 +123,7 @@ export const CodeBlock = ({
       </div>
       <SyntaxHighlighter
         language={activeLanguage}
-        style={atomDark}
+        style={isDark ? atomDark : prism}
         customStyle={{
           margin: 0,
           padding: 0,
@@ -98,11 +134,12 @@ export const CodeBlock = ({
         showLineNumbers={true}
         lineProps={(lineNumber) => ({
           style: {
-            backgroundColor: activeHighlightLines.includes(lineNumber)
-              ? "rgba(255,255,255,0.1)"
-              : "transparent",
             display: "block",
-            width: "100%",
+            backgroundColor: activeHighlightLines.includes(lineNumber)
+              ? isDark
+                ? "rgba(255, 255, 255, 0.1)"
+                : "rgba(0, 0, 0, 0.05)"
+              : "transparent",
           },
         })}
         PreTag="div"

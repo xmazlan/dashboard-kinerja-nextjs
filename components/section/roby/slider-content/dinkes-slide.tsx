@@ -13,6 +13,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 import CardComponent from "@/components/card/card-component";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import DataDinkesHiv from "../data/dinkes/data-dinkes-hiv";
+import DataDinkesJkn from "../data/dinkes/data-dinkes-jkn";
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
 export default function SectionDinkesDataSlide({
   onDone,
@@ -92,6 +93,9 @@ export default function SectionDinkesDataSlide({
             <CarouselContent className="h-full">
               <CarouselItem>
                 <DataDinkesHiv />
+              </CarouselItem>
+              <CarouselItem>
+                <DataDinkesJkn />
               </CarouselItem>
             </CarouselContent>
             {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />

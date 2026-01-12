@@ -9,7 +9,13 @@ import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 import { cn } from "@/lib/utils";
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
-export default function DataDinkesHiv() {
+export default function DataDinkesHiv({
+  ratioDesktop = 0.5,
+  ratioMobile = 0.38,
+}: {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+}) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
