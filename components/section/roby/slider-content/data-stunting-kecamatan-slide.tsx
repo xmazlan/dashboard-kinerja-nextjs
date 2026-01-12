@@ -203,58 +203,69 @@ export default function DataStuntingKecamatanSlide({
           </>
         }
       >
-        <div className="h-full flex flex-col space-y-3 relative">
-          {isLoadingApiData && (
-            <div className="absolute inset-0 z-50 bg-background/50 flex items-center justify-center">
+        <div className="h-full flex flex-col space-y-3">
+          {isLoadingApiData ? (
+            <div className="flex-1 flex items-center justify-center">
               <LoadingContent />
             </div>
-          )}
-
-          <Carousel
-            className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
-            opts={{ loop: true, align: "start" }}
-            setApi={setApi}
-            onMouseEnter={() => active && setPaused(true)}
-            onMouseLeave={() => active && setPaused(false)}
-            onTouchStart={() => active && setPaused(true)}
-            onTouchEnd={() => active && setPaused(false)}
-          >
-            <CarouselContent
-              className={cn("items-stretch", fullSize ? "h-full" : undefined)}
-            >
-              <CarouselItem>
-                <DataStuntingSlide />
-              </CarouselItem>
-              {pages.map((group, pidx) => (
-                <CarouselItem key={`page-${pidx}`}>
-                  <KecamatanGroupGrid group={group} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <div
-            className={cn(
-              fullSize
-                ? "flex justify-center gap-2"
-                : "mt-3 flex justify-center gap-2"
-            )}
-          >
-            {scrollSnaps.map((_, idx) => (
-              <button
-                key={idx}
-                aria-label={`Ke slide ${idx + 1}`}
-                onClick={() => api?.scrollTo(idx)}
+          ) : pages.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-sm text-muted-foreground text-center">
+                Data stunting kecamatan belum tersedia.
+              </p>
+            </div>
+          ) : (
+            <>
+              <Carousel
+                className={cn(fullSize ? "w-full flex-1 min-h-0" : "w-full")}
+                opts={{ loop: true, align: "start" }}
+                setApi={setApi}
+                onMouseEnter={() => active && setPaused(true)}
+                onMouseLeave={() => active && setPaused(false)}
+                onTouchStart={() => active && setPaused(true)}
+                onTouchEnd={() => active && setPaused(false)}
+              >
+                <CarouselContent
+                  className={cn(
+                    "items-stretch",
+                    fullSize ? "h-full" : undefined
+                  )}
+                >
+                  <CarouselItem>
+                    <DataStuntingSlide />
+                  </CarouselItem>
+                  {pages.map((group, pidx) => (
+                    <CarouselItem key={`page-${pidx}`}>
+                      <KecamatanGroupGrid group={group} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+              <div
                 className={cn(
-                  "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
-                  idx === selectedIndex
-                    ? "bg-primary text-white border-primary"
-                    : "bg-transparent text-foreground/70 border-border hover:text-foreground"
+                  fullSize
+                    ? "flex justify-center gap-2"
+                    : "mt-3 flex justify-center gap-2"
                 )}
               >
-                {idx + 1}
-              </button>
-            ))}
-          </div>
+                {scrollSnaps.map((_, idx) => (
+                  <button
+                    key={idx}
+                    aria-label={`Ke slide ${idx + 1}`}
+                    onClick={() => api?.scrollTo(idx)}
+                    className={cn(
+                      "h-7 min-w-7 md:h-8 md:min-w-8 px-2 inline-flex items-center justify-center rounded-md border transition-colors font-mono text-xs md:text-sm tabular-nums",
+                      idx === selectedIndex
+                        ? "bg-primary text-white border-primary"
+                        : "bg-transparent text-foreground/70 border-border hover:text-foreground"
+                    )}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </CardComponent>
     </>

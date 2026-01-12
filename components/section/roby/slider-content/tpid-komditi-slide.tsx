@@ -120,7 +120,7 @@ export default function SectionTpidKomoditiSlide({
   return (
     <>
       <CardComponent
-        className="gap-1 border-none shadow-none w-full h-full p-2 "
+        className="gap-1  w-full h-full p-2 "
         title="Data Pasar dan Harga Komoditas"
         description={
           <>

@@ -3,37 +3,19 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   TrendingUp,
   Users,
   CheckCircle2,
-  ChevronsUpDown,
-  Check,
-  Bell,
-  ShieldCheck,
-  UserRound,
+  Download,
+  File,
+  FilePenLine,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useOpdKinerjaData } from "@/hooks/query/use-opd-kinerja";
 import { useSession } from "next-auth/react";
 import { useAplikasiOpdData } from "@/hooks/query/use-aplikasi-opd";
 import React from "react";
-import { CodeBlock } from "@/components/ui/code-block";
 import { SectionHero } from "@/components/layout/section-hero";
 import { NumberTicker } from "@/components/magicui/number-ticker";
-import SectionContainer from "@/components/section/section-container";
 import DataPupr from "@/components/section/roby/data/pupr/data-pupr";
 import DataDisdikDoItm from "@/components/section/roby/data/disdik/data-disdik-doitm";
 import DataDisdikKebutuhanGuru from "@/components/section/roby/data/disdik/data-disdik-kebutuhan_guru";
@@ -41,8 +23,21 @@ import SectionCapilIkd from "@/components/section/roby/data/capil/data-capil-ikd
 import DataOrtalIkm from "@/components/section/roby/data/ortal/data-ortal-ikm";
 import DataOrtalRb from "@/components/section/roby/data/ortal/data-ortal-rb";
 import DataOrtalSakip from "@/components/section/roby/data/ortal/data-ortal-sakip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import JsonTable from "./json-table";
+import AplikasiTabs from "./aplikasi-tabs";
 import { useLayoutStore } from "@/hooks/use-layout";
+import DataDinkesHiv from "@/components/section/roby/data/dinkes/data-dinkes-hiv";
+import DataDinkesJkn from "@/components/section/roby/data/dinkes/data-dinkes-jkn";
+
+type AplikasiOption = {
+  id?: number;
+  nama_aplikasi?: string;
+  slug_aplikasi?: string;
+  json_data?: any[];
+  file?: string;
+  deskripsi?: string | null;
+};
 
 export default function VPageOverview() {
   const { data: session } = useSession();
@@ -82,28 +77,37 @@ export default function VPageOverview() {
     viewport?.width,
   ]);
 
-  const { data: aplikasiData, isLoading: isLoadingAplikasiData } =
-    useAplikasiOpdData();
-  const aplikasiOptions: Array<{
-    id?: number;
-    nama_aplikasi?: string;
-    slug_aplikasi?: string;
-  }> = Array.isArray(aplikasiData?.data) ? aplikasiData?.data : [];
-  const [openCombobox, setOpenCombobox] = React.useState(false);
+  const { data: aplikasiData } = useAplikasiOpdData();
+  const aplikasiOptions: AplikasiOption[] = Array.isArray(aplikasiData?.data)
+    ? aplikasiData.data
+    : [];
   const [opdAplication, setOpdAplication] = React.useState<string>("");
+  const [activeTab, setActiveTab] = React.useState<string>("");
+
+  React.useEffect(() => {
+    if (aplikasiOptions.length > 0 && !activeTab) {
+      const first = aplikasiOptions[0];
+      const firstValue = first.slug_aplikasi || String(first.id);
+      setActiveTab(firstValue);
+      setOpdAplication(firstValue);
+    }
+  }, [aplikasiOptions, activeTab, setOpdAplication]);
+
+  const handleTabChange = React.useCallback(
+    (value: string) => {
+      setActiveTab(value);
+      setOpdAplication(value);
+    },
+    [setOpdAplication]
+  );
+
   const { data: opdKinerjaData } = useOpdKinerjaData({
     opdName: session?.data?.user?.opd_slug || "",
     opdAplication,
   });
 
   const renderJson = React.useCallback(
-    () => (
-      <CodeBlock
-        code={JSON.stringify(opdKinerjaData, null, 2)}
-        language="json"
-        filename="data.json"
-      />
-    ),
+    () => <JsonTable data={opdKinerjaData} />,
     [opdKinerjaData]
   );
 
@@ -120,8 +124,8 @@ export default function VPageOverview() {
       ikm: () => <DataOrtalIkm ratioDesktop={1} ratioMobile={1} />,
       rb: () => <DataOrtalRb ratioDesktop={1} ratioMobile={1} />,
       sakip: () => <DataOrtalSakip ratioDesktop={1} ratioMobile={1} />,
-      "hiv-aids": renderJson,
-      "cakupan-kepesertaan-jaminan-kesehatan-nasional-jkn": renderJson,
+      "hiv-aids": () => <DataDinkesHiv ratioDesktop={1} ratioMobile={1} />,
+      jkn: () => <DataDinkesJkn ratioDesktop={1} ratioMobile={1} />,
       "tuberkulosis-tbc": renderJson,
     }),
     [renderJson]
@@ -132,10 +136,13 @@ export default function VPageOverview() {
     const render = renderByApp[opdAplication];
     if (render) return <div className="h-full">{render()}</div>;
     if (opdAplication === "l2t8")
-      return <p>Data kinerja L2T8 disimpan dalam format JSON.</p>;
+      return <p>Data kinerja disimpan dalam format JSON.</p>;
     return (
       <div className="space-y-2">
-        <p>Data kinerja {opdAplication} disimpan dalam format JSON.</p>
+        <p>
+          Data kinerja <span className="font-bold"> {opdAplication} </span>{" "}
+          disimpan dalam sistem.
+        </p>
         {renderJson()}
       </div>
     );
@@ -156,11 +163,10 @@ export default function VPageOverview() {
                 right={
                   <>
                     <div className="hidden sm:flex items-center gap-2 rounded-md border bg-background px-3 py-2">
-                      <Users className="h-4 w-4" />
-                      <div>
-                        <div className="text-sm font-semibold">
-                          <NumberTicker value={aplikasiOptions.length} />
-                        </div>
+                      <div className="text-sm font-semibold">
+                        <NumberTicker value={aplikasiOptions.length} />
+                      </div>
+                      <div className="flex flex-col">
                         <div className="text-xs text-muted-foreground">
                           Aplikasi tersedia
                         </div>
@@ -175,33 +181,19 @@ export default function VPageOverview() {
               />
             </div>
             <div className="grid grid-cols-1 gap-3">
-              <div className=" items-center gap-8">
-                <Tabs
-                  defaultValue="profile"
-                  className="text-sm text-muted-foreground"
-                >
-                  <TabsList>
-                    <TabsTrigger value="profile">
-                      <UserRound /> Profile
-                    </TabsTrigger>
-                    <TabsTrigger value="security">
-                      <ShieldCheck /> Security
-                    </TabsTrigger>
-                    <TabsTrigger value="notifications">
-                      <Bell /> Notifications
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="profile">
-                    Make changes to your account here.
-                  </TabsContent>
-                  <TabsContent value="password">
-                    Change your password here.
-                  </TabsContent>
-                </Tabs>
+              <div className="items-center gap-8 h-[clamp(260px,65vh,720px)]">
+                <AplikasiTabs
+                  options={aplikasiOptions}
+                  activeTab={activeTab}
+                  onTabChange={handleTabChange}
+                  content={content}
+                />
               </div>
             </div>
+
+            {/* 
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 ">
-              <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+               <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -265,8 +257,9 @@ export default function VPageOverview() {
                 </PopoverContent>
               </Popover>
             </div>
+            */}
 
-            <div
+            {/* <div
               ref={sectionRef}
               className="flex flex-1 flex-col gap-3 min-h-0"
             >
@@ -288,7 +281,7 @@ export default function VPageOverview() {
                             {String(opdAplication)}
                           </div>
                         </div>
-                        <div className="p-2 flex-1 min-h-0 h-full">
+                        <div className="p-2 flex-1 min-h-0 h-full m">
                           {content}
                         </div>
                       </div>
@@ -300,7 +293,7 @@ export default function VPageOverview() {
                   </div>
                 </div>
               </SectionContainer>
-            </div>
+            </div> */}
           </div>
         </section>
       ) : (
