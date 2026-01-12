@@ -225,7 +225,7 @@ export default function ListDataApplication({
               placeholder="Cari aplikasi..."
             />
           </div>
-          <div className="w-[340px] flex items-center gap-2">
+          <div className="w-85 flex items-center gap-2">
             <div className="flex-1">
               <Select
                 value={selectedOpd}
