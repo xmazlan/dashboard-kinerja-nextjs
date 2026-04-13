@@ -90,10 +90,10 @@ export default function DataDisdikDoItm({
     pct: percent(Number(it?.nilai ?? 0), sumLTM),
   }));
   const doTableSorted = [...doTableData].sort((a, b) =>
-    doAsc ? a.value - b.value : b.value - a.value
+    doAsc ? a.value - b.value : b.value - a.value,
   );
   const ltmTableSorted = [...ltmTableData].sort((a, b) =>
-    ltmAsc ? a.value - b.value : b.value - a.value
+    ltmAsc ? a.value - b.value : b.value - a.value,
   );
   const doChartData = doItems.map((it) => ({
     name: String(it?.nama ?? ""),
@@ -109,12 +109,12 @@ export default function DataDisdikDoItm({
       w < 640
         ? "xs"
         : w < 768
-        ? "sm"
-        : w < 1024
-        ? "md"
-        : w < 1280
-        ? "lg"
-        : "xl";
+          ? "sm"
+          : w < 1024
+            ? "md"
+            : w < 1280
+              ? "lg"
+              : "xl";
     const update = () => setVp(compute(window.innerWidth));
     update();
     window.addEventListener("resize", update);
@@ -156,7 +156,7 @@ export default function DataDisdikDoItm({
     barChartOptions(
       Boolean(isDark),
       "DO • Chart",
-      lastGet ? `Terakhir ${lastGet}` : null
+      lastGet ? `Terakhir ${lastGet}` : null,
     ),
     {
       xaxis: { labels: { rotate: -50 }, categories: doCategories },
@@ -190,7 +190,7 @@ export default function DataDisdikDoItm({
           },
         },
       ],
-    }
+    },
   );
 
   const ltmLabels = ltmChartData.map((d) => d.name);
@@ -199,7 +199,7 @@ export default function DataDisdikDoItm({
     pieChartOptions(
       Boolean(isDark),
       "LTM • Chart",
-      lastGet ? `Terakhir ${lastGet}` : null
+      lastGet ? `Terakhir ${lastGet}` : null,
     ),
     {
       labels: ltmLabels,
@@ -231,7 +231,7 @@ export default function DataDisdikDoItm({
           },
         },
       ],
-    }
+    },
   );
 
   return (
@@ -255,7 +255,7 @@ export default function DataDisdikDoItm({
         action={
           <div className="flex flex-col sm:flex-row sm:items-center gap-1.5">
             <ModalDetail
-              title="Detail Pajak BPHTB"
+              title="DO dan LTM"
               description="Tabulasi dan visualisasi detail."
               contentModal={
                 <>
@@ -305,7 +305,7 @@ export default function DataDisdikDoItm({
                                 key={it.label}
                                 className={cn(
                                   getPatternByKey(it.label),
-                                  "text-white"
+                                  "text-white",
                                 )}
                               >
                                 <TableCell className="font-medium">
@@ -374,7 +374,7 @@ export default function DataDisdikDoItm({
                                 key={it.label}
                                 className={cn(
                                   getPatternByKey(it.label),
-                                  "text-white"
+                                  "text-white",
                                 )}
                               >
                                 <TableCell className="font-medium">
