@@ -15,11 +15,12 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 
 import DataBpkadSp2d from "../data/bpkad/data-bpkad-sp2d";
 import DataBpkadRfk from "../data/bpkad/data-bpkad-rfk";
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionBpkadDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

@@ -20,16 +20,23 @@ import DataPajakMINERAL from "../data/pajak/data-pajak-MINERAL";
 import DataPajakWALET from "../data/pajak/data-pajak-WALET";
 import DataPajakREKLAME from "../data/pajak/data-pajak-REKLAME";
 import DataPajakAIRBAWAHTANAH from "../data/pajak/data-pajak-AIRBAWAHTANAH";
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionPajakDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const [childHasError, setChildHasError] = React.useState(false);
+  
+  // Notify parent about errors
+  React.useEffect(() => {
+    onError?.(childHasError);
+  }, [childHasError, onError]);
   const speed = useDashboardStore((s) => s.speed);
   const childSpeed = useDashboardStore((s) => s.childSpeed);
   const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
@@ -98,25 +105,25 @@ export default function SectionPajakDataSlide({
           >
             <CarouselContent className="h-full">
               <CarouselItem>
-                <DataPajakPBJT />
+                <DataPajakPBJT onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakPBB />
+                <DataPajakPBB onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakBPHTB />
+                <DataPajakBPHTB onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakMINERAL />
+                <DataPajakMINERAL onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakWALET />
+                <DataPajakWALET onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakREKLAME />
+                <DataPajakREKLAME onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataPajakAIRBAWAHTANAH />
+                <DataPajakAIRBAWAHTANAH onError={setChildHasError} />
               </CarouselItem>
             </CarouselContent>
             {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />

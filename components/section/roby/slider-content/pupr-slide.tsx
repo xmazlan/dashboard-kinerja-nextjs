@@ -15,11 +15,12 @@ import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-eresp
 import DataEresponMasterData from "../data/pengaduan/data-erespon-master-data";
 import DataPupr from "../data/pupr/data-pupr";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionPuprDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

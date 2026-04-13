@@ -34,11 +34,12 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import KecamatanGroupGrid from "../data/stunting/kecamatan-group-grid";
 import LoadingContent from "../data/loading-content";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function DataStuntingKecamatanSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   const { data: apiData, isLoading: isLoadingApiData } =
     useStuntingSweeperKecamatanData();

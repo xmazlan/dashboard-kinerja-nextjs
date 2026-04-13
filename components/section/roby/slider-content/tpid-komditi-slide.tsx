@@ -23,11 +23,12 @@ import DataTpidKomoditiDetail from "../data/tpid/data-tpid-komoditi-detail";
 import DataTpidPasar from "../data/tpid/data-tpid-pasar";
 import LoadingContent from "../data/loading-content";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionTpidKomoditiSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   const { data: masterData, isLoading: isLoadingMasterData } =
     useTpidKomoditiData();

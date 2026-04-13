@@ -19,13 +19,18 @@ import PajakStatistikContent from "./pajak-statistik-content";
 import { usePajakFilterStore } from "@/store/use-pajak-filter";
 import { useTheme } from "next-themes";
 import PajakFilterControls from "./pajak-filter-controls";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataPajakPBJT() {
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataPajakPBJT({ onError }: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
-  const { data: jenisResp, isLoading: isLoadingJenis } = useJenisPajakData();
-  const { data: tahunResp, isLoading: isLoadingTahun } = useTahunPajakData();
+  const { data: jenisResp, isLoading: isLoadingJenis, error: jenisError } = useJenisPajakData();
+  const { data: tahunResp, isLoading: isLoadingTahun, error: tahunError } = useTahunPajakData();
   const jenisOptions: Array<{ value: string | number; text: string }> =
     Array.isArray(jenisResp?.data) ? jenisResp.data : [];
   const tahunOptions: Array<{ value: string | number; text: string | number }> =
@@ -41,12 +46,32 @@ export default function DataPajakPBJT() {
     if (!jenispajak && jenisOptions.length > 0)
       setJenisPajak(String(jenisOptions[0].value));
   }, [jenispajak, jenisOptions]);
+  
+  // Sync tahun dengan opsi yang tersedia
+  React.useEffect(() => {
+    if (tahunOptions.length > 0) {
+      const tahunExists = tahunOptions.some(
+        (opt) => String(opt.value) === tahun
+      );
+      if (!tahunExists) {
+        setTahun(String(tahunOptions[0].value));
+      }
+    }
+  }, [tahunOptions, tahun, setTahun]);
+  
   // Default bulan/tahun berasal dari store (persisted). Tidak auto-set dari opsi API.
-  const { data: apiResp, isLoading: isLoadingStat } = usePajakStatistikData({
+  const { data: apiResp, isLoading: isLoadingStat, error: statError } = usePajakStatistikData({
     jenispajak,
     bulan,
     tahun,
   });
+  
+  // Notify parent of error
+  React.useEffect(() => {
+    const hasError = !!(jenisError || tahunError || statError);
+    onError?.(hasError);
+  }, [jenisError, tahunError, statError, onError]);
+  
   const last = apiResp?.last_get ?? "";
   const dt = apiResp?.data ?? {};
   type TriwulanItem = { tw: string | number; target: number; total: number };
@@ -127,68 +152,85 @@ export default function DataPajakPBJT() {
 
   return (
     <>
-      <CardComponent
-        className="gap-1 border-none shadow-none w-full h-full"
-        title="Statistik Pajak PBJT"
-        description={
-          <>
-            Last update: <span suppressHydrationWarning>{last || "-"}</span>
-            <br />
-            <span className="italic text-xs">(Sumber : Bapenda)</span>
-          </>
-        }
-        action={
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5">
-            {/* <Select value={jenispajak} onValueChange={(v) => setJenisPajak(v)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Jenis pajak" />
-              </SelectTrigger>
-              <SelectContent>
-                {jenisOptions.map((opt, idx) => (
-                  <SelectItem key={idx} value={String(opt.value)}>
-                    {opt.text}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select> */}
-            <PajakFilterControls
-              bulan={bulan}
-              setBulan={setBulan}
-              tahun={tahun}
-              setTahun={setTahun}
-              tahunOptions={tahunOptions}
-              dirty={dirty}
-              clearFilter={clearFilter}
-            />
-            <ModalDetail
-              title="Detail Pajak PBJT"
-              description="Tabulasi dan visualisasi detail."
-              contentModal={
-                <DataDetailPajak
-                  jenispajak={jenispajak}
-                  bulan={bulan}
-                  tahun={tahun}
-                />
-              }
-            />
-          </div>
-        }
-      >
-        <PajakStatistikContent
-          isLoading={isLoadingJenis || isLoadingTahun || isLoadingStat}
-          isDark={isDark}
-          tahun={tahun}
-          totalTarget={totalTarget}
-          totalRealisasi={totalRealisasi}
-          isAboveTarget={isAboveTarget}
-          pieData={pieData}
-          pieTotal={pieTotal}
-          triwulanData={triwulanData}
-          formatCurrency={formatCurrency}
-          defaultTooltipFormatter={defaultTooltipFormatter}
-          defaultLabelFormatter={defaultLabelFormatter}
-        />
-      </CardComponent>
+      {(jenisError || tahunError || statError) && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={
+              statError?.message ||
+              tahunError?.message ||
+              jenisError?.message ||
+              "Gagal mengambil data pajak. Silakan coba lagi nanti."
+            }
+            error={statError || tahunError || jenisError}
+            opd="BAPENDA (Badan Pendapatan Daerah)"
+          />
+        </div>
+      )}
+      {!statError && !tahunError && !jenisError && (
+        <CardComponent
+          className="gap-1 border-none shadow-none w-full h-full"
+          title="Statistik Pajak PBJT"
+          description={
+            <>
+              Last update: <span suppressHydrationWarning>{last || "-"}</span>
+              <br />
+              <span className="italic text-xs">(Sumber : Bapenda)</span>
+            </>
+          }
+          action={
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5">
+              {/* <Select value={jenispajak} onValueChange={(v) => setJenisPajak(v)}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Jenis pajak" />
+                </SelectTrigger>
+                <SelectContent>
+                  {jenisOptions.map((opt, idx) => (
+                    <SelectItem key={idx} value={String(opt.value)}>
+                      {opt.text}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select> */}
+              <PajakFilterControls
+                bulan={bulan}
+                setBulan={setBulan}
+                tahun={tahun}
+                setTahun={setTahun}
+                tahunOptions={tahunOptions}
+                dirty={dirty}
+                clearFilter={clearFilter}
+              />
+              <ModalDetail
+                title="Detail Pajak PBJT"
+                description="Tabulasi dan visualisasi detail."
+                contentModal={
+                  <DataDetailPajak
+                    jenispajak={jenispajak}
+                    bulan={bulan}
+                    tahun={tahun}
+                  />
+                }
+              />
+            </div>
+          }
+        >
+          <PajakStatistikContent
+            isLoading={isLoadingJenis || isLoadingTahun || isLoadingStat}
+            isDark={isDark}
+            tahun={tahun}
+            totalTarget={totalTarget}
+            totalRealisasi={totalRealisasi}
+            isAboveTarget={isAboveTarget}
+            pieData={pieData}
+            pieTotal={pieTotal}
+            triwulanData={triwulanData}
+            formatCurrency={formatCurrency}
+            defaultTooltipFormatter={defaultTooltipFormatter}
+            defaultLabelFormatter={defaultLabelFormatter}
+          />
+        </CardComponent>
+      )}
     </>
   );
 }

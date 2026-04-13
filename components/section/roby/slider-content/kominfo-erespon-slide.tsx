@@ -14,11 +14,12 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
 import DataEresponMasterData from "../data/pengaduan/data-erespon-master-data";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function KominfoEresponSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

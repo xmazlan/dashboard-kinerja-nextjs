@@ -10,6 +10,7 @@ import {
 import { type CarouselApi } from "@/components/ui/carousel";
 import { useLayoutStore } from "@/hooks/use-layout";
 import { useDashboardStore } from "@/hooks/use-dashboard";
+import { ApiErrorMinimal } from "@/components/ui/api-error";
 import SectionPajakDataSlide from "./roby/slider-content/pajak-slide";
 import SectionBpkadDataSlide from "./roby/slider-content/bpkad-slide";
 import DisdikSlide from "./roby/slider-content/disdik-slide";
@@ -36,6 +37,17 @@ export default function GlobSlider({
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
+  
+  // Track errors for each slide
+  const [slideErrors, setSlideErrors] = React.useState<Record<number, boolean>>({});
+  
+  const setSlideError = React.useCallback((slideIndex: number, hasError: boolean) => {
+    setSlideErrors(prev => ({
+      ...prev,
+      [slideIndex]: hasError
+    }));
+  }, []);
+  
   React.useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
@@ -232,70 +244,98 @@ export default function GlobSlider({
             {/* BAPENDA */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionPajakDataSlide
-                    key={
-                      mounted && selected === 0
-                        ? `active-0-${selected}`
-                        : `idle-0`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 0}
-                  />
-                </div>
+                {slideErrors[0] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Pajak. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionPajakDataSlide
+                      key={
+                        mounted && selected === 0
+                          ? `active-0-${selected}`
+                          : `idle-0`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 0}
+                      onError={(hasError) => setSlideError(0, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/*BPKAD  */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionBpkadDataSlide
-                    key={
-                      mounted && selected === 1
-                        ? `active-1-${selected}`
-                        : `idle-1`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 1}
-                  />
-                </div>
+                {slideErrors[1] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data BPKAD. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionBpkadDataSlide
+                      key={
+                        mounted && selected === 1
+                          ? `active-1-${selected}`
+                          : `idle-1`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 1}
+                      onError={(hasError) => setSlideError(1, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* TPID */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionTpidKomoditiSlide
-                    key={
-                      mounted && selected === 2
-                        ? `active-2-${selected}`
-                        : `idle-2`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 2}
-                  />
-                </div>
+                {slideErrors[2] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data TPID. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionTpidKomoditiSlide
+                      key={
+                        mounted && selected === 2
+                          ? `active-2-${selected}`
+                          : `idle-2`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 2}
+                      onError={(hasError) => setSlideError(2, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
 
             {/* ERESPON */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
-                  <KominfoEresponSlide
-                    key={
-                      mounted && selected === 3
-                        ? `active-3-${selected}`
-                        : `idle-3`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 3}
-                  />
-                </div>
+                {slideErrors[3] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Erespon. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
+                    <KominfoEresponSlide
+                      key={
+                        mounted && selected === 3
+                          ? `active-3-${selected}`
+                          : `idle-3`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 3}
+                      onError={(hasError) => setSlideError(3, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
 
@@ -303,69 +343,97 @@ export default function GlobSlider({
             {/* CAPIL */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionCapilDataSlide
-                    key={
-                      mounted && selected === 4
-                        ? `active-4-${selected}`
-                        : `idle-4`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 4}
-                  />
-                </div>
+                {slideErrors[4] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Capil. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionCapilDataSlide
+                      key={
+                        mounted && selected === 4
+                          ? `active-4-${selected}`
+                          : `idle-4`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 4}
+                      onError={(hasError) => setSlideError(4, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* STUNTING */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DataStuntingKecamatanSlide
-                    key={
-                      mounted && selected === 5
-                        ? `active-5-${selected}`
-                        : `idle-5`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 5}
-                  />
-                </div>
+                {slideErrors[5] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Stunting. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <DataStuntingKecamatanSlide
+                      key={
+                        mounted && selected === 5
+                          ? `active-5-${selected}`
+                          : `idle-5`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 5}
+                      onError={(hasError) => setSlideError(5, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* DINKES */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionDinkesDataSlide
-                    key={
-                      mounted && selected === 6
-                        ? `active-6-${selected}`
-                        : `idle-6`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 6}
-                  />
-                </div>
+                {slideErrors[6] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Dinkes. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionDinkesDataSlide
+                      key={
+                        mounted && selected === 6
+                          ? `active-6-${selected}`
+                          : `idle-6`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 6}
+                      onError={(hasError) => setSlideError(6, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* DISDIK */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <DisdikSlide
-                    key={
-                      mounted && selected === 7
-                        ? `active-7-${selected}`
-                        : `idle-7`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 7}
-                  />
-                </div>
+                {slideErrors[7] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Disdik. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <DisdikSlide
+                      key={
+                        mounted && selected === 7
+                          ? `active-7-${selected}`
+                          : `idle-7`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 7}
+                      onError={(hasError) => setSlideError(7, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
 
@@ -373,52 +441,73 @@ export default function GlobSlider({
             {/* SIPUAN PENARI */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
-                  <SipuanPenariSlide
-                    key={
-                      mounted && selected === 8
-                        ? `active-8-${selected}`
-                        : `idle-8`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 8}
-                  />
-                </div>
+                {slideErrors[8] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Sipuan Penari. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0">
+                    <SipuanPenariSlide
+                      key={
+                        mounted && selected === 8
+                          ? `active-8-${selected}`
+                          : `idle-8`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 8}
+                      onError={(hasError) => setSlideError(8, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* ORTAL */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionOrtalDataSlide
-                    key={
-                      mounted && selected === 9
-                        ? `active-9-${selected}`
-                        : `idle-9`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 9}
-                  />
-                </div>
+                {slideErrors[9] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data Ortal. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionOrtalDataSlide
+                      key={
+                        mounted && selected === 9
+                          ? `active-9-${selected}`
+                          : `idle-9`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 9}
+                      onError={(hasError) => setSlideError(9, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
             {/* PUPR   */}
             <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
-                <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
-                  <SectionPuprDataSlide
-                    key={
-                      mounted && selected === 10
-                        ? `active-10-${selected}`
-                        : `idle-10`
-                    }
-                    onDone={handleInnerDone}
-                    fullSize
-                    active={mounted && selected === 10}
-                  />
-                </div>
+                {slideErrors[10] ? (
+                  <div className="w-full h-full flex items-center justify-center p-4">
+                    <ApiErrorMinimal title="Gagal memuat data PUPR. Silakan coba lagi." />
+                  </div>
+                ) : (
+                  <div className="w-full h-full p-0 flex items-stretch justify-stretch min-h-0 flex-1">
+                    <SectionPuprDataSlide
+                      key={
+                        mounted && selected === 10
+                          ? `active-10-${selected}`
+                          : `idle-10`
+                      }
+                      onDone={handleInnerDone}
+                      fullSize
+                      active={mounted && selected === 10}
+                      onError={(hasError) => setSlideError(10, hasError)}
+                    />
+                  </div>
+                )}
               </div>
             </CarouselItem>
           </CarouselContent>

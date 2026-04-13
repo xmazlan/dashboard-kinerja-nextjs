@@ -40,8 +40,8 @@ import ChartPerikananOrnamentalCultivation from "../../sipuan-penari/chart-perik
 import ChartPerikananKUBProduction from "../../sipuan-penari/chart-perikanan-kub-production";
 import ChartPerikananUPIFisheryProduct from "../../sipuan-penari/chart-perikanan-upi-fishery-product";
 const SPEED_LIDER = Number(process.env.NEXT_PUBLIC_SPEED_LIDER);
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
-export default function SipuanPenariSlide({ onDone, fullSize, active }: Props) {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
+export default function SipuanPenariSlide({ onDone, fullSize, active, onError }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);

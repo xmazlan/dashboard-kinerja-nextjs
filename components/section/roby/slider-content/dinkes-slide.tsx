@@ -14,11 +14,12 @@ import CardComponent from "@/components/card/card-component";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import DataDinkesHiv from "../data/dinkes/data-dinkes-hiv";
 import DataDinkesJkn from "../data/dinkes/data-dinkes-jkn";
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionDinkesDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

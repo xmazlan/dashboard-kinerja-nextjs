@@ -23,16 +23,36 @@ import DataEresponKelurahan from "@/components/section/roby/data/pengaduan/data-
 import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespon-opd";
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
 import { Button } from "@/components/ui/button";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataBpkad() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataBpkad({ onError }: Props) {
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     useBpkadSp2dData();
   const [showAll, setShowAll] = React.useState(false);
 
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
+
   return (
     <div className="w-full h-full">
-      <CardComponent
-        className="gap-1 border-none shadow-none w-full h-full"
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data BPKAD. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="BPKAD (Badan Pengelola Keuangan dan Aset Daerah)"
+          />
+        </div>
+      )}
+      {!masterError && (
+        <CardComponent
+          className="gap-1 border-none shadow-none w-full h-full"
         title="Data BPKAD"
         description={(() => {
           const periode = String(masterData?.data?.Rekap_Kota?.Periode || "-");
@@ -220,7 +240,8 @@ export default function DataBpkad() {
             );
           })()
         )}
-      </CardComponent>
+        </CardComponent>
+      )}
     </div>
   );
 }

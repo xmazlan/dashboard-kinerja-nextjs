@@ -6,10 +6,20 @@ import { useStuntingSweeperKecamatanData } from "@/hooks/query/use-stuntingsweep
 import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import LoadingContent from "../loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataStuntingKecamatan() {
-  const { data: apiData, isLoading: isLoadingApiData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataStuntingKecamatan({ onError }: Props) {
+  const { data: apiData, isLoading: isLoadingApiData, error: apiError } =
     useStuntingSweeperKecamatanData();
+
+  React.useEffect(() => {
+    onError?.(!!apiError);
+  }, [apiError, onError]);
+
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -39,7 +49,17 @@ export default function DataStuntingKecamatan() {
 
   return (
     <div className="w-full h-full">
-      <CardComponent
+      {apiError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={apiError?.message || "Gagal mengambil data Stunting. Silakan coba lagi nanti."}
+            error={apiError}
+          />
+        </div>
+      )}
+      {!apiError && (
+        <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Penangan Stunting per Kecamatan"
         description={
@@ -145,6 +165,7 @@ export default function DataStuntingKecamatan() {
           })()
         )}
       </CardComponent>
+      )}
     </div>
   );
 }

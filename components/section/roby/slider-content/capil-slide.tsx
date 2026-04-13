@@ -14,11 +14,12 @@ import CardComponent from "@/components/card/card-component";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 
 import SectionCapilIkd from "../data/capil/data-capil-ikd";
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionCapilDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

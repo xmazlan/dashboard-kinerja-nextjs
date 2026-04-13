@@ -15,11 +15,12 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import DataOrtalSakip from "../data/ortal/data-ortal-sakip";
 import DataOrtalIkm from "../data/ortal/data-ortal-ikm";
 import DataOrtalRb from "../data/ortal/data-ortal-rb";
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionOrtalDataSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);

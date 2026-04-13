@@ -15,8 +15,8 @@ import { useDashboardStore } from "@/hooks/use-dashboard";
 import DataDisdikDoItm from "../data/disdik/data-disdik-doitm";
 import DataDisdikKebutuhanGuru from "../data/disdik/data-disdik-kebutuhan_guru";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
-export default function DisdikSlide({ onDone, fullSize, active }: Props) {
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
+export default function DisdikSlide({ onDone, fullSize, active, onError }: Props) {
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
