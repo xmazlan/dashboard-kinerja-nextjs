@@ -17,15 +17,23 @@ const aj = arcjet({
 
 // Arcjet middleware untuk semua requests
 async function arcjetMiddleware(request: NextRequest) {
-  const forwardedFor = request.headers.get("x-forwarded-for") || "";
-  const ip =
-    (forwardedFor.split(",")[0] || "").trim() ||
-    request.headers.get("x-real-ip") ||
-    request.headers.get("cf-connecting-ip") ||
-    undefined;
-  const decision = await aj.protect(
-    ip ? ({ ...request, ip } as unknown as NextRequest) : request
-  );
+  // Ambil IP dari header x-forwarded-for atau request.ip
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip = forwardedFor
+    ? forwardedFor.split(",")[0].trim()
+    : (request as any).ip || "127.0.0.1";
+
+  // Sediakan objek yang memenuhi interface ArcjetNextRequest.
+  // Kita harus menyertakan headers secara eksplisit karena spread operator 
+  // tidak menyalin properti non-enumerable seperti headers dari NextRequest.
+  // Versi beta.15 membutuhkan semua properti ini dalam satu argumen.
+  const decision = await aj.protect({
+    ip,
+    headers: request.headers,
+    method: request.method,
+    url: request.url,
+    cookies: request.cookies,
+  } as any);
 
   if (decision.isDenied()) {
     console.log("Arcjet blocked request:", decision.reason);
