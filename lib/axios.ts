@@ -10,6 +10,8 @@ declare module "axios" {
   }
 }
 
+const isServer = typeof window === "undefined";
+
 const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -18,24 +20,24 @@ const axios = Axios.create({
     "Content-Type": "application/json",
   },
   withCredentials: false,
-  httpsAgent: new https.Agent({
-    rejectUnauthorized: false,
-    // Tambahan konfigurasi untuk performa
-    keepAlive: true,
-    maxSockets: 50,
-    timeout: 15000, // 15 detik untuk connection
+  timeout: 15000, // 15 detik
+
+  // Hanya terapkan konfigurasi Agent dan pengaturan spesifik node di server
+  ...(isServer && {
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+      keepAlive: true,
+      maxSockets: 50,
+      timeout: 15000,
+    }),
+    maxRedirects: 5,
+    maxContentLength: 50 * 1024 * 1024, // 50MB
   }),
-  // Tingkatkan timeout untuk request yang lebih kompleks
-  timeout: 15000, // 15 detik (lebih reasonable untuk auth)
 
   // Konfigurasi retry otomatis untuk network issues
   validateStatus: function (status) {
     return status >= 200 && status < 300; // default
   },
-
-  // Konfigurasi tambahan untuk handling request/response
-  maxRedirects: 5,
-  maxContentLength: 50 * 1024 * 1024, // 50MB
 });
 
 // Request interceptor untuk debugging dan add headers dinamis
