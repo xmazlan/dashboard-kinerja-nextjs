@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import CardComponent from "@/components/card/card-component";
 import LayoutCard from "@/components/card/layout-card";
 import BarChart from "@/components/apexchart/bar-chart";
@@ -10,6 +11,7 @@ import merge from "deepmerge";
 import { barChartOptions } from "@/lib/apex-chart-options";
 import { cn } from "@/lib/utils";
 import { COLOR_PATTERNS } from "@/components/patern-collor";
+import { ApiError } from "@/components/ui/api-error";
 
 type JknItem = {
   bulan?: number;
@@ -40,18 +42,26 @@ const JKN_PESERTA_PATTERN = COLOR_PATTERNS[12];
 const JKN_CAKUPAN_PATTERN = COLOR_PATTERNS[22];
 const JKN_KEAKTIFAN_PATTERN = COLOR_PATTERNS[32];
 
+interface Props {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+  onError?: (hasError: boolean) => void;
+}
+
 export default function DataDinkesJkn({
   ratioDesktop = 0.5,
   ratioMobile = 0.38,
-}: {
-  ratioDesktop?: number;
-  ratioMobile?: number;
-}) {
+  onError,
+}: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
 
-  const { data: apiData, isLoading: isLoadingApiData } = useDinkesJknData();
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } = useDinkesJknData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const lastGet = apiData?.last_get ?? "";
 
   const items: JknItem[] = Array.isArray(apiData?.data)
@@ -209,6 +219,18 @@ export default function DataDinkesJkn({
 
   return (
     <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="DINKES"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="DINKES JKN"
@@ -378,6 +400,8 @@ export default function DataDinkesJkn({
           })()
         )}
       </CardComponent>
+      </>
+      )}
     </>
   );
 }

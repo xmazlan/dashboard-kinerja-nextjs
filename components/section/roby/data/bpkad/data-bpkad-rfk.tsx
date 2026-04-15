@@ -22,20 +22,41 @@ import { ModalDetail } from "@/components/modal/detail-modal";
 import { Input } from "@/components/ui/input";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataBpkadRfk() {
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataBpkadRfk({ onError }: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
   const [tanggal, setTanggal] = React.useState(() =>
     new Date().toISOString().slice(0, 10)
   );
-  const { data: masterData, isLoading: isLoadingMasterData } = useBpkadRfkData({
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } = useBpkadRfkData({
     tanggal,
   });
 
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
+
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="BPKAD"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data BPKAD (RFK)"
@@ -251,6 +272,8 @@ export default function DataBpkadRfk() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

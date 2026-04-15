@@ -23,17 +23,27 @@ import { ModalDetail } from "@/components/modal/detail-modal";
 import DataDisdikKebutuhanGuru from "./data-disdik-kebutuhan_guru";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
+
+interface Props {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+  onError?: (hasError: boolean) => void;
+}
+
 export default function DataDisdikDoItm({
   ratioDesktop = 0.6,
   ratioMobile = 0.4,
-}: {
-  ratioDesktop?: number;
-  ratioMobile?: number;
-}) {
+  onError,
+}: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
-  const { data: apiData, isLoading: isLoadingApiData } = useDisdikDoItmData();
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } = useDisdikDoItmData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const lastGet = apiData?.last_get ?? "";
   const [doAsc, setDoAsc] = React.useState(false);
   const [ltmAsc, setLtmAsc] = React.useState(false);
@@ -236,6 +246,18 @@ export default function DataDisdikDoItm({
 
   return (
     <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="DISDIK"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Disdik DO dan LTM"
@@ -482,6 +504,8 @@ export default function DataDisdikDoItm({
           })()
         )}
       </CardComponent>
+      </>
+      )}
     </>
   );
 }

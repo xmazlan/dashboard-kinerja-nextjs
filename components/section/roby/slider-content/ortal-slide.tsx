@@ -26,6 +26,11 @@ export default function SectionOrtalDataSlide({
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const [childHasError, setChildHasError] = React.useState(false);
+  
+  React.useEffect(() => {
+    onError?.(childHasError);
+  }, [childHasError, onError]);
   const speed = useDashboardStore((s) => s.speed);
   const childSpeed = useDashboardStore((s) => s.childSpeed);
   const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
@@ -94,13 +99,13 @@ export default function SectionOrtalDataSlide({
           >
             <CarouselContent className="h-full">
               <CarouselItem>
-                <DataOrtalSakip />
+                <DataOrtalSakip onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataOrtalIkm />
+                <DataOrtalIkm onError={setChildHasError} />
               </CarouselItem>
               <CarouselItem>
-                <DataOrtalRb />
+                <DataOrtalRb onError={setChildHasError} />
               </CarouselItem>
             </CarouselContent>
             {/* <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-background/60 backdrop-blur-md border border-border hover:bg-background/80 h-6 w-6 md:h-8 md:w-8" />

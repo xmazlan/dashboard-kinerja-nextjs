@@ -8,10 +8,19 @@ import { useTpidKomoditiData } from "@/hooks/query/use-tpid";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import OptimizeImage from "@/components/optimize-image";
 import LoadingContent from "../loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataTpidKomoditiDetail() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataTpidKomoditiDetail({ onError }: Props) {
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     useTpidKomoditiData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
 
   const toNum = (v: any) => Number(v ?? 0);
   const cleanUrl = (s: any) =>
@@ -20,7 +29,19 @@ export default function DataTpidKomoditiDetail() {
       .trim();
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="TPID"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Tim Pengendalian Inflasi Daerah (Komoditi)"
@@ -189,6 +210,8 @@ export default function DataTpidKomoditiDetail() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

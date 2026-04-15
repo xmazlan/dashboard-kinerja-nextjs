@@ -13,10 +13,19 @@ import DataStuntingKelurahan from "./data-stunting-kelurahan";
 import DataStuntingPuskesmas from "./data-stunting-puskesmas";
 import DataStuntingPosyandu from "./data-stunting-posyandu";
 import LoadingContent from "../loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataStuntingData() {
-  const { data: apiData, isLoading: isLoadingApiData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataStuntingData({ onError }: Props) {
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } =
     useStuntingSweeperData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const totalBalita = Number(apiData?.data?.totalBalita ?? 0);
   const bbu = apiData?.data?.status?.bbu ?? {};
   const tbu = apiData?.data?.status?.tbu ?? {};
@@ -72,7 +81,19 @@ export default function DataStuntingData() {
   const bbtbSorted = sortDesc(bbtbEntries);
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="STUNTING"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Penangan Stunting"
@@ -336,6 +357,8 @@ export default function DataStuntingData() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

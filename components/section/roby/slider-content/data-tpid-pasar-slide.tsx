@@ -38,16 +38,22 @@ import { Search } from "lucide-react";
 import LoadingContent from "../data/loading-content";
 import LayoutCard from "@/components/card/layout-card";
 import { useDashboardStore } from "@/hooks/use-dashboard";
+import { ApiError } from "@/components/ui/api-error";
 
-type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean };
+type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 
 export default function DataTpidPasarSlide({
   onDone,
   fullSize,
   active,
+  onError,
 }: Props) {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     useTpidPasarData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const [query, setQuery] = React.useState("");
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [paused, setPaused] = React.useState(false);
@@ -187,7 +193,19 @@ export default function DataTpidPasarSlide({
   const FIRST_N = 15;
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="TPID"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Pasar dan Harga Komoditas"
@@ -415,6 +433,8 @@ export default function DataTpidPasarSlide({
           </div>
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

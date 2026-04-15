@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DataTpidKomoditiDetail from "../data/tpid/data-tpid-komoditi-detail";
 import DataTpidPasar from "../data/tpid/data-tpid-pasar";
 import LoadingContent from "../data/loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function SectionTpidKomoditiSlide({
@@ -30,12 +31,17 @@ export default function SectionTpidKomoditiSlide({
   active,
   onError,
 }: Props) {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     useTpidKomoditiData();
   // State & kontrol untuk Carousel CHART
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const [childHasError, setChildHasError] = React.useState(false);
+  
+  React.useEffect(() => {
+    onError?.(childHasError || !!masterError);
+  }, [childHasError, masterError, onError]);
   const speed = useDashboardStore((s) => s.speed);
   const childSpeed = useDashboardStore((s) => s.childSpeed);
   const isGlobalPaused = useDashboardStore((s) => s.isGlobalPaused);
@@ -176,7 +182,16 @@ export default function SectionTpidKomoditiSlide({
         })()}
       >
         <div className="flex h-full flex-col">
-          {isLoadingMasterData ? (
+          {masterError ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <ApiError
+                title="Terjadi Kesalahan Server"
+                message={masterError?.message || "Gagal mengambil data TPID Komoditi. Silakan coba lagi nanti."}
+                error={masterError}
+                opd="TPID (Tim Pengendalian Inflasi Daerah)"
+              />
+            </div>
+          ) : isLoadingMasterData ? (
             <LoadingContent />
           ) : (
             (() => {

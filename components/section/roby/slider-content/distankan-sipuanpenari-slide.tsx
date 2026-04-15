@@ -46,6 +46,11 @@ export default function SipuanPenariSlide({ onDone, fullSize, active, onError }:
   const [chartApi, setChartApi] = React.useState<CarouselApi | null>(null);
   const [chartPaused, setChartPaused] = React.useState(false);
   const chartPausedRef = React.useRef(false);
+  const [childHasError, setChildHasError] = React.useState(false);
+  
+  React.useEffect(() => {
+    onError?.(childHasError);
+  }, [childHasError, onError]);
   const speed = useDashboardStore((s) => s.speed);
   const safeSpeed = speed >= 3000 ? speed : 3000;
   const childSpeed = useDashboardStore((s) => s.childSpeed);
@@ -147,13 +152,13 @@ export default function SipuanPenariSlide({ onDone, fullSize, active, onError }:
             isLoaded: true,
           }));
         } else {
-          // fetchData();
+          setChildHasError(true);
           toast.error("Gagal !", {
             description: res.message || "API Server Error !",
           });
         }
       } catch (error) {
-        // fetchData();
+        setChildHasError(true);
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || "API Server Error !",
@@ -187,13 +192,13 @@ export default function SipuanPenariSlide({ onDone, fullSize, active, onError }:
             isLoaded: true,
           }));
         } else {
-          // fetchData();
+          setChildHasError(true);
           toast.error("Gagal !", {
             description: res.message || "API Server Error !",
           });
         }
       } catch (error) {
-        // fetchData();
+        setChildHasError(true);
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || "API Server Error !",
@@ -227,13 +232,13 @@ export default function SipuanPenariSlide({ onDone, fullSize, active, onError }:
             isLoaded: true,
           }));
         } else {
-          // fetchData();
+          setChildHasError(true);
           toast.error("Gagal !", {
             description: res.message || "API Server Error !",
           });
         }
       } catch (error) {
-        // fetchData();
+        setChildHasError(true);
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || "API Server Error !",
@@ -267,13 +272,13 @@ export default function SipuanPenariSlide({ onDone, fullSize, active, onError }:
             isLoaded: true,
           }));
         } else {
-          // fetchData();
+          setChildHasError(true);
           toast.error("Gagal !", {
             description: res.message || "API Server Error !",
           });
         }
       } catch (error) {
-        // fetchData();
+        setChildHasError(true);
         if (error instanceof Error) {
           toast.error("Gagal !", {
             description: error.message || "API Server Error !",

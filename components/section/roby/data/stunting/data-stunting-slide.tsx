@@ -1,3 +1,4 @@
+import React from "react";
 import { cn } from "@/lib/utils";
 import CardComponent from "@/components/card/card-component";
 import { useStuntingSweeperData } from "@/hooks/query/use-stuntingsweeper";
@@ -5,10 +6,19 @@ import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataStuntingSlide() {
-  const { data: apiData, isLoading: isLoadingApiData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataStuntingSlide({ onError }: Props) {
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } =
     useStuntingSweeperData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const totalBalita = Number(apiData?.data?.totalBalita ?? 0);
   const bbu = apiData?.data?.status?.bbu ?? {};
   const tbu = apiData?.data?.status?.tbu ?? {};
@@ -64,7 +74,19 @@ export default function DataStuntingSlide() {
   const bbtbSorted = sortDesc(bbtbEntries);
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="STUNTING"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent className="p-0  border-none shadow-none w-full h-full">
         {isLoadingApiData ? (
           <LoadingContent />
@@ -271,6 +293,8 @@ export default function DataStuntingSlide() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

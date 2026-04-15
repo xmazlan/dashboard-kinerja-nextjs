@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import CardComponent from "@/components/card/card-component";
 import { useDinkesHivData } from "@/hooks/query/use-dinkes";
 import { useTheme } from "next-themes";
@@ -9,17 +10,27 @@ import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
 import { cn } from "@/lib/utils";
 import { getPatternByKey, NEUTRAL_PATTERN } from "@/components/patern-collor";
+import { ApiError } from "@/components/ui/api-error";
+
+interface Props {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+  onError?: (hasError: boolean) => void;
+}
+
 export default function DataDinkesHiv({
   ratioDesktop = 0.5,
   ratioMobile = 0.38,
-}: {
-  ratioDesktop?: number;
-  ratioMobile?: number;
-}) {
+  onError,
+}: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
-  const { data: apiData, isLoading: isLoadingApiData } = useDinkesHivData();
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } = useDinkesHivData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const lastGet = apiData?.last_get ?? "";
   const items: Array<{
     klasifikasi_pasien?: string;
@@ -89,6 +100,18 @@ export default function DataDinkesHiv({
 
   return (
     <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="DINKES"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="DINKES HIV"
@@ -195,6 +218,8 @@ export default function DataDinkesHiv({
           })()
         )}
       </CardComponent>
+      </>
+      )}
     </>
   );
 }

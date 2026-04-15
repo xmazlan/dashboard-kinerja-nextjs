@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { cn } from "@/lib/utils";
 
 import CardComponent from "@/components/card/card-component";
@@ -13,18 +14,39 @@ import {
 } from "@tabler/icons-react";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
+
+interface Props {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+  onError?: (hasError: boolean) => void;
+}
 
 export default function SectionCapilIkd({
   ratioDesktop = 0.7,
   ratioMobile = 0.5,
-}: {
-  ratioDesktop?: number;
-  ratioMobile?: number;
-}) {
-  const { data: dataRespon, isLoading: isLoadingData } = useCapilIkdData();
+  onError,
+}: Props) {
+  const { data: dataRespon, isLoading: isLoadingData, error: masterError } = useCapilIkdData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
 
   return (
-    <CardComponent
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="DUKCAPIL"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <CardComponent
       className="gap-1 border-none shadow-none w-full h-full"
       title="Data Capil"
       description={(() => {
@@ -165,5 +187,7 @@ export default function SectionCapilIkd({
         })()
       )}
     </CardComponent>
+    )}
+    </>
   );
 }

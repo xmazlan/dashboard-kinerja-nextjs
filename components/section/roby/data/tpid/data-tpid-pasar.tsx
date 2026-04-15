@@ -23,10 +23,19 @@ import {
 import { Search } from "lucide-react";
 import OptimizeImage from "@/components/optimize-image";
 import LoadingContent from "../loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataTpidPasar() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataTpidPasar({ onError }: Props) {
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     useTpidPasarData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const [query, setQuery] = React.useState("");
   const [expandedAll, setExpandedAll] = React.useState(false);
   const toNum = (v: unknown) => {
@@ -39,7 +48,19 @@ export default function DataTpidPasar() {
       .trim();
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="TPID"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Pasar dan Harga Komoditas"
@@ -264,6 +285,8 @@ export default function DataTpidPasar() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

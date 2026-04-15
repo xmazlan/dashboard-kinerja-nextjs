@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { useDashboardStore } from "@/hooks/use-dashboard";
 import KecamatanGroupGrid from "../data/stunting/kecamatan-group-grid";
 import LoadingContent from "../data/loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
 type Props = { onDone?: () => void; fullSize?: boolean; active?: boolean; onError?: (hasError: boolean) => void };
 export default function DataStuntingKecamatanSlide({
@@ -41,12 +42,16 @@ export default function DataStuntingKecamatanSlide({
   active,
   onError,
 }: Props) {
-  const { data: apiData, isLoading: isLoadingApiData } =
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } =
     useStuntingSweeperKecamatanData();
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [paused, setPaused] = React.useState(false);
   const pausedRef = React.useRef(false);
   const [q, setQ] = React.useState("");
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
 
   React.useEffect(() => {
     pausedRef.current = paused;
@@ -205,7 +210,16 @@ export default function DataStuntingKecamatanSlide({
         }
       >
         <div className="h-full flex flex-col space-y-3">
-          {isLoadingApiData ? (
+          {masterError ? (
+            <div className="flex-1 flex items-center justify-center">
+              <ApiError
+                title="Terjadi Kesalahan Server"
+                message={masterError?.message || "Gagal mengambil data Stunting. Silakan coba lagi nanti."}
+                error={masterError}
+                opd="STUNTING"
+              />
+            </div>
+          ) : isLoadingApiData ? (
             <div className="flex-1 flex items-center justify-center">
               <LoadingContent />
             </div>

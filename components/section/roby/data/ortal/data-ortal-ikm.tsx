@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import CardComponent from "@/components/card/card-component";
 import { useOrtalIkmData } from "@/hooks/query/use-ortal";
 import {
@@ -17,17 +18,27 @@ import BarChart from "@/components/apexchart/bar-chart";
 import { ModalDetail } from "@/components/modal/detail-modal";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
+
+interface Props {
+  ratioDesktop?: number;
+  ratioMobile?: number;
+  onError?: (hasError: boolean) => void;
+}
+
 export default function DataOrtalIkm({
   ratioDesktop = 0.5,
   ratioMobile = 0.38,
-}: {
-  ratioDesktop?: number;
-  ratioMobile?: number;
-}) {
+  onError,
+}: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
-  const { data: apiData, isLoading: isLoadingApiData } = useOrtalIkmData();
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } = useOrtalIkmData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const lastGet = apiData?.last_get ?? "";
   const items: Array<{
     tahun?: number | string;
@@ -95,6 +106,18 @@ export default function DataOrtalIkm({
 
   return (
     <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="ORTAL"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <>
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="ORTAL IKM "
@@ -182,6 +205,8 @@ export default function DataOrtalIkm({
           })()
         )}
       </CardComponent>
+      </>
+      )}
     </>
   );
 }

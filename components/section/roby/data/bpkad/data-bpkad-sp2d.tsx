@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import CardComponent from "@/components/card/card-component";
 
 import { useBpkadSp2dData } from "@/hooks/query/use-bpkad";
@@ -13,8 +14,13 @@ import OPDProgressCard from "./opd-progress-card";
 import formatCurrency from "@/lib/format-currency";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataBpkadSp2d() {
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataBpkadSp2d({ onError }: Props) {
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const isDark = currentTheme === "dark";
@@ -22,11 +28,28 @@ export default function DataBpkadSp2d() {
     data: apiData,
     isLoading: isLoadingMasterData,
     isFetching: isFetchingMasterData,
+    error: masterError,
   } = useBpkadSp2dData();
   const masterData = apiData;
 
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
+
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="BPKAD"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data BPKAD SP2D"
@@ -232,6 +255,8 @@ export default function DataBpkadSp2d() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

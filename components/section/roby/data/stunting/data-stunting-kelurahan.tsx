@@ -6,10 +6,19 @@ import { useStuntingSweeperKelurahanData } from "@/hooks/query/use-stuntingsweep
 import { getPatternByKey } from "@/components/patern-collor";
 import { ShineBorder } from "@/components/magicui/shine-border";
 import LoadingContent from "../loading-content";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataStuntingKelurahan() {
-  const { data: apiData, isLoading: isLoadingApiData } =
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataStuntingKelurahan({ onError }: Props) {
+  const { data: apiData, isLoading: isLoadingApiData, error: masterError } =
     useStuntingSweeperKelurahanData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const toNum = (v: unknown) => {
     const n = typeof v === "number" ? v : Number(v ?? 0);
     return Number.isFinite(n) ? n : 0;
@@ -38,7 +47,19 @@ export default function DataStuntingKelurahan() {
   );
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="STUNTING"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data Penangan Stunting per Kelurahan"
@@ -145,6 +166,8 @@ export default function DataStuntingKelurahan() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import CardComponent from "@/components/card/card-component";
 import { usePengaduanEresponMasterData } from "@/hooks/query/use-pengaduan-erespon";
 import {
@@ -21,6 +22,7 @@ import DataEresponKelurahan from "@/components/section/roby/data/pengaduan/data-
 import DataEresponOpd from "@/components/section/roby/data/pengaduan/data-erespon-opd";
 import LoadingContent from "../loading-content";
 import LayoutCard from "@/components/card/layout-card";
+import { ApiError } from "@/components/ui/api-error";
 
 const DashboardTile = ({ label, value, Icon, pattern }: any) => (
   <div
@@ -44,12 +46,33 @@ const DashboardTile = ({ label, value, Icon, pattern }: any) => (
     </div>
   </div>
 );
-export default function DataEresponMasterData() {
-  const { data: masterData, isLoading: isLoadingMasterData } =
+
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataEresponMasterData({ onError }: Props) {
+  const { data: masterData, isLoading: isLoadingMasterData, error: masterError } =
     usePengaduanEresponMasterData();
 
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
+
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="KOMINFO"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data pengaduan masyarakat"
@@ -217,6 +240,8 @@ export default function DataEresponMasterData() {
           })()
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }

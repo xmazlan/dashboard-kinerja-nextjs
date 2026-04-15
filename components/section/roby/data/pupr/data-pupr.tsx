@@ -8,10 +8,19 @@ import BarChart from "@/components/apexchart/bar-chart";
 import { Button } from "@/components/ui/button";
 import { ApexOptions } from "apexcharts";
 import { useTheme } from "next-themes";
+import { ApiError } from "@/components/ui/api-error";
 
-export default function DataPupr() {
+interface Props {
+  onError?: (hasError: boolean) => void;
+}
+
+export default function DataPupr({ onError }: Props) {
   const { theme } = useTheme();
-  const { data, isLoading } = usePuprData();
+  const { data, isLoading, error: masterError } = usePuprData();
+
+  React.useEffect(() => {
+    onError?.(!!masterError);
+  }, [masterError, onError]);
   const rightPanelRef = React.useRef<HTMLDivElement>(null);
   const [chartHeight, setChartHeight] = React.useState<number>(360);
   const arr = Array.isArray(data?.data)
@@ -82,7 +91,19 @@ export default function DataPupr() {
   }, [sortedRows.length, activeYear, theme]);
 
   return (
-    <div className="w-full h-full">
+    <>
+      {masterError && (
+        <div className="w-full h-full flex items-center justify-center">
+          <ApiError
+            title="Terjadi Kesalahan Server"
+            message={masterError?.message || "Gagal mengambil data. Silakan coba lagi nanti."}
+            error={masterError}
+            opd="PUPR"
+          />
+        </div>
+      )}
+      {!masterError && (
+      <div className="w-full h-full">
       <CardComponent
         className="gap-1 border-none shadow-none w-full h-full"
         title="Data PUPR - L2T2"
@@ -179,6 +200,8 @@ export default function DataPupr() {
           </div>
         )}
       </CardComponent>
-    </div>
+      </div>
+      )}
+    </>
   );
 }
