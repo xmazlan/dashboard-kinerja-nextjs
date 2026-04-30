@@ -242,7 +242,8 @@ export default function GlobSlider({
           <CarouselContent className="h-full">
             {/* ======= SECTION ONE ======= */}
             {/* BAPENDA */}
-            <CarouselItem className="h-full">
+
+            {/* <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 {slideErrors[0] ? (
                   <div className="w-full h-full flex items-center justify-center p-4">
@@ -264,9 +265,11 @@ export default function GlobSlider({
                   </div>
                 )}
               </div>
-            </CarouselItem>
+            </CarouselItem> */}
+
             {/*BPKAD  */}
-            <CarouselItem className="h-full">
+
+            {/* <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 {slideErrors[1] ? (
                   <div className="w-full h-full flex items-center justify-center p-4">
@@ -288,9 +291,11 @@ export default function GlobSlider({
                   </div>
                 )}
               </div>
-            </CarouselItem>
+            </CarouselItem> */}
+
             {/* TPID */}
-            <CarouselItem className="h-full">
+
+            {/* <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 {slideErrors[2] ? (
                   <div className="w-full h-full flex items-center justify-center p-4">
@@ -312,10 +317,11 @@ export default function GlobSlider({
                   </div>
                 )}
               </div>
-            </CarouselItem>
+            </CarouselItem> */}
 
             {/* ERESPON */}
-            <CarouselItem className="h-full">
+
+            {/* <CarouselItem className="h-full">
               <div className="relative w-full h-full overflow-hidden rounded-md">
                 {slideErrors[3] ? (
                   <div className="w-full h-full flex items-center justify-center p-4">
@@ -337,7 +343,7 @@ export default function GlobSlider({
                   </div>
                 )}
               </div>
-            </CarouselItem>
+            </CarouselItem> */}
 
             {/* ======= SECTION TWO ======= */}
             {/* CAPIL */}

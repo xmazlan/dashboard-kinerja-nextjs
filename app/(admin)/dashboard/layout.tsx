@@ -46,7 +46,7 @@ export default function Layout({
         >
           <div className="relative w-full h-full overflow-auto">
             <div className="w-full h-full space-y-4 py-4">
-              {sectionOne}
+              {/* {sectionOne} */}
               {sectionTwo}
               {sectionTree}
             </div>
